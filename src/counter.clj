@@ -1,7 +1,5 @@
 (ns data-processor)
 
-(ns data-processor)
-
 (deftype Subcounter [condition count])
 (deftype Counter [name subcounters counter])
 
