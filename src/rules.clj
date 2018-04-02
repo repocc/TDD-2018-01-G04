@@ -3,9 +3,9 @@
 (defn define-subcounter[params]
 	( let [
 			condition params
-			count 0
+			;;count 0
 		]
-	(zipmap [:condition :count] [condition count])))
+	(zipmap [:condition] [condition])))
 
 (defn define-counter [params, type]
 	( let [
@@ -28,20 +28,17 @@
 (defmulti define-rule 
   (fn[function params] (function "function")))
 
-(def define-counter-type "define-counter")
-(def define-signal-type "define-signal")
+(defmethod define-rule 'define-counter [function, params]         
+    (define-counter params 'define-counter))
 
-(defmethod define-rule define-counter-type [function, params]         
-    (define-counter params define-counter-type))
-
-(defmethod define-rule define-signal-type [function, params]         
-    (define-signal params define-signal-type))
+(defmethod define-rule 'define-signal [function, params]         
+    (define-signal params 'define-signal))
 
 (defn is-counter [rule] 
-	(= (:type rule) define-counter-type))
+	(= (:type rule) 'define-counter))
 
 (defn is-signal [rule] 
-	(= (:type rule) define-signal-type))
+	(= (:type rule) 'define-signal))
 
 (defn evaluate-function [f] 
-	(define-rule {"function" (str (first f))} (rest f)))  
+	(define-rule {"function" (first f)} (rest f)))  
