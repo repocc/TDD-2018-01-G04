@@ -1,5 +1,5 @@
 (ns data-processor (:use clojure.pprint))
-(use 'rules)
+(use 'rule)
 (use 'counter)
 
 (defn initialize-processor [rules]

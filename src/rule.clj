@@ -1,4 +1,4 @@
-(ns rules)
+(ns rule)
 
 (defn define-subcounter[params]
 	( let [
