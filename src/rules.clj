@@ -1,20 +1,29 @@
 (ns rules)
 
+(defn define-subcounter[params]
+	( let [
+			condition params
+			count 0
+		]
+	(zipmap [:condition :count] [condition count])))
+
 (defn define-counter [params, type]
 	( let [
 			name (first params)
-			subcounters (second params)
+			subcounters (map define-subcounter (second params))
 			condition (last params)
+			count 0
 	] 
-	(zipmap [:type :name :subcounters :condition] [type name subcounters condition])))
+	(zipmap [:type :name :subcounters :condition :count] [type name subcounters condition count])))
 
 (defn define-signal [params, type]
 	( let [
 			name (first (keys (first params)))
 			expression (first (vals (first params)))
 			condition (last params)
+			count 0
 	] 
-	(zipmap [:type :name :expression :condition] [type name expression condition])))
+	(zipmap [:type :name :expression :condition :count] [type name expression condition count])))
 
 (defmulti define-rule 
   (fn[function params] (function "function")))
