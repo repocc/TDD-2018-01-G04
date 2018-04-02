@@ -25,14 +25,13 @@
 	] 
 	(zipmap [:type :name :expression :condition :count] [type name expression condition count])))
 
-(defmulti define-rule 
-  (fn[function params] (function "function")))
+(defmulti define-rule (fn[type params] (symbol type)))
 
-(defmethod define-rule 'define-counter [function, params]         
-    (define-counter params 'define-counter))
+(defmethod define-rule 'define-counter [type, params]         
+    (define-counter params type))
 
-(defmethod define-rule 'define-signal [function, params]         
-    (define-signal params 'define-signal))
+(defmethod define-rule 'define-signal [type, params]         
+    (define-signal params type))
 
 (defn is-counter [rule] 
 	(= (:type rule) 'define-counter))
@@ -41,4 +40,4 @@
 	(= (:type rule) 'define-signal))
 
 (defn evaluate-function [f] 
-	(define-rule {"function" (first f)} (rest f)))  
+	(define-rule (first f) (rest f)))  
