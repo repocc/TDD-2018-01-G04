@@ -3,10 +3,12 @@
 
 (defn initialize-processor [rules]
   (	let [ 
-  		counters (map evaluate-function rules)
+  		rules (map evaluate-function rules)
+  		counters (filter is-counter rules)
+  		signals (filter is-signal rules)
   		data []
 		]
-  (zipmap [:counters :data] [counters data])))
+  (zipmap [:counters :signals :data] [counters signals data])))
          
 (defn process-data [state new-data]
   [nil []])
