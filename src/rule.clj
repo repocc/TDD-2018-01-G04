@@ -1,8 +1,9 @@
 (ns rule)
+(use 'condition)
 
 (defn define-subcounter[params]
 	( let [
-			condition params
+			condition (define-condition params)
 			;;count 0
 		]
 	(zipmap [:condition] [condition])))
@@ -11,7 +12,7 @@
 	( let [
 			name (first params)
 			subcounters (map define-subcounter (second params))
-			condition (last params)
+			condition (define-condition (last params))
 			count 0
 	] 
 	(zipmap [:type :name :subcounters :condition :count] [type name subcounters condition count])))
@@ -20,7 +21,7 @@
 	( let [
 			name (first (keys (first params)))
 			expression (first (vals (first params)))
-			condition (last params)
+			condition (define-condition (last params))
 			count 0
 	] 
 	(zipmap [:type :name :expression :condition :count] [type name expression condition count])))

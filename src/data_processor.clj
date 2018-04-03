@@ -8,14 +8,16 @@
   		counters (filter is-counter rules)
   		signals (filter is-signal rules)
   		data []
+  		new-data []
+  		state (zipmap [:counters :signals :data :new-data] [counters signals data new-data])
 		]
-  (zipmap [:counters :signals :data] [counters signals data])))
+  [state]))
          
 (defn process-data [state new-data]
   ( let [
-  		all-data (concat (:data state) new-data)
+  		state (map evaluate-rules state)
   	]
-  [nil []]))
+  state))
          
 (defn query-counter [state counter-name counter-args]
   (let [
