@@ -11,5 +11,3 @@
 	]
 	conditions))
 
-filter #(define-expression condition current %) (:data state)
-

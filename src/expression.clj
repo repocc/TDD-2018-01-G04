@@ -1,5 +1,6 @@
 (ns expression)
 (use 'condition)
+(require '[clojure.string :as str])
 
 (defmulti define-expression (fn[condition current past] (type condition)))
 (defmulti define-expression-by-symbol (fn[operation condition current past] (symbol operation)))
@@ -93,16 +94,16 @@
     	(define-expression (last condition) current past)))
 
 (defmethod define-expression-by-symbol 'includes? [operation condition current past]         
-    (includes?
+    (str/includes?
     	(define-expression (second condition) current past) 
     	(define-expression (last condition) current past)))
 
 (defmethod define-expression-by-symbol 'starts-with? [operation condition current past]         
-    (starts-with?
+    (str/starts-with?
     	(define-expression (second condition) current past) 
     	(define-expression (last condition) current past)))
 
 (defmethod define-expression-by-symbol 'ends-with? [operation condition current past]         
-    (ends-with?
+    (str/ends-with?
     	(define-expression (second condition) current past) 
     	(define-expression (last condition) current past)))
