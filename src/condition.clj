@@ -9,7 +9,8 @@
 	( let [
 			type (first condition)
 			key (second condition)
+			value (get element key)
 		]
 		;element could be current or past objects being evaluated
-   	(get element key)))
+   	value))
 

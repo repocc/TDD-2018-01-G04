@@ -1,28 +1,108 @@
 (ns expression)
 (use 'condition)
 
-(defmulti define-expression (fn[condition element] (type condition)))
-(defmulti define-expression-by-symbol (fn[operation condition element] (symbol operation)))
+(defmulti define-expression (fn[condition current past] (type condition)))
+(defmulti define-expression-by-symbol (fn[operation condition current past] (symbol operation)))
 
-(defmethod define-expression java.lang.Boolean [condition element]         
-    (define-condition condition element))
+(defmethod define-expression java.lang.Boolean [condition current past]         
+    (define-condition condition current))
 
-(defmethod define-expression :default [condition element]         
+(defmethod define-expression :default [condition current past]         
     (let [
     		operation (first condition)
     	] 
-    (define-expression-by-symbol operation condition element)))
+    (define-expression-by-symbol operation condition current past)))
 
-(defmethod define-expression-by-symbol 'current [operation condition element]         
-    (define-condition condition element))
+;current past
+(defmethod define-expression-by-symbol 'current [operation condition current past]         
+    (define-condition condition current))
 
-(defmethod define-expression-by-symbol 'past [operation condition element]         
-    (define-condition condition element))
+(defmethod define-expression-by-symbol 'past [operation condition current past]         
+    (define-condition condition past))
 
-(defmethod define-expression-by-symbol '= [operation condition element]         
-    (let [
-    		firstTerm (second condition)
-    		secondTerm (last condition)	
-    	]
-    (= (define-expression firstTerm element) (define-expression secondTerm element))))
+;For every value
+(defmethod define-expression-by-symbol '= [operation condition current past]         
+    (= 
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
 
+(defmethod define-expression-by-symbol '!= [operation condition current past]         
+    (not= 
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+;For booleans
+(defmethod define-expression-by-symbol 'or [operation condition current past]         
+    (or 
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'and [operation condition current past]         
+    (and 
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'not [operation condition current past]         
+    (not (define-expression (second condition) current past)))
+
+;For integer
+(defmethod define-expression-by-symbol '+ [operation condition current past]         
+    (+
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '- [operation condition current past]         
+    (-
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '/ [operation condition current past]         
+    (/
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'mod [operation condition current past]         
+    (mod
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '< [operation condition current past]         
+    (<
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '> [operation condition current past]         
+    (>
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '<= [operation condition current past]         
+    (<=
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol '>= [operation condition current past]         
+    (>=
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+;For strings
+(defmethod define-expression-by-symbol 'concat [operation condition current past]         
+    (str
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'includes? [operation condition current past]         
+    (includes?
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'starts-with? [operation condition current past]         
+    (starts-with?
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
+
+(defmethod define-expression-by-symbol 'ends-with? [operation condition current past]         
+    (ends-with?
+    	(define-expression (second condition) current past) 
+    	(define-expression (last condition) current past)))
