@@ -4,8 +4,7 @@
 
 (defn define-subcounter[params]
 	( let [
-			condition (define-condition params)
-			;;count 0
+			condition params
 		]
 	(zipmap [:condition] [condition])))
 
@@ -15,7 +14,7 @@
 			ordered-parameters (reduce merge {} (map get-ordered-parameters (second params)));(merge (get-ordered-parameters (second params)))
 			parameters (define-parameter (second params))
 			subcounters {}
-			condition (define-condition (last params))
+			condition (last params)
 	] 
 	(zipmap [:type :name :ordered-parameters :parameters :subcounters :condition ] [type name ordered-parameters parameters subcounters condition])))
 
@@ -23,10 +22,9 @@
 	( let [
 			name (first (keys (first params)))
 			expression (first (vals (first params)))
-			condition (define-condition (last params))
-			count 0
+			condition (last params)
 	] 
-	(zipmap [:type :name :expression :condition :count] [type name expression condition count])))
+	(zipmap [:type :name :expression :condition] [type name expression condition])))
 
 (defmulti define-rule (fn[type params] (symbol type)))
 

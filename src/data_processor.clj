@@ -15,7 +15,7 @@
          
 (defn process-data [state new-data]
   ( let [
-  		state (map evaluate-rules state)
+  		state (map #(evaluate-rules % new-data) state)
   	]
   state))
          

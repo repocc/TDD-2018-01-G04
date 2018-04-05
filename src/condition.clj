@@ -1,16 +1,16 @@
 (ns condition)
 
-;TODO: We need to cover all the cases. Probably a recursive function
+(defmulti define-condition (fn[condition element] (type condition)))
 
-(defmulti define-condition (fn[condition] (type condition)))
-
-(defmethod define-condition java.lang.Boolean [condition]         
+(defmethod define-condition java.lang.Boolean [condition element]         
     condition)
 
-(defmethod define-condition :default [condition]
+(defmethod define-condition :default [condition element]
 	( let [
 			type (first condition)
 			key (second condition)
-			value true
+			value (get element key)
 		]
-   	(zipmap [:type :key :value] [type key value])))
+		;element could be current or past objects being evaluated
+   	value))
+
