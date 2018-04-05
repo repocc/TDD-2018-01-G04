@@ -1,5 +1,6 @@
 (ns rule)
 (use 'condition)
+(use 'parameter)
 
 (defn define-subcounter[params]
 	( let [
@@ -11,11 +12,12 @@
 (defn define-counter [params, type]
 	( let [
 			name (first params)
-			subcounters (map define-subcounter (second params))
+			ordered-parameters (reduce merge {} (map get-ordered-parameters (second params)));(merge (get-ordered-parameters (second params)))
+			parameters (define-parameter (second params))
+			subcounters {}
 			condition (define-condition (last params))
-			count 0
 	] 
-	(zipmap [:type :name :subcounters :condition :count] [type name subcounters condition count])))
+	(zipmap [:type :name :ordered-parameters :parameters :subcounters :condition ] [type name ordered-parameters parameters subcounters condition])))
 
 (defn define-signal [params, type]
 	( let [
