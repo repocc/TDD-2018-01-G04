@@ -6,7 +6,7 @@
 
 (defn evaluate-rules [state new-data]
 	(let [
-		current {"spam" true}
+		current {"spam" "tes"}
 		conditions (map #(define-expression (:condition %) current new-data) (:counters state))
 	]
 	conditions))

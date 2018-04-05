@@ -8,6 +8,12 @@
 (defmethod define-expression java.lang.Boolean [condition current past]         
     (define-condition condition current))
 
+(defmethod define-expression java.lang.Integer [condition current past]         
+    (define-condition condition current))
+
+(defmethod define-expression java.lang.String [condition current past]         
+    (define-condition condition current))
+
 (defmethod define-expression :default [condition current past]         
     (let [
     		operation (first condition)

@@ -5,6 +5,12 @@
 (defmethod define-condition java.lang.Boolean [condition element]         
     condition)
 
+(defmethod define-condition java.lang.Integer [condition element]         
+    condition)
+
+(defmethod define-condition java.lang.String [condition element]         
+    condition)
+
 (defmethod define-condition :default [condition element]
 	( let [
 			type (first condition)
