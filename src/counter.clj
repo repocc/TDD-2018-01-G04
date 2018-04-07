@@ -23,7 +23,6 @@
 	(map #(process-counter % data new-data) counters))
 
 
-
 (defn evaluate-rules [state new-data]
 	(let [
 		counters-rules (evaluate-counters-rules (state :counters) (state :data) new-data)
