@@ -83,7 +83,7 @@
   (let [st0 (initialize-processor rules)
         [st1 sg1] (process-data st0 {"spam" true})
         [st2 sg2] (process-data st1 {"spam" false})
-        [st3 sg3] (process-data st2 {})]
+        [st3 sg3] (process-data st2 {"spam" true})]
     (is (= 0
            (count sg1)))
     (is (= 1

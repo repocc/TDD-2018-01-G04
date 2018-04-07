@@ -3,7 +3,7 @@
 
 ;validate conditions
 (defn validate-condition [condition current past]
-	(define-expression condition current past))
+	(define-expression condition current past '({})))
 
 (defn get-validate-data [counter current past]
 	(let [

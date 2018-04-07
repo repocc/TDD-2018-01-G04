@@ -1,14 +1,18 @@
 (ns signal-processor)
 (use 'expression)
 
-(defmulti process-signal (fn[signal past current] (define-expression (signal :condition) current past)))
-
-(defmethod process-signal true [signal past current]
+(defn evaluate-expresion [signal past current counters]
 	(let [
-		;value-expression (define-expression (signal :expression) current past)
-		value-expression (true? false)
+		value-expression (try
+			(define-expression (signal :expression) current past counters)
+			(catch Exception e '()))
 	]
-	{(signal :name)  value-expression}))
+	( if (= value-expression '() ) '() {(signal :name)  value-expression})))
 
-(defmethod process-signal false [signal past current]
-    '())
+(defn process-signal [signal past current counters]
+	(let [
+    	past-data (first (filter #(define-expression (signal :condition) current % '({})) past))
+    	ok (define-expression (signal :condition) current past-data '({}))
+    ]
+    ( if (false? ok ) '() (evaluate-expresion signal past-data current counters))
+    ))

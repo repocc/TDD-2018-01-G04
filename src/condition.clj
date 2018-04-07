@@ -20,3 +20,11 @@
 		;element could be current or past objects being evaluated
    	value))
 
+
+;TODO: refactoring
+(defn get-counter-value-expr [counters counter-name args]
+	(let [
+		counter (first (filter #(= (:name %) counter-name) counters))
+		counter-value ( if (nil? counter) 0 (get (counter :subcounters) args) )
+		]
+		(if (nil? counter-value) 0 counter-value )))
