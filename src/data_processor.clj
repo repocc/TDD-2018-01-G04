@@ -10,14 +10,13 @@
       data-filter (find-data counters signals)
   		data [{}]
   		new-data []
-  		state (zipmap [:counters :signals :data-filter :data :new-data] [counters signals data-filter data new-data])
-		]
-  [state]))
+		](zipmap [:counters :signals :data-filter :data :new-data] [counters signals data-filter data new-data])
+  ))
          
 (defn process-data [state new-data]
   ( let [
-  		state (map #(evaluate-rules % new-data) state)
-      new-state (merge (first state) {:data (conj ((first state) :data) new-data)})
+      state (evaluate-rules state new-data)
+      new-state (merge state {:data (conj (state :data) new-data)})
   	]
   [new-state {}]))
          

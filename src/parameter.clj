@@ -23,9 +23,6 @@
 (defmethod define-parameter clojure.lang.Symbol [param]         
     (define-literal param))
 
-;(defmethod define-parameter clojure.lang.PersistentList [param]         
-;    (define-literal param))
-
 (defmethod define-parameter :default [param]
 	( let [
 			type (first param)
