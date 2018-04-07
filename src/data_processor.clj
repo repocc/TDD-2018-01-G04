@@ -2,6 +2,7 @@
 (use 'rule)
 (use 'counter)
 (use 'filter-data)
+(use 'rules-evaluator)
 
 (defn initialize-processor [rules]
   (	let [ 
@@ -10,8 +11,7 @@
   		signals (filter is-signal rules)
       data-filter (find-data counters signals)
   		data [{}]
-  		new-data []
-		](zipmap [:counters :signals :data-filter :data :new-data] [counters signals data-filter data new-data])
+		](zipmap [:counters :signals :data-filter :data ] [counters signals data-filter data ])
   ))
          
 (defn process-data [state new-data]

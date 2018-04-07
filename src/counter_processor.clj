@@ -20,7 +20,7 @@
     (contains? data (param :field)))
 
 (defmethod check-current :default [param data]
-    (true? true))
+    true)
 
 (defmulti check-past (fn[param data] (param :type)))
 
@@ -28,7 +28,7 @@
     (contains? data (param :field)))
 
 (defmethod check-past :default [param data]
-    (true? true))
+    true)
 
 (defn check-single-data [params data]
 	(every? true? (map #(check-past % data) params)))
@@ -44,7 +44,7 @@
 (defmulti get_subcounter-value (fn[subcounters key] (nil? (get subcounters key))))
 
 (defmethod get_subcounter-value true [subcounters key]
-    (+ 0 1))
+    1)
 
 (defmethod get_subcounter-value false [subcounters key]
     (+ (get subcounters key) 1))
@@ -71,7 +71,7 @@
     (merge counter {:subcounters final-subcounter})))
 
 (defmethod calculate-counter false [counter current past ok]         
-    (first [counter]))
+    counter)
 
 
 (defmulti process-counter-with-params (fn[counter data new-data] (exist-params-in-fields counter data new-data)))
@@ -83,7 +83,7 @@
     (calculate-counter counter new-data past-data ok)))
 
 (defmethod process-counter-with-params false [counter data new-data]         
-    (first [counter]))
+    counter)
 
 
 (defmulti process-counter-without-params (fn[counter data new-data] (second (get-validate-data counter new-data data))))
@@ -97,7 +97,7 @@
     (merge counter {:subcounters final-subcounter})))
 
 (defmethod process-counter-without-params false [counter data new-data]         
-    (first [counter]))
+    counter)
 
 
 (defn check-counter-with-params [params]

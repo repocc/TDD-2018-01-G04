@@ -1,5 +1,6 @@
 (ns expression)
 (use 'condition)
+(use 'counter)
 (require '[clojure.string :as str])
 
 (defmulti define-expression (fn[condition current past counters] (type condition)))
@@ -27,10 +28,9 @@
 (defmethod define-expression-by-symbol 'past [operation condition current past counters]         
     (define-condition condition past))
 
-;TODO: refactoring
 (defmethod define-expression-by-symbol 'counter-value [operation condition current past counters]         
-    (get-counter-value-expr counters (second condition) (last condition)))
-    ;(count (second condition)))
+    (get-counter-value counters (second condition) (last condition)))
+
 
 ;For every value
 (defmethod define-expression-by-symbol '= [operation condition current past counters]         
