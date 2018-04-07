@@ -23,7 +23,7 @@
     (is (= 0
            (query-counter (initialize-processor rules) "spam" [])))))
 
-(deftest unconditional-counter-test2
+(deftest unconditional-counter-test
   (let [st0 (initialize-processor rules)
         st1 (process-data-dropping-signals st0 {"spam" true})
         st2 (process-data-dropping-signals st1 {"spam" true})]

@@ -1,6 +1,7 @@
 (ns data-processor (:use clojure.pprint))
 (use 'rule)
 (use 'counter)
+(use 'filter-data)
 
 (defn initialize-processor [rules]
   (	let [ 
@@ -15,10 +16,10 @@
          
 (defn process-data [state new-data]
   ( let [
-      state (evaluate-rules state new-data)
+      [state results] (evaluate-rules state new-data)
       new-state (merge state {:data (conj (state :data) new-data)})
   	]
-  [new-state {}]))
+  [new-state results]))
          
 (defn query-counter [state counter-name counter-args]
   (get-counter-value (:counters  state) counter-name counter-args))

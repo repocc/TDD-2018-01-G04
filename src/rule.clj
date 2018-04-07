@@ -2,9 +2,6 @@
 (use 'condition)
 (use 'parameter)
 
-(defn find-data [counters signals]
-	(true? true))
-
 (defn define-subcounter[params]
 	( let [
 			condition params
