@@ -11,12 +11,11 @@
 (defn define-counter [params, type]
 	( let [
 			name (first params)
-			ordered-parameters (reduce merge {} (map get-ordered-parameters (second params)));(merge (get-ordered-parameters (second params)))
-			parameters (define-parameter (second params))
+			parameters (map define-parameter (second params))
 			subcounters {}
 			condition (last params)
 	] 
-	(zipmap [:type :name :ordered-parameters :parameters :subcounters :condition ] [type name ordered-parameters parameters subcounters condition])))
+	(zipmap [:type :name :parameters :subcounters :condition ] [type name parameters subcounters condition])))
 
 (defn define-signal [params, type]
 	( let [

@@ -1,28 +1,34 @@
 (ns parameter)
 
-(defn get-ordered-parameters [params]
-	(merge {} {(second params) []}))
+(defn define-literal [literal]
+	(zipmap [:type :field ] [ "literal" literal]))
 
-(defn get-parameters [parameters]
-	(let [
-		type (symbol (first parameters))
-		field (second parameters)
-	]
-	(zipmap [:type :field] [type field])))
+(defmulti define-parameter (fn[param] (type param)))
 
-(defn is-current [parameters] 
-	(= (:type parameters) 'current))
+(defmethod define-parameter java.lang.Boolean [param]
+    (define-literal param))
 
-(defn is-past [parameters] 
-	(= (:type parameters) 'past))
+(defmethod define-parameter java.lang.Long [param]         
+    (define-literal param))
 
-(defn get-field [parameter]
-	(first (vals (select-keys parameter [:field]))))
+(defmethod define-parameter java.lang.String [param]         
+    (define-literal param))
 
-(defn define-parameter [parameters]
-	(let [ 
-		parameters	(map get-parameters parameters)
-		current	(map get-field (filter is-current parameters))
-		past	(map get-field (filter is-past parameters))
-	]
-	(zipmap [:current :past ] [current past])))
+(defmethod define-parameter clojure.lang.PersistentVector [param]
+    (define-literal param))
+
+(defmethod define-parameter clojure.lang.PersistentArrayMap [param]         
+    (define-literal param))
+
+(defmethod define-parameter clojure.lang.Symbol [param]         
+    (define-literal param))
+
+;(defmethod define-parameter clojure.lang.PersistentList [param]         
+;    (define-literal param))
+
+(defmethod define-parameter :default [param]
+	( let [
+			type (first param)
+			field (second param)
+	]	
+   	(zipmap [:type :field ] [type field])))
