@@ -7,7 +7,7 @@
   		rules (map evaluate-function rules)
   		counters (filter is-counter rules)
   		signals (filter is-signal rules)
-  		data [{"important" false}]
+  		data [{}]
   		new-data []
   		state (zipmap [:counters :signals :data :new-data] [counters signals data new-data])
 		]
@@ -15,7 +15,7 @@
          
 (defn process-data [state new-data]
   ( let [
-  		state (map #(evaluate-rules2 % new-data) state)
+  		state (map #(evaluate-rules % new-data) state)
   	]
   state))
          

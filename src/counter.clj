@@ -11,17 +11,17 @@
 
 
 
-(defn evaluate-rules2 [state new-data]
+(defn evaluate-rules [state new-data]
 	(let [
 		counters-rules (evaluate-counters-rules (state :counters) (state :data) new-data)
 	]
 	(merge state {:counters counters-rules})))
 
 
-(defn evaluate-rules [state new-data]
-	(let [
-		current {"spam" "tes"}
-		conditions (map #(define-expression (:condition %) current new-data) (:counters state))
-	]
-	conditions))
+;(defn evaluate-rules [state new-data]
+;	(let [
+;		current {"spam" "tes"}
+;		conditions (map #(define-expression (:condition %) current new-data) (:counters state))
+;	]
+;	conditions))
 

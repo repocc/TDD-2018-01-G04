@@ -78,8 +78,7 @@
 
 (defmethod process-counter-with-params true [counter data new-data]
     (let [
-    	past-data (first (filter #(validate-condition (counter :condition) new-data %) data))
-    	ok (validate-condition (counter :condition) new-data past-data)
+    	[past-data ok] (get-validate-data counter new-data data)
     ]
     (calculate-counter counter new-data past-data ok)))
 
@@ -91,7 +90,7 @@
 
 (defmethod process-counter-without-params true [counter data new-data]
     (let [
-    	subcounter (map #(get_field % {} {}) (counter :parameters))
+    	subcounter (map #(get_field % data new-data) (counter :parameters))
     	subcounter-value (get_subcounter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
