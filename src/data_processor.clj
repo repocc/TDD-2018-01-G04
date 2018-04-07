@@ -20,7 +20,4 @@
   state))
          
 (defn query-counter [state counter-name counter-args]
-  (let [
-  	counter (get-counter-by-name (:counters state) counter-name)
-  ]
-  (if(nil? counter) 0 (:count counter))))
+  (get-counter-value (:counters (first state)) counter-name counter-args))
