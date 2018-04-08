@@ -2,7 +2,7 @@
 (use 'rule)
 (use 'counter)
 (use 'filter-data)
-(use 'rules-evaluator)
+(use 'rule-evaluator)
 
 (defn initialize-processor [rules]
   (	let [ 
