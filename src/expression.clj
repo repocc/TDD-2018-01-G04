@@ -21,6 +21,26 @@
     	] 
     (define-expression-by-symbol operation condition current past counters)))
 
+(def symbols 
+    {'= =, 
+    '!= not=, 
+    ;'or or,
+    ;'and and,
+    'not not,
+    '+ +,
+    '- -,
+    '/ /,
+    'mod mod,
+    '< <,
+    '> >,
+    '<= <=,
+    '>= >=,
+    'concat str,
+    'includes? str/includes?,
+    'starts-with? str/starts-with?,
+    'ends-with? str/ends-with?}
+)
+
 ;current past
 (defmethod define-expression-by-symbol 'current [operation condition current past counters]         
     (define-condition condition current))
@@ -31,90 +51,12 @@
 (defmethod define-expression-by-symbol 'counter-value [operation condition current past counters]         
     (get-counter-value counters (second condition) (last condition)))
 
-
-;For every value
-(defmethod define-expression-by-symbol '= [operation condition current past counters]         
-    (= 
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '!= [operation condition current past counters]         
-    (not= 
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-;For booleans
-(defmethod define-expression-by-symbol 'or [operation condition current past counters]         
-    (or 
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
 (defmethod define-expression-by-symbol 'and [operation condition current past counters]         
-    (and 
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
+    (and (map #(define-expression % current past counters) (rest condition))))
 
-(defmethod define-expression-by-symbol 'not [operation condition current past counters]         
-    (not (define-expression (second condition) current past counters)))
+(defmethod define-expression-by-symbol 'or [operation condition current past counters]         
+    (or (map #(define-expression % current past counters) (rest condition))))
 
-;For integer
-(defmethod define-expression-by-symbol '+ [operation condition current past counters]         
-    (+
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
+(defmethod define-expression-by-symbol :default [operation condition current past counters]         
+    (apply (get symbols operation) (map #(define-expression % current past counters) (rest condition))))
 
-(defmethod define-expression-by-symbol '- [operation condition current past counters]         
-    (-
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '/ [operation condition current past counters]         
-    (/
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol 'mod [operation condition current past counters]         
-    (mod
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '< [operation condition current past counters]         
-    (<
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '> [operation condition current past counters]         
-    (>
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '<= [operation condition current past counters]         
-    (<=
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol '>= [operation condition current past counters]         
-    (>=
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-;For strings
-(defmethod define-expression-by-symbol 'concat [operation condition current past counters]         
-    (str
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol 'includes? [operation condition current past counters]         
-    (str/includes?
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol 'starts-with? [operation condition current past counters]         
-    (str/starts-with?
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
-
-(defmethod define-expression-by-symbol 'ends-with? [operation condition current past counters]         
-    (str/ends-with?
-    	(define-expression (second condition) current past counters) 
-    	(define-expression (last condition) current past counters)))
