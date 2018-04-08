@@ -35,3 +35,14 @@
 
 (defn get-params-of-type [type params]
     (filter #(= (% :type) type) params))
+
+(defmulti get-param-value (fn[param current past] (param :type)))
+
+(defmethod get-param-value "literal" [param current past]
+    (param :field))
+
+(defmethod get-param-value 'current [param current past]
+    (get current (param :field)))
+
+(defmethod get-param-value 'past [param current past]
+    (get past (param :field)))

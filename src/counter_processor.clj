@@ -42,22 +42,11 @@
 	]
 	(every? true? [exist-current exist-past])))
 
-(defmulti get_field (fn[param current past] (param :type)))
-
-(defmethod get_field "literal" [param current past]
-    (param :field))
-
-(defmethod get_field 'current [param current past]
-    (get current (param :field)))
-
-(defmethod get_field 'past [param current past]
-    (get past (param :field)))
-
 (defmulti calculate-counter (fn[counter current past ok] (true? ok)))
 
 (defmethod calculate-counter true [counter current past ok]         
     (let [
-    	subcounter (map #(get_field % current past) (counter :parameters))
+    	subcounter (map #(get-param-value % current past) (counter :parameters))
     	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
@@ -85,7 +74,7 @@
 
 (defmethod process-counter-without-params true [counter data new-data]
     (let [
-    	subcounter (map #(get_field % data new-data) (counter :parameters))
+    	subcounter (map #(get-param-value % data new-data) (counter :parameters))
     	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
