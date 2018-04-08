@@ -1,5 +1,4 @@
 (ns rule)
-(use 'condition)
 (use 'parameter)
 
 (defn define-subcounter[params]

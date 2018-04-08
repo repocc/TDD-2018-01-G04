@@ -1,5 +1,4 @@
 (ns expression)
-(use 'condition)
 (use 'counter)
 (require '[clojure.string :as str])
 
@@ -41,22 +40,31 @@
     'ends-with? str/ends-with?}
 )
 
-;current past
+(defn get-condition-value [condition, element] 
+    (   let [
+            key (second condition)
+            value (get element key)
+        ]
+    value))
+
 (defmethod define-expression-by-symbol 'current [operation condition current past counters]         
-    (define-condition condition current))
+    (get-condition-value condition current))
 
 (defmethod define-expression-by-symbol 'past [operation condition current past counters]         
-    (define-condition condition past))
+    (get-condition-value condition past))
+
+(defn get-conditions [condition current past counters] 
+    (map #(define-expression % current past counters) (rest condition)))
 
 (defmethod define-expression-by-symbol 'counter-value [operation condition current past counters]         
     (get-counter-value counters (second condition) (last condition)))
 
 (defmethod define-expression-by-symbol 'and [operation condition current past counters]         
-    (and (map #(define-expression % current past counters) (rest condition))))
+    (and (get-conditions condition current past counters)))
 
 (defmethod define-expression-by-symbol 'or [operation condition current past counters]         
-    (or (map #(define-expression % current past counters) (rest condition))))
+    (or (get-conditions condition current past counters)))
 
 (defmethod define-expression-by-symbol :default [operation condition current past counters]         
-    (apply (get symbols operation) (map #(define-expression % current past counters) (rest condition))))
+    (apply (get symbols operation) (get-conditions condition current past counters)))
 
