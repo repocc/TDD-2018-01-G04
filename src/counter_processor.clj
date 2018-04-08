@@ -1,9 +1,9 @@
 (ns counter-processor)
-(use 'expression)
+(use 'condition)
 
 ;validate conditions
 (defn validate-condition [condition current past]
-	(define-expression condition current past '({})))
+	(define-condition condition current past '({})))
 
 (defn get-validate-data [counter current past]
 	(let [

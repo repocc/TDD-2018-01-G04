@@ -1,5 +1,5 @@
 (ns rules-evaluator)
-(use 'expression)
+(use 'condition)
 (use 'counter-processor)
 (use 'signal-processor)
 
