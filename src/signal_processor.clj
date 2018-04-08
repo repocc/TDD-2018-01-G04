@@ -9,9 +9,9 @@
 	]
 	( if (= value-expression '() ) '() {(signal :name)  value-expression})))
 
-(defn process-signal [signal past current counters]
+(defn process-signal [signal data current counters]
 	(let [
-    	past-data (first (filter #(define-condition (signal :condition) current % '({})) past))
+    	past-data (first (filter #(define-condition (signal :condition) current % '({})) data))
     	ok (define-condition (signal :condition) current past-data '({}))
     ]
     ( if (false? ok ) '() (evaluate-expresion signal past-data current counters))

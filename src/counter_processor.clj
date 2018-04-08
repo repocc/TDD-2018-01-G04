@@ -1,5 +1,6 @@
 (ns counter-processor)
 (use 'condition)
+(use 'counter)
 
 ;validate conditions
 (defn validate-condition [condition current past]
@@ -40,15 +41,6 @@
 	]
 	(every? true? [exist-current exist-past])))
 
-
-(defmulti get_subcounter-value (fn[subcounters key] (nil? (get subcounters key))))
-
-(defmethod get_subcounter-value true [subcounters key]
-    1)
-
-(defmethod get_subcounter-value false [subcounters key]
-    (+ (get subcounters key) 1))
-
 (defmulti get_field (fn[param current past] (param :type)))
 
 (defmethod get_field "literal" [param current past]
@@ -65,7 +57,7 @@
 (defmethod calculate-counter true [counter current past ok]         
     (let [
     	subcounter (map #(get_field % current past) (counter :parameters))
-    	subcounter-value (get_subcounter-value (counter :subcounters) subcounter)
+    	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
     (merge counter {:subcounters final-subcounter})))
@@ -74,7 +66,8 @@
     counter)
 
 
-(defmulti process-counter-with-params (fn[counter data new-data] (exist-params-in-fields counter data new-data)))
+(defmulti process-counter-with-params (fn[counter data new-data] 
+    (exist-params-in-fields counter data new-data)))
 
 (defmethod process-counter-with-params true [counter data new-data]
     (let [
@@ -86,12 +79,13 @@
     counter)
 
 
-(defmulti process-counter-without-params (fn[counter data new-data] (second (get-validate-data counter new-data data))))
+(defmulti process-counter-without-params (fn[counter data new-data] 
+    (second (get-validate-data counter new-data data))))
 
 (defmethod process-counter-without-params true [counter data new-data]
     (let [
     	subcounter (map #(get_field % data new-data) (counter :parameters))
-    	subcounter-value (get_subcounter-value (counter :subcounters) subcounter)
+    	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
     (merge counter {:subcounters final-subcounter})))
@@ -108,7 +102,8 @@
 	(or current-params past-params)))
 
 
-(defmulti process-counter (fn[counter data new-data] (check-counter-with-params (counter :parameters))))
+(defmulti process-counter (fn[counter data new-data] 
+    (check-counter-with-params (counter :parameters))))
 
 (defmethod process-counter true [counter data new-data]
     (process-counter-with-params counter data new-data))
