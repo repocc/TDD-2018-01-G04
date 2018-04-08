@@ -29,3 +29,9 @@
 			field (second param)
 	]	
    	(zipmap [:type :field ] [type field])))
+
+(defn has-params-of-type [type params]
+    (some true? (map #(= (% :type) type) params)))
+
+(defn get-params-of-type [type params]
+    (filter #(= (% :type) type) params))

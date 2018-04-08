@@ -1,6 +1,7 @@
 (ns counter-processor)
 (use 'condition)
 (use 'counter)
+(use 'parameter)
 
 ;validate conditions
 (defn validate-condition [condition current past]
@@ -93,17 +94,14 @@
 (defmethod process-counter-without-params false [counter data new-data]         
     counter)
 
-
-(defn check-counter-with-params [params]
-	(let [
-		current-params (some true? (map #(= (% :type) 'current) params))
-		past-params (some true? (map #(= (% :type) 'past) params))
-	]
-	(or current-params past-params)))
-
-
 (defmulti process-counter (fn[counter data new-data] 
-    (check-counter-with-params (counter :parameters))))
+    (let [
+        parameters (counter :parameters)
+    ]
+    (or 
+        (has-params-of-type 'current parameters)
+        (has-params-of-type 'past parameters)
+    ))))
 
 (defmethod process-counter true [counter data new-data]
     (process-counter-with-params counter data new-data))
