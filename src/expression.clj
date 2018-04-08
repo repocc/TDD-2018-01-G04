@@ -7,13 +7,13 @@
 (defmulti define-expression-by-symbol (fn[operation condition current past counters] (symbol operation)))
 
 (defmethod define-expression java.lang.Boolean [condition current past counters]         
-    (define-condition condition current))
+    condition)
 
 (defmethod define-expression java.lang.Integer [condition current past counters]         
-    (define-condition condition current))
+    condition)
 
 (defmethod define-expression java.lang.String [condition current past counters]         
-    (define-condition condition current))
+    condition)
 
 (defmethod define-expression :default [condition current past counters]         
     (let [
