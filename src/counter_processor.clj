@@ -16,31 +16,21 @@
 
 
 ;check if params exist in the data
-(defmulti check-current (fn[param data] (param :type)))
-
-(defmethod check-current 'current [param data]
+(defn has-param-field [param data] 
     (contains? data (param :field)))
 
-(defmethod check-current :default [param data]
-    true)
-
-(defmulti check-past (fn[param data] (param :type)))
-
-(defmethod check-past 'past [param data]
-    (contains? data (param :field)))
-
-(defmethod check-past :default [param data]
-    true)
-
-(defn check-single-data [params data]
-	(every? true? (map #(check-past % data) params)))
+(defn has-every-param-field [params data]
+	(every? true? (map #(has-param-field % data) params)))
 
 (defn exist-params-in-fields [counter data new-data] 
 	(let [
-		exist-current (every? true? (map #(check-current % new-data) (counter :parameters)))
-		exist-past (some true? (map #(check-single-data (counter :parameters) %) data))
+        parameters (counter :parameters)
+        current-parameters (get-params-of-type 'current parameters)
+        past-parameters (get-params-of-type 'past parameters)
+		exist-current (every? true? (map #(has-param-field % new-data) current-parameters))
+		exist-past (some true? (map #(has-every-param-field past-parameters %) data))
 	]
-	(every? true? [exist-current exist-past])))
+    (every? true? [ exist-current exist-past])))
 
 (defmulti calculate-counter (fn[counter current past ok] (true? ok)))
 
