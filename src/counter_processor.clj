@@ -1,117 +1,75 @@
 (ns counter-processor)
-(use 'expression)
+(use 'condition)
+(use 'counter)
+(use 'parameter)
 
 ;validate conditions
-(defn validate-condition [condition current past]
-	(define-expression condition current past '({})))
-
-(defn get-validate-data [counter current past]
+(defn validate-condition [counter current past]
 	(let [
-    	past-data (first (filter #(validate-condition (counter :condition) current %) past))
-    	ok (validate-condition (counter :condition) current past-data)
+    	past-data (first (filter #(define-condition (counter :condition) current % '({})) past))
+    	ok (define-condition (counter :condition) current past-data '({}))
     ]
     [past-data ok]))
 
 
 ;check if params exist in the data
-(defmulti check-current (fn[param data] (param :type)))
-
-(defmethod check-current 'current [param data]
+(defn has-param-field [param data] 
     (contains? data (param :field)))
 
-(defmethod check-current :default [param data]
-    true)
-
-(defmulti check-past (fn[param data] (param :type)))
-
-(defmethod check-past 'past [param data]
-    (contains? data (param :field)))
-
-(defmethod check-past :default [param data]
-    true)
-
-(defn check-single-data [params data]
-	(every? true? (map #(check-past % data) params)))
+(defn has-every-param-field [params data]
+	(every? true? (map #(has-param-field % data) params)))
 
 (defn exist-params-in-fields [counter data new-data] 
 	(let [
-		exist-current (every? true? (map #(check-current % new-data) (counter :parameters)))
-		exist-past (some true? (map #(check-single-data (counter :parameters) %) data))
+        parameters (counter :parameters)
+        current-parameters (get-params-of-type 'current parameters)
+        past-parameters (get-params-of-type 'past parameters)
+		exist-current (every? true? (map #(has-param-field % new-data) current-parameters))
+		exist-past (some true? (map #(has-every-param-field past-parameters %) data))
 	]
-	(every? true? [exist-current exist-past])))
+    (every? true? [exist-current exist-past])))
 
 
-(defmulti get_subcounter-value (fn[subcounters key] (nil? (get subcounters key))))
+(defmulti calculate-counter (fn[counter current past is-valid] (true? is-valid)))
 
-(defmethod get_subcounter-value true [subcounters key]
-    1)
-
-(defmethod get_subcounter-value false [subcounters key]
-    (+ (get subcounters key) 1))
-
-(defmulti get_field (fn[param current past] (param :type)))
-
-(defmethod get_field "literal" [param current past]
-    (param :field))
-
-(defmethod get_field 'current [param current past]
-    (get current (param :field)))
-
-(defmethod get_field 'past [param current past]
-    (get past (param :field)))
-
-(defmulti calculate-counter (fn[counter current past ok] (true? ok)))
-
-(defmethod calculate-counter true [counter current past ok]         
+(defmethod calculate-counter true [counter current past is-valid]         
     (let [
-    	subcounter (map #(get_field % current past) (counter :parameters))
-    	subcounter-value (get_subcounter-value (counter :subcounters) subcounter)
+    	subcounter (map #(get-param-value % current past) (counter :parameters))
+    	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
     (merge counter {:subcounters final-subcounter})))
 
-(defmethod calculate-counter false [counter current past ok]         
+(defmethod calculate-counter false [counter current past is-valid]         
     counter)
 
 
-(defmulti process-counter-with-params (fn[counter data new-data] (exist-params-in-fields counter data new-data)))
-
-(defmethod process-counter-with-params true [counter data new-data]
+(defn process-counter-with-params [counter data new-data] 
     (let [
-    	[past-data ok] (get-validate-data counter new-data data)
+        is-param-in-fields (exist-params-in-fields counter data new-data)
+        [past-data ok] (validate-condition counter new-data data)
+        is-valid (and is-param-in-fields ok)
     ]
-    (calculate-counter counter new-data past-data ok)))
+    (calculate-counter counter new-data past-data is-valid)))
 
-(defmethod process-counter-with-params false [counter data new-data]         
-    counter)
-
-
-(defmulti process-counter-without-params (fn[counter data new-data] (second (get-validate-data counter new-data data))))
-
-(defmethod process-counter-without-params true [counter data new-data]
+(defn process-counter-without-params [counter data new-data] 
     (let [
-    	subcounter (map #(get_field % data new-data) (counter :parameters))
-    	subcounter-value (get_subcounter-value (counter :subcounters) subcounter)
-    	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
+        is-valid (second (validate-condition counter new-data data))
     ]
-    (merge counter {:subcounters final-subcounter})))
-
-(defmethod process-counter-without-params false [counter data new-data]         
-    counter)
+    (calculate-counter counter new-data data is-valid)))
 
 
-(defn check-counter-with-params [params]
-	(let [
-		current-params (some true? (map #(= (% :type) 'current) params))
-		past-params (some true? (map #(= (% :type) 'past) params))
-	]
-	(or current-params past-params)))
-
-
-(defmulti process-counter (fn[counter data new-data] (check-counter-with-params (counter :parameters))))
+(defmulti process-counter (fn[counter data new-data] 
+    (let [
+        parameters (counter :parameters)
+    ]
+    (or 
+        (has-params-of-type 'current parameters)
+        (has-params-of-type 'past parameters)
+    ))))
 
 (defmethod process-counter true [counter data new-data]
     (process-counter-with-params counter data new-data))
 
-(defmethod process-counter nil [counter data new-data]         
+(defmethod process-counter :default [counter data new-data]         
     (process-counter-without-params counter data new-data))

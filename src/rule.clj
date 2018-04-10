@@ -1,12 +1,5 @@
 (ns rule)
-(use 'condition)
 (use 'parameter)
-
-(defn define-subcounter[params]
-	( let [
-			condition params
-		]
-	(zipmap [:condition] [condition])))
 
 (defn define-counter [params, type]
 	( let [

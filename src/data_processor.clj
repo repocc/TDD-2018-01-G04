@@ -1,17 +1,17 @@
 (ns data-processor (:use clojure.pprint))
 (use 'rule)
 (use 'counter)
-(use 'filter-data)
-(use 'rules-evaluator)
+(use 'rule-evaluator)
+(use 'parameter)
 
 (defn initialize-processor [rules]
   (	let [ 
   		rules (map evaluate-function rules)
   		counters (filter is-counter rules)
   		signals (filter is-signal rules)
-      data-filter (find-data counters signals)
+      param-fields (find-param-fields counters)
   		data [{}]
-		](zipmap [:counters :signals :data-filter :data ] [counters signals data-filter data ])
+		](zipmap [:counters :signals :param-fields :data ] [counters signals param-fields data ])
   ))
          
 (defn process-data [state new-data]
