@@ -2,7 +2,9 @@
   (:require [clojure.test :refer :all]
             [data-processor :refer :all]))
 
-(def rules '((define-counter "email-count" []
+(def rules '( (define-counter "spam-count-whit-param-literal" ["spam"]
+                (current "spam"))
+              (define-counter "email-count" []
                true)
              (define-counter "spam-count" []
                (current "spam"))
@@ -50,7 +52,15 @@
             st2 (process-data-dropping-signals st1 {"spam" false})
             st3 (process-data-dropping-signals st2 {"spam" true})]
         (is (= 2
-               (query-counter st3 "spam-count" [])))))))
+               (query-counter st3 "spam-count" [])))))
+      (testing "when considered field string"
+      (let [st0 (initialize-processor rules)
+            st1 (process-data-dropping-signals st0 {"spam" true})
+            st2 (process-data-dropping-signals st1 {"spam" false})
+            st3 (process-data-dropping-signals st2 {"spam" true})]
+        (is (= 2
+               (query-counter st3 "spam-count-whit-param-literal" ["spam"])))))
+    ))
 
 (deftest contingency-table-counter-test
   (let [st0 (initialize-processor rules)
@@ -114,3 +124,4 @@
            sg4))
     (is (= '({"repeated" 2})
            sg5))))
+
