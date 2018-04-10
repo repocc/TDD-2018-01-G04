@@ -74,5 +74,5 @@
 (defmethod process-counter true [counter data new-data]
     (process-counter-with-params counter data new-data))
 
-(defmethod process-counter nil [counter data new-data]         
+(defmethod process-counter :default [counter data new-data]         
     (process-counter-without-params counter data new-data))
