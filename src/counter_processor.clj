@@ -32,9 +32,10 @@
 	]
     (every? true? [exist-current exist-past])))
 
-(defmulti calculate-counter (fn[counter current past ok] (true? ok)))
 
-(defmethod calculate-counter true [counter current past ok]         
+(defmulti calculate-counter (fn[counter current past is-valid] (true? is-valid)))
+
+(defmethod calculate-counter true [counter current past is-valid]         
     (let [
     	subcounter (map #(get-param-value % current past) (counter :parameters))
     	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
@@ -42,36 +43,24 @@
     ]
     (merge counter {:subcounters final-subcounter})))
 
-(defmethod calculate-counter false [counter current past ok]         
+(defmethod calculate-counter false [counter current past is-valid]         
     counter)
 
 
-(defmulti process-counter-with-params (fn[counter data new-data] 
-    (exist-params-in-fields counter data new-data)))
-
-(defmethod process-counter-with-params true [counter data new-data]
+(defn process-counter-with-params [counter data new-data] 
     (let [
-    	[past-data ok] (get-validate-data counter new-data data)
+        is-param-in-fields (exist-params-in-fields counter data new-data)
+        [past-data ok] (get-validate-data counter new-data data)
+        is-valid (and is-param-in-fields ok)
     ]
-    (calculate-counter counter new-data past-data ok)))
+    (calculate-counter counter new-data past-data is-valid)))
 
-(defmethod process-counter-with-params false [counter data new-data]         
-    counter)
-
-
-(defmulti process-counter-without-params (fn[counter data new-data] 
-    (second (get-validate-data counter new-data data))))
-
-(defmethod process-counter-without-params true [counter data new-data]
+(defn process-counter-without-params [counter data new-data] 
     (let [
-    	subcounter (map #(get-param-value % data new-data) (counter :parameters))
-    	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
-    	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
+        is-valid (second (get-validate-data counter new-data data))
     ]
-    (merge counter {:subcounters final-subcounter})))
+    (calculate-counter counter new-data data is-valid)))
 
-(defmethod process-counter-without-params false [counter data new-data]         
-    counter)
 
 (defmulti process-counter (fn[counter data new-data] 
     (let [
