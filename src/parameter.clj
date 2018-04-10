@@ -12,7 +12,7 @@
     (define-parameter-format (first param) (second param)))
 
 (defmethod define-parameter :default [param]
-    (define-parameter-format "literal" (second param)))
+    (define-parameter-format "literal" param))
 
 
 (defn has-params-of-type [type params]
