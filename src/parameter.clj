@@ -31,3 +31,16 @@
 
 (defmethod get-param-value 'past [param current past]
     (get past (param :field)))
+
+(defn find-counter-param-fields [counter]
+	(let [
+		past-params (get-params-of-type 'past (counter :parameters))
+	]
+	(into [] (map #(% :field) past-params))))
+	
+
+(defn find-param-fields [counters]
+	(let [
+		counter-param-fields (remove #(= % []) (distinct (map find-counter-param-fields counters)))
+	]
+	(distinct (flatten counter-param-fields))))
