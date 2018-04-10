@@ -30,7 +30,7 @@
 		exist-current (every? true? (map #(has-param-field % new-data) current-parameters))
 		exist-past (some true? (map #(has-every-param-field past-parameters %) data))
 	]
-    (every? true? [ exist-current exist-past])))
+    (every? true? [exist-current exist-past])))
 
 (defmulti calculate-counter (fn[counter current past ok] (true? ok)))
 
