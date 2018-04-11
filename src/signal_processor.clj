@@ -11,7 +11,6 @@
 
 (defn process-signal [signal data current counters]
 	(let [
-    	past-data (first (filter #(define-condition (signal :condition) current % '({})) data))
-    	ok (define-condition (signal :condition) current past-data '({}))
+    	[sample-data ok] (validate-condition (:condition signal) current data)
     ]
-    ( if (false? ok ) '() (evaluate-condition signal past-data current counters))))
+    ( if (false? ok ) '() (evaluate-condition signal sample-data current counters))))

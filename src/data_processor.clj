@@ -9,7 +9,7 @@
   		rules (map evaluate-function rules)
   		counters (filter is-counter rules)
   		signals (filter is-signal rules)
-      param-fields (find-param-fields counters)
+      param-fields (find-param-fields counters signals)
   		data [{}]
 		](zipmap [:counters :signals :param-fields :data ] [counters signals param-fields data ])
   ))
@@ -17,7 +17,7 @@
 (defn process-data [state new-data]
   ( let [
       [state results] (evaluate-rules state new-data)
-      new-state (merge state {:data (conj (state :data) new-data)})
+      new-state (merge state {:data (filter-fields (state :data) new-data (state :param-fields))})
   	]
   [new-state results]))
          
