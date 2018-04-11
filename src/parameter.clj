@@ -39,8 +39,31 @@
 	(into [] (map #(% :field) past-params))))
 	
 
-(defn find-param-fields [counters]
+(defmulti find-fields (fn[dato] (first dato)))
+
+(defmethod find-fields 'past [dato]
+       (let [
+          dato  (into[] (concat (find-fields (rest dato)) [(second dato)]))
+        ]
+        dato)
+)
+
+(defmethod find-fields nil [dato]
+       []
+)
+
+(defmethod find-fields :default [dato]
+    (find-fields (rest dato)))
+
+(defn find-param-fields [counters signals]
 	(let [
 		counter-param-fields (remove #(= % []) (distinct (map find-counter-param-fields counters)))
+		counter-condition-fields (remove #(= % []) (distinct (map #(find-fields (flatten(% :condition)) ) counters)))
+		signal-condition-fields (remove #(= % []) (distinct (map #(find-fields (flatten(% :condition)) ) signals)))
+		signal-expression-fields (remove #(= % []) (distinct (map #(find-fields (flatten(% :expression)) ) signals)))
 	]
-	(distinct (flatten counter-param-fields))))
+	(distinct (flatten (concat counter-param-fields counter-condition-fields signal-condition-fields signal-expression-fields)))
+	))
+
+(defn filter-fields [data new-data filter-data]
+	(distinct (conj data (select-keys new-data filter-data))))
