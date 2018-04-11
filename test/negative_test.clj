@@ -35,7 +35,7 @@
             st1 (process-data-dropping-signals st0 {"spam" true, "important" true})
             st2 (process-data-dropping-signals st1 {"spam" true, "important" false})]
         (is (= 0 (query-counter st2 "spam-important-table" [true])))))
-    (testing "when condition is true but param no exist in current data"
+    (testing "when condition is true but param does not exist in current data"
       (let [st0 (initialize-processor rules)
             st1 (process-data-dropping-signals st0 {"important" true})
             st2 (process-data-dropping-signals st1 {"important" true})]
@@ -46,7 +46,7 @@
 
 (deftest failures-query-test
   (testing "Count incoming data by current condition"
-    (testing "when counter name no exist"
+    (testing "when counter name does not exist"
       (let [st0 (initialize-processor rules)
             st1 (process-data-dropping-signals st0 {"spam" true, "important" true})
             st2 (process-data-dropping-signals st1 {"spam" true, "important" true})]
