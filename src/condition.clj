@@ -65,6 +65,6 @@
 (defmethod define-condition-by-symbol 'or [operation condition current past counters]         
     (some true? (get-conditions condition current past counters)))
 
-(defmethod define-condition-by-symbol :default [operation condition current past counters]         
+(defmethod define-condition-by-symbol :default [operation condition current past counters]
     (apply (get symbols operation) (get-conditions condition current past counters)))
 

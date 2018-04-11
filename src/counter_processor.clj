@@ -6,8 +6,13 @@
 ;validate conditions
 (defn validate-condition [counter current past]
 	(let [
-    	past-data (first (filter #(define-condition (counter :condition) current % '({})) past))
-    	ok (define-condition (counter :condition) current past-data '({}))
+    	past-data (first (filter #(try
+                (define-condition (counter :condition) current % '({}))
+                (catch Exception e false)
+            ) past))
+    	ok  (try
+                (define-condition (counter :condition) current past-data '({}))
+                (catch Exception e false))    
     ]
     [past-data ok]))
 

@@ -167,7 +167,6 @@
         st3 (process-data-dropping-signals st2 {"visitor" "Pedro"})
         st4 (process-data-dropping-signals st3 {"visitor" "Sofia"})
         ]
-        ;(pprint st4)
     (is (= 1 (query-counter st4 "visitor-counter" ["Pedro"])))
     (is (= 1 (query-counter st4 "visitor-counter" ["Sofia"])))
     ))
