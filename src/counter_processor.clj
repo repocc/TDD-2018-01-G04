@@ -3,20 +3,6 @@
 (use 'counter)
 (use 'parameter)
 
-;validate conditions
-(defn validate-condition [counter current past]
-	(let [
-    	past-data (first (filter #(try
-                (define-condition (counter :condition) current % '({}))
-                (catch Exception e false)
-            ) past))
-    	ok  (try
-                (define-condition (counter :condition) current past-data '({}))
-                (catch Exception e false))    
-    ]
-    [past-data ok]))
-
-
 ;check if params exist in the data
 (defn has-param-field [param data] 
     (contains? data (param :field)))
@@ -52,14 +38,14 @@
 (defn process-counter-with-params [counter data new-data] 
     (let [
         is-param-in-fields (exist-params-in-fields counter data new-data)
-        [past-data ok] (validate-condition counter new-data data)
+        [sample-data ok] (validate-condition (:condition counter) new-data data)
         is-valid (and is-param-in-fields ok)
     ]
-    (calculate-counter counter new-data past-data is-valid)))
+    (calculate-counter counter new-data sample-data is-valid)))
 
 (defn process-counter-without-params [counter data new-data] 
     (let [
-        is-valid (second (validate-condition counter new-data data))
+        is-valid (second (validate-condition (:condition counter) new-data data))
     ]
     (calculate-counter counter new-data data is-valid)))
 

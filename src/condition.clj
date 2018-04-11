@@ -68,3 +68,16 @@
 (defmethod define-condition-by-symbol :default [operation condition current past counters]
     (apply (get symbols operation) (get-conditions condition current past counters)))
 
+
+;validate conditions
+(defn validate-condition [condition current data]
+    (let [
+        sample-data (first (filter #(try
+                (define-condition condition current % '({}))
+                (catch Exception e false)
+            ) data))
+        ok  (try
+                (define-condition condition current sample-data '({}))
+                (catch Exception e false))    
+    ]
+    [sample-data ok]))
