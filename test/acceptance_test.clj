@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [data-processor :refer :all]))
 
-(def rules '( (define-counter "spam-count-whit-param-literal" ["spam"]
+(def rules '( (define-counter "spam-count-with-param-literal" ["spam"]
                 (current "spam"))
               (define-counter "email-count" []
                true)
@@ -71,7 +71,7 @@
             st2 (process-data-dropping-signals st1 {"spam" false})
             st3 (process-data-dropping-signals st2 {"spam" true})]
         (is (= 2
-               (query-counter st3 "spam-count-whit-param-literal" ["spam"])))))
+               (query-counter st3 "spam-count-with-param-literal" ["spam"])))))
     ))
 
 (deftest contingency-table-counter-test
@@ -137,7 +137,7 @@
     (is (= '({"repeated" 2})
            sg5))))
 
-(deftest complej-condition-counter-test
+(deftest complex-condition-counter-test
   (let [st0 (initialize-processor rules)
         st1 (process-data-dropping-signals st0 {"sender" "Pedro","receiver" "Sofia","subject" "meeting"})
         st2 (process-data-dropping-signals st1 {"sender" "Sofia","receiver" "Pedro","subject" "meeting"})

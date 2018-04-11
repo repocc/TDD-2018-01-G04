@@ -39,21 +39,21 @@
 	(into [] (map #(% :field) past-params))))
 	
 
-(defmulti find-fields (fn[dato] (first dato)))
+(defmulti find-fields (fn[item] (first item)))
 
-(defmethod find-fields 'past [dato]
+(defmethod find-fields 'past [item]
        (let [
-          dato  (into[] (concat (find-fields (rest dato)) [(second dato)]))
+          item  (into[] (concat (find-fields (rest item)) [(second item)]))
         ]
-        dato)
+        item)
 )
 
-(defmethod find-fields nil [dato]
+(defmethod find-fields nil [item]
        []
 )
 
-(defmethod find-fields :default [dato]
-    (find-fields (rest dato)))
+(defmethod find-fields :default [item]
+    (find-fields (rest item)))
 
 (defn find-param-fields [counters signals]
 	(let [
