@@ -1,17 +1,31 @@
 (ns parameter)
 
-(defmulti define-parameter (fn[param] (first param)))
+(defmulti define-parameter (fn[param] (type param)))
+(defmulti define-parameter-by-symbol (fn[param] (first param)))
 
 (defn define-parameter-format [type field]
     (zipmap [:type :field ] [ type field]))
 
-(defmethod define-parameter 'current [param]
+(defmethod define-parameter java.lang.Boolean [param]         
+    (define-parameter-format "literal" param))
+
+(defmethod define-parameter java.lang.Long [param]         
+    (define-parameter-format "literal" param))
+
+(defmethod define-parameter java.lang.String [param]         
+    (define-parameter-format "literal" param))
+
+(defmethod define-parameter :default [param]         
+    (define-parameter-by-symbol param))
+
+
+(defmethod define-parameter-by-symbol 'current [param]
 	(define-parameter-format (first param) (second param)))
 
-(defmethod define-parameter 'past [param]
+(defmethod define-parameter-by-symbol 'past [param]
     (define-parameter-format (first param) (second param)))
 
-(defmethod define-parameter :default [param]
+(defmethod define-parameter-by-symbol :default [param]
     (define-parameter-format "literal" param))
 
 

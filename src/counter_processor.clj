@@ -26,7 +26,8 @@
 (defmethod calculate-counter true [counter current past is-valid]         
     (let [
     	subcounter (map #(get-param-value % current past) (counter :parameters))
-    	subcounter-value (increment-counter-value (counter :subcounters) subcounter)
+        step-evaluation (define-condition (counter :step) current past '({}))
+    	subcounter-value (increment-counter-value (counter :subcounters) subcounter step-evaluation)
     	final-subcounter (merge (counter :subcounters) {(into [] subcounter) subcounter-value})
     ]
     (merge counter {:subcounters final-subcounter})))

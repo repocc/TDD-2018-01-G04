@@ -16,12 +16,12 @@
 	]
 	(if (nil? counter-value) 0 counter-value)))
 
-(defmulti increment-counter-value (fn[subcounters key] (
+(defmulti increment-counter-value (fn[subcounters key step] (
     nil? (get subcounters key)))
 )
 
-(defmethod increment-counter-value true [subcounters key]
-    1)
+(defmethod increment-counter-value true [subcounters key step]
+    step)
 
-(defmethod increment-counter-value false [subcounters key]
-    (+ (get subcounters key) 1))
+(defmethod increment-counter-value false [subcounters key step]
+    (+ (get subcounters key) step))
