@@ -9,9 +9,10 @@
   		rules (map evaluate-function rules)
   		counters (filter is-counter rules)
   		signals (filter is-signal rules)
+      counter-steps (filter is-counter-step rules)
       param-fields (find-param-fields counters signals)
   		data [{}]
-		](zipmap [:counters :signals :param-fields :data ] [counters signals param-fields data ])
+		](zipmap [:counters :signals :counter-steps :param-fields :data ] [counters signals counter-steps param-fields data ])
   ))
          
 (defn process-data [state new-data]
