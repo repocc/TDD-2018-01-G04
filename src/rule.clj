@@ -1,10 +1,9 @@
 (ns rule)
-(use 'parameter)
 
 (defn define-counter [params, type]
 	( let [
 			name (first params)
-			parameters (map define-parameter (second params))
+			parameters (second params)
 			step 1
 			subcounters {}
 			condition (last params)
@@ -24,7 +23,7 @@
 			name (first params)
 			step (second params)
 			last-params (rest params)
-			parameters (map define-parameter (second last-params))
+			parameters (second last-params)
 			subcounters {}
 			condition (last last-params)
 	] 
@@ -48,7 +47,7 @@
 (defn is-signal [rule] 
 	(= (:type rule) 'define-signal))
 
-(defn is-counter-step [rule] 
+(defn is-step-counter [rule] 
 	(= (:type rule) 'define-step-counter))
 
 (defn evaluate-function [f] 

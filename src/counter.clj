@@ -3,7 +3,6 @@
 (defn get-counter-by-name [counters counter-name] 
 	(first (filter #(= (:name %) counter-name) counters))) 
 
-
 (defmulti get-counter-value (fn[counters counter-name args] (get-counter-by-name counters counter-name)))
 
 (defmethod get-counter-value nil [counters counter-name args]

@@ -2,12 +2,12 @@
 (use 'rule)
 (use 'counter)
 (use 'rule-evaluator)
-(use 'parameter)
+(use 'field)
 
 (defn initialize-processor [rules]
   (	let [ 
   		rules (map evaluate-function rules)
-  		counters (concat (filter is-counter rules) (filter is-counter-step rules))
+  		counters (concat (filter is-counter rules) (filter is-step-counter rules))
   		signals (filter is-signal rules)
       param-fields (find-param-fields counters signals)
   		data [{}]
