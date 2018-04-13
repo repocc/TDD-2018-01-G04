@@ -2,7 +2,9 @@
   (:require [clojure.test :refer :all]
             [data-processor :refer :all]))
 
-(def rules '( (define-counter "spam-count-with-param-literal" ["spam"]
+(def rules '( (define-counter "one-counter-spam" [2 "spam" (counter-value "spam-count" [])]
+                true)
+              (define-counter "spam-count-with-param-literal" ["spam"]
                 (current "spam"))
               (define-counter "email-count" []
                true)
@@ -34,6 +36,14 @@
   (testing "Query counter from initial state"
     (is (= 0
            (query-counter (initialize-processor rules) "spam" [])))))
+
+(deftest counter-value-params-test
+  (let [st0 (initialize-processor rules)
+        st1 (process-data-dropping-signals st0 {"spam" true})
+        st2 (process-data-dropping-signals st1 {"spam" true})]
+    (is (= 1
+           (query-counter st2 "one-counter-spam" [2 "spam" 1])))))
+
 
 (deftest unconditional-counter-test
   (let [st0 (initialize-processor rules)
