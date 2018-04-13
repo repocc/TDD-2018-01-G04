@@ -11,6 +11,9 @@
 (defmethod define-condition java.lang.Integer [condition current past counters]         
     condition)
 
+(defmethod define-condition java.lang.Long [condition current past counters]         
+    condition)
+
 (defmethod define-condition java.lang.String [condition current past counters]         
     condition)
 

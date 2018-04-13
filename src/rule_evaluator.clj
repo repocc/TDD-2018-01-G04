@@ -3,9 +3,8 @@
 (use 'counter-processor)
 (use 'signal-processor)
 
-
 (defn evaluate-counters [counters data new-data]
-	(map #(process-counter % data new-data) counters))
+	(map #(process-counter % counters data new-data) counters))
 
 (defn evaluate-signals [signals counters data new-data]
 	(remove #(= % ()) (map #(process-signal % data new-data counters) signals)))
