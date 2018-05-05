@@ -1,6 +1,6 @@
-## Clojure ring example
+## API Events Processor
 
-Minimal JSON REST API example with Clojure, Ring and Compojure
+JSON REST API built with Clojure, Ring and Compojure
 
 ## Running
 
