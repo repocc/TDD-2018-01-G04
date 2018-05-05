@@ -22,7 +22,6 @@
  	{:status 200}
 )
 
-
 (defn find-all-rules [] (
 	let [
 		rules (db-find-all-rules)
