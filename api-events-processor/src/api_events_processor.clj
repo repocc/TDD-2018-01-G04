@@ -16,9 +16,9 @@
     {:status 200 :body (find-all-rules)}
   )
 
-  ;;(GET "/example/api/car/:id" [id] 
-  ;;  {:status 200 :body (db-find-car-by-id id)}
-  ;;)  
+  (DELETE "/api/rule/:name" [name] 
+    (drop-rule-by-name name)
+  )
 
   (POST "/api/rule" request
     (store-rule request))

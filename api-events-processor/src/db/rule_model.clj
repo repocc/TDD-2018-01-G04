@@ -1,10 +1,8 @@
-(ns db.rule-model
-  (:require [rage-db.core :as rdb]))
+(ns db.rule-model)
+(use 'db.base-model)
 
-(use 'db.db-client)
+(defn db-find-all-rules [] (db-find-all :rules))
 
-(defn db-find-all-rules [] (rdb/keyspace db :rules))
+(defn db-drop-rule-by-name [name] (db-drop-where :rules :name name))
 
-;;(defn db-find-rule-by-id [id] (rdb/where db :rules :id (parse-number id)))  
-
-(defn db-store-rule [rule] (rdb/insert db :rules rule))
+(defn db-store-rule [rule] (db-store :rules rule))
