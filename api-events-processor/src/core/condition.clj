@@ -11,6 +11,15 @@
 (defmethod define-condition java.lang.Integer [condition current past counters]         
     condition)
 
+(defmethod define-condition java.lang.Double [condition current past counters]         
+    condition)
+
+(defmethod define-condition clojure.lang.BigInt [condition current past counters]         
+    condition)
+
+(defmethod define-condition clojure.lang.Ratio [condition current past counters]         
+    condition) 
+
 (defmethod define-condition java.lang.Long [condition current past counters]         
     condition)
 
