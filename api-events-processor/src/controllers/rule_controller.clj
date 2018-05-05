@@ -1,13 +1,17 @@
 (ns controllers.rule-controller)
+(require '[clojure.string :as str])
 (use 'db.rule-model)
+(use 'rule)
 
 (defn store-rule [request] (
 	let [
 			query (get-in request [:params :query])
-      rule {:query query}
+			parsed-query (try (evaluate-function (read-string query)) (catch Exception e nil))
+      rule {:query query :parsed-query parsed-query}
+      status-code (if (nil? parsed-query) 500 201)
   ]
-  (db-store-rule rule)     
-  {:status 201 :body rule}
+  (if (nil? parsed-query) nil (db-store-rule rule))
+ 	{:status status-code :body rule}
 ))
 
 (defn find-all-rules [] (
