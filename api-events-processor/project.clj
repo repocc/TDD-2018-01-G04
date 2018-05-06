@@ -16,6 +16,7 @@
     [org.clojure/tools.cli "0.3.5"]
     [ring.middleware.logger "0.5.0" :exclusions [org.slf4j/slf4j-log4j12]]
     [ring/ring-core "1.5.0"]
+    [ring-cors "0.1.12"]
     [ring/ring-defaults "0.2.1"]
     [ring/ring-devel "1.5.0"]
     [ring/ring-jetty-adapter "1.5.0"]
