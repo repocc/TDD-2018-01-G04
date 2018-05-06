@@ -110,9 +110,7 @@ const executeRequest = (type, resource, params, count) => {
 * @returns {Promise} the Promise for a REST response
 */
 export default (type, resource, params) => {
-  return executeRequest(type, resource, params, null);
-
-  /*const { fetchJson } = fetchUtils;
+  const { fetchJson } = fetchUtils;
   
   switch(type){
       case GET_LIST: {
@@ -127,5 +125,5 @@ export default (type, resource, params) => {
       default: {
           return executeRequest(type, resource, params, null);
       }       
-  }*/
+  }
 };

@@ -1,11 +1,12 @@
 export const messages = {
   resources: {
-    rules: {
+    rule: {
       title: 'Reglas',
       name: 'Reglas |||| Reglas',
       fields: {
         id: 'ID',
         name: 'Nombre',
+        query: 'Consulta'
       }
     }
   }
