@@ -5,6 +5,7 @@
             [ring.adapter.jetty :as jetty]
             [compojure.handler :as handler]
             [rage-db.core :as rdb]
+            [ring.middleware.cors :refer [wrap-cors]]
             ))
 
 ;;(use 'utils.string-util)
@@ -14,6 +15,14 @@
 (defroutes app-routes
   (GET "/api/rule" [] 
     {:status 200 :body (find-all-rules)}
+  )
+
+  (GET "/api/rule/count" [] 
+    {:status 200 :body (count-all-rules)}
+  )
+
+  (OPTIONS "/api/rule" [] 
+    {:status 200 }
   )
 
   (DELETE "/api/rule/:name" [name] 
@@ -27,8 +36,12 @@
 
   (route/not-found "Not Found"))
 
+
 (def app
   (-> (handler/api app-routes)
+      ;; accept everything
+      (wrap-cors routes #".*")
+      (wrap-cors routes identity)
       (middleware/wrap-json-body)
       (middleware/wrap-json-params)
       (middleware/wrap-json-response)
