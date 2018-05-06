@@ -10,12 +10,14 @@ import RuleIcon from 'material-ui/svg-icons/action/label';
 import spanishMessages from 'aor-language-spanish';
 import customSpanishMessages from './common/i18n/es';
 
+import Login from './Login';
+
 const messages = {
     es: { ...spanishMessages, ...customSpanishMessages }
 };
 
 const App = () => (
-    <Admin authClient={authClient} restClient={myApiRestClient} title="Dashboard" locale="es" messages={messages}>
+    <Admin authClient={authClient} restClient={myApiRestClient} loginPage={Login} title="Dashboard" locale="es" messages={messages}>
         <Resource name="rule" list={RulesList} create={RuleCreate} icon={RuleIcon} />
     </Admin>
 );
