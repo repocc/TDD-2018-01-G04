@@ -27,3 +27,10 @@
 		rules (db-find-all-rules)
 	]
 	(if (nil? rules) [] rules)))
+
+
+(defn count-all-rules [] (
+	let [
+		count (db-count-all-rules)
+	]
+	{:count count}))

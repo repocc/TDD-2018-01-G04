@@ -17,6 +17,10 @@
     {:status 200 :body (find-all-rules)}
   )
 
+  (GET "/api/rule/count" [] 
+    {:status 200 :body (count-all-rules)}
+  )
+
   (OPTIONS "/api/rule" [] 
     {:status 200 }
   )
