@@ -1,8 +1,8 @@
 (ns core.data-processor (:use clojure.pprint))
-(use 'rule)
-(use 'counter)
-(use 'rule-evaluator)
-(use 'field)
+(use 'core.rule)
+(use 'core.counter)
+(use 'core.rule-evaluator)
+(use 'core.field)
 
 (defn initialize-processor [rules]
   (	let [ 
