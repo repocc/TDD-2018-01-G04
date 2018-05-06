@@ -1,6 +1,6 @@
 (ns extension-test
   (:require [clojure.test :refer :all]
-            [data-processor :refer :all]))
+            [core.data-processor :refer :all]))
 
 (defn process-data-dropping-signals [state new-data]
   (first (process-data state new-data)))

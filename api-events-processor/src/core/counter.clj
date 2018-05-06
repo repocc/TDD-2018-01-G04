@@ -1,4 +1,4 @@
-(ns counter)
+(ns core.counter)
 
 (defn get-counter-by-name [counters counter-name] 
 	(first (filter #(= (:name %) counter-name) counters))) 

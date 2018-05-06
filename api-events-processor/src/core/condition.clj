@@ -1,5 +1,5 @@
-(ns condition)
-(use 'counter)
+(ns core.condition)
+(use 'core.counter)
 (require '[clojure.string :as str])
 
 (defmulti define-condition (fn[condition current past counters] (type condition)))

@@ -1,5 +1,5 @@
-(ns signal-processor)
-(use 'condition)
+(ns core.signal-processor)
+(use 'core.condition)
 
 (defn evaluate-condition [signal past current counters]
 	(let [

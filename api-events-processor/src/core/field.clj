@@ -1,4 +1,4 @@
-(ns field)
+(ns core.field)
 
 (defmulti find-fields (fn[item] (first item)))
 

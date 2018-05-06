@@ -1,6 +1,6 @@
-(ns counter-processor)
-(use 'condition)
-(use 'counter)
+(ns core.counter-processor)
+(use 'core.condition)
+(use 'core.counter)
 
 (defmulti calculate-counter (fn[counter counters current past is-valid] (true? is-valid)))
 

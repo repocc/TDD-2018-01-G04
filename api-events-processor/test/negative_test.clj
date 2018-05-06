@@ -1,6 +1,6 @@
 (ns negative-test
   (:require [clojure.test :refer :all]
-            [data-processor :refer :all]))
+            [core.data-processor :refer :all]))
 
 
 (def rules '((define-counter "email-important-spam-count" [(current "spam")]

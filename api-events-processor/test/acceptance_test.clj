@@ -1,6 +1,6 @@
 (ns acceptance-test
   (:require [clojure.test :refer :all]
-            [data-processor :refer :all]))
+            [core.data-processor :refer :all]))
 
 (def rules '( (define-counter "one-counter-spam" [2 "spam" (counter-value "spam-count" [])]
                 true)

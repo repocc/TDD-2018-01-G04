@@ -1,4 +1,4 @@
-(ns data-processor (:use clojure.pprint))
+(ns core.data-processor (:use clojure.pprint))
 (use 'rule)
 (use 'counter)
 (use 'rule-evaluator)

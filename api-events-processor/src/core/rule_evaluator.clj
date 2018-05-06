@@ -1,7 +1,7 @@
-(ns rule-evaluator)
-(use 'condition)
-(use 'counter-processor)
-(use 'signal-processor)
+(ns core.rule-evaluator)
+(use 'core.condition)
+(use 'core.counter-processor)
+(use 'core.signal-processor)
 
 (defn evaluate-counters [counters data new-data]
 	(map #(process-counter % counters data new-data) counters))

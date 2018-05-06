@@ -1,4 +1,4 @@
-(ns rule)
+(ns core.rule)
 
 (defn define-counter [params, type]
 	( let [
