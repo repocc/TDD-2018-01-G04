@@ -1,7 +1,7 @@
 (ns controllers.rule-controller)
 (require '[clojure.string :as str])
 (use 'db.rule-model)
-(use 'rule)
+(use 'core.rule)
 
 (defn store-rule [request] (
 	let [
