@@ -24,6 +24,10 @@
 	{:status 200 :body (db-get-dashboard-by-id id)}
 )
 
+(defn update-dashboard-by-id [id attrs] 
+	{:status 200 :body (db-get-dashboard-by-id id)}
+)
+
 (defn drop-dashboard-by-id [id] (
 	db-drop-dashboard-by-id id))
 
