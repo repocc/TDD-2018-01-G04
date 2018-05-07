@@ -26,7 +26,7 @@
 	(if (nil? dashboards) [] dashboards)))
 
 (defn get-dashboard-by-id [id] 
-	{:status 200 :body (db-get-dashboard-by-id id)}
+	{:status 200 :body (first (db-get-dashboard-by-id id))}
 )
 
 (defn drop-dashboard-by-id [id] (
