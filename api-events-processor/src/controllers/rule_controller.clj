@@ -2,6 +2,7 @@
 (require '[clojure.string :as str])
 (use 'db.rule-model)
 (use 'core.rule)
+(use 'utils.string-util)
 
 (defn store-rule [request] (
 	let [
@@ -10,7 +11,7 @@
 			parsed-query (try (evaluate-function (read-string query)) (catch Exception e nil))
 			invalid-query (nil? parsed-query)
       
-      rule (if invalid-query nil {:name name :query query}) 
+      rule (if invalid-query nil {:id (uuid) :name name :query query}) 
       status-code (if invalid-query 500 201)
   ]
   (if invalid-query nil (db-store-rule rule))
