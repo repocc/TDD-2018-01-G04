@@ -3,12 +3,17 @@
 (use 'db.dashboard-model)
 (use 'utils.string-util)
 
+(defn convert-rule-ids [rule_ids] (
+  let [
+		converted-rule-ids (if (nil? rule_ids) nil (if (vector? rule_ids) rule_ids [rule_ids]))
+	]
+	converted-rule-ids ))
+
 (defn store-dashboard [request] (
 	let [
 			name (get-in request [:params :name])
-			rule_ids (get-in request [:params :rule_ids])
-			converted-rule-ids (if (nil? rule_ids) nil (if (vector? rule_ids) rule_ids [rule_ids]))
-      dashboard {:id (uuid) :name name :rule_ids converted-rule-ids} 
+			rule_ids (convert-rule-ids (get-in request [:params :rule_ids]))
+			dashboard {:id (uuid) :name name :rule_ids rule_ids} 
   ]
   (db-store-dashboard dashboard)
  	{:status 200 :body dashboard}
@@ -26,6 +31,17 @@
 
 (defn drop-dashboard-by-id [id] (
 	db-drop-dashboard-by-id id))
+
+(defn update-dashboard-by-id [request] ( 
+	let [
+			id (get-in request [:params :id])
+			name (get-in request [:params :name])
+			rule_ids (convert-rule-ids (get-in request [:params :rule_ids]))
+      dashboard {:id id :name name :rule_ids rule_ids} 
+  ]
+	(drop-dashboard-by-id id)
+	(db-store-dashboard dashboard)
+	{:status 200 :body dashboard} ))
 
 (defn count-all-dashboards [] (
 	let [

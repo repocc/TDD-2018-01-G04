@@ -43,6 +43,9 @@
     (get-dashboard-by-id id)
   )
   
+  (PUT "/api/dashboard/:id" request
+    (update-dashboard-by-id request)
+  )
   (DELETE "/api/dashboard/:id" [id] 
     {:status 200 :body (drop-dashboard-by-id id)}
   )
@@ -60,6 +63,14 @@
 
   (route/not-found "Not Found"))
 
+(defn wrap-exception-handling
+  [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Exception e
+        (println e)
+        {:status 500 :body "Internal server error"}))))
 
 (def app
   (-> (handler/api app-routes)
@@ -69,6 +80,7 @@
       (middleware/wrap-json-body)
       (middleware/wrap-json-params)
       (middleware/wrap-json-response)
+      (wrap-exception-handling)
   )
 )
 
