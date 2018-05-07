@@ -18,11 +18,6 @@
  	{:status status-code :body rule}
 ))
 
-(defn drop-rule-by-name [name] 
-	(db-drop-rule-by-name name)
- 	{:status 200}
-)
-
 (defn find-all-rules [] (
 	let [
 		rules (db-find-all-rules)

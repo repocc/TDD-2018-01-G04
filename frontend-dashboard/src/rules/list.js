@@ -8,6 +8,7 @@ const RulesTitle = () => {
 export const RulesList = (props) => (
     <List title={<RulesTitle />} {...props}>
         <Datagrid>
+            <TextField source="id" label="resources.rule.fields.id" />
             <TextField source="name" label="resources.rule.fields.name" />
             <TextField source="query" label="resources.rule.fields.query" />
         </Datagrid>

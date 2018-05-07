@@ -2,6 +2,7 @@ import {
   COUNT,
   GET_LIST,
   GET_ONE,
+  GET_MANY,
   CREATE,
   UPDATE,
   DELETE,
@@ -27,6 +28,10 @@ const convertRESTRequestToHTTP = (type, resource, params) => {
   case GET_LIST: {
       url = `${API_URL}/${resource}`;
       break;
+  }
+  case GET_MANY: {
+    url = `${API_URL}/${resource}`;
+    break;
   }
   case GET_ONE:
       url = `${API_URL}/${resource}/${params.id}`;

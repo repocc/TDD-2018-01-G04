@@ -8,6 +8,15 @@ export const messages = {
         name: 'Nombre',
         query: 'Consulta'
       }
+    },
+    dashboard: {
+      title: 'Dashboards',
+      name: 'Dashboards |||| Dashboards',
+      fields: {
+        id: 'ID',
+        name: 'Nombre',
+        rule_ids: 'Reglas'
+      }
     }
   }
 };

@@ -13,6 +13,7 @@
 (use 'db.seeds)
 (use 'controllers.rule-controller)
 (use 'controllers.user-controller)
+(use 'controllers.dashboard-controller)
 
 (defroutes app-routes
   (GET "/api/rule" [] 
@@ -23,12 +24,23 @@
     {:status 200 :body (count-all-rules)}
   )
 
-  (OPTIONS "/api/rule" [] 
-    {:status 200 }
+  (POST "/api/dashboard" request
+    (store-dashboard request))
+  
+  (GET "/api/dashboard" [] 
+    {:status 200 :body (find-all-dashboards)}
   )
 
-  (DELETE "/api/rule/:name" [name] 
-    (drop-rule-by-name name)
+  (GET "/api/dashboard/count" [] 
+    {:status 200 :body (count-all-dashboards)}
+  )
+
+  (GET "/api/dashboard/:id" [id] 
+    (get-dashboard-by-id id)
+  )
+  
+  (DELETE "/api/dashboard/:id" [id] 
+    {:status 200 :body (drop-dashboard-by-id)}
   )
 
   (POST "/api/rule" request
