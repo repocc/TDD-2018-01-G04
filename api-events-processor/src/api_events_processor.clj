@@ -43,8 +43,8 @@
     (get-dashboard-by-id id)
   )
   
-  (PUT "/api/dashboard/:id" [id attrs]
-    {:status 200 :body (update-dashboard-by-id id attrs)}
+  (PUT "/api/dashboard/:id" request
+    (update-dashboard-by-id request)
   )
   (DELETE "/api/dashboard/:id" [id] 
     {:status 200 :body (drop-dashboard-by-id id)}
