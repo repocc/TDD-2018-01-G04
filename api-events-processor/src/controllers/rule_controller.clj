@@ -18,11 +18,20 @@
  	{:status status-code :body rule}
 ))
 
-(defn find-all-rules [] (
+(defn in? 
+  "true if coll contains elm"
+  [coll elm]  
+  (some #(= elm %) coll))
+
+(defn find-all-rules [params] (
 	let [
+		id (get params "id")
 		rules (db-find-all-rules)
+		response (if (nil? rules) [] rules)
+		parsed-id (if (nil? id) () (read-string id))
 	]
-	(if (nil? rules) [] rules)))
+	(if (nil? id) response (filter #(in? parsed-id (:id %)) response))
+))
 
 
 (defn count-all-rules [] (

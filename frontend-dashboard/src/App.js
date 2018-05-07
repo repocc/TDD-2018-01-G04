@@ -33,7 +33,7 @@ class App extends Component {
                         icon={GenericIcon}
                     />,
                     permissions === 'admin'
-                        ? <Resource name="rule" view={RuleCreate} list={RulesList} create={RuleCreate} icon={GenericIcon} />
+                        ? <Resource name="rule" list={RulesList} create={RuleCreate} icon={GenericIcon} />
                         : null,
                 ]}
             </Admin>

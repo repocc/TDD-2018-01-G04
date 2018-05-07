@@ -7,7 +7,8 @@
 	let [
 			name (get-in request [:params :name])
 			rule_ids (get-in request [:params :rule_ids])
-      dashboard {:id (uuid) :name name :rule_ids rule_ids} 
+			converted-rule-ids (if (nil? rule_ids) nil (if (vector? rule_ids) rule_ids [rule_ids]))
+      dashboard {:id (uuid) :name name :rule_ids converted-rule-ids} 
   ]
   (db-store-dashboard dashboard)
  	{:status 200 :body dashboard}
@@ -23,10 +24,8 @@
 	{:status 200 :body (db-get-dashboard-by-id id)}
 )
 
-(defn drop-dashboard-by-id [id] 
-	(db-drop-dashboard-by-id id)
- 	{:status 200}
-)
+(defn drop-dashboard-by-id [id] (
+	db-drop-dashboard-by-id id))
 
 (defn count-all-dashboards [] (
 	let [

@@ -10,7 +10,6 @@ export const DashboardsList = (props) => (
         <Datagrid>
             <TextField source="id" label="resources.dashboard.fields.id" />
             <TextField source="name" label="resources.dashboard.fields.name" />
-            <TextField source="rule_ids" label="resources.dashboard.fields.rule_ids" />
             <EditButton />
         </Datagrid>
     </List>

@@ -16,8 +16,8 @@
 (use 'controllers.dashboard-controller)
 
 (defroutes app-routes
-  (GET "/api/rule" [] 
-    {:status 200 :body (find-all-rules)}
+  (GET "/api/rule" {params :query-params}
+    {:status 200 :body (find-all-rules params)}
   )
 
   (GET "/api/rule/count" [] 
@@ -40,7 +40,7 @@
   )
   
   (DELETE "/api/dashboard/:id" [id] 
-    {:status 200 :body (drop-dashboard-by-id)}
+    {:status 200 :body (drop-dashboard-by-id id)}
   )
 
   (POST "/api/rule" request
