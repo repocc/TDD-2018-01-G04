@@ -2,6 +2,7 @@
 (require '[clojure.string :as str])
 (use 'db.rule-model)
 (use 'core.rule)
+(use 'utils.string-util)
 
 (defn store-rule [request] (
 	let [
@@ -10,23 +11,27 @@
 			parsed-query (try (evaluate-function (read-string query)) (catch Exception e nil))
 			invalid-query (nil? parsed-query)
       
-      rule (if invalid-query nil {:name name :query query}) 
+      rule (if invalid-query nil {:id (uuid) :name name :query query}) 
       status-code (if invalid-query 500 201)
   ]
   (if invalid-query nil (db-store-rule rule))
  	{:status status-code :body rule}
 ))
 
-(defn drop-rule-by-name [name] 
-	(db-drop-rule-by-name name)
- 	{:status 200}
-)
+(defn in? 
+  "true if coll contains elm"
+  [coll elm]  
+  (some #(= elm %) coll))
 
-(defn find-all-rules [] (
+(defn find-all-rules [params] (
 	let [
+		id (get params "id")
 		rules (db-find-all-rules)
+		response (if (nil? rules) [] rules)
+		parsed-id (if (nil? id) () (read-string id))
 	]
-	(if (nil? rules) [] rules)))
+	(if (nil? id) response (filter #(in? parsed-id (:id %)) response))
+))
 
 
 (defn count-all-rules [] (

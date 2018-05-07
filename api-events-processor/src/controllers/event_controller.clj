@@ -45,7 +45,7 @@
 	let [
 			event (get-in request [:params :event])
 			data (into {} (for [[k v] event] [(name k) v]))
-			rules (into '() (map #(read-string (second (vals %))) (db-find-all-rules)))
+			rules (into '() (map #(read-string (:query %)) (db-find-all-rules)))
 			state (initialize-processor rules)
 
 			counters (get-counters (:counters state))

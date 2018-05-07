@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, SelectInput, SimpleForm, TextInput, maxLength, required } from 'admin-on-rest';
+import { Create, SimpleForm, TextInput, maxLength, required } from 'admin-on-rest';
 
 const RuleCreateTitle = () => {
     return <span>Crear regla</span>;

@@ -14,26 +14,37 @@
 (use 'controllers.rule-controller)
 (use 'controllers.event-controller)
 (use 'controllers.user-controller)
+(use 'controllers.dashboard-controller)
 
 (defroutes app-routes
-  (GET "/api/rule" [] 
-    {:status 200 :body (find-all-rules)}
+  (GET "/api/rule" {params :query-params}
+    {:status 200 :body (find-all-rules params)}
   )
 
   (GET "/api/rule/count" [] 
     {:status 200 :body (count-all-rules)}
   )
 
+  (POST "/api/dashboard" request
+    (store-dashboard request))
+  
+  (GET "/api/dashboard" [] 
+    {:status 200 :body (find-all-dashboards)}
+  )
+
+  (GET "/api/dashboard/count" [] 
+    {:status 200 :body (count-all-dashboards)})
+  
   (GET "/api/counter" [] 
     {:status 200 :body (find-all-counters)}
   )
 
-  (OPTIONS "/api/rule" [] 
-    {:status 200 }
+  (GET "/api/dashboard/:id" [id] 
+    (get-dashboard-by-id id)
   )
-
-  (DELETE "/api/rule/:name" [name] 
-    (drop-rule-by-name name)
+  
+  (DELETE "/api/dashboard/:id" [id] 
+    {:status 200 :body (drop-dashboard-by-id id)}
   )
 
   (POST "/api/rule" request

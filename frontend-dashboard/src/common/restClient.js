@@ -3,7 +3,6 @@ import {
   GET_LIST,
   GET_ONE,
   GET_MANY,
-  GET_MANY_REFERENCE,
   CREATE,
   UPDATE,
   DELETE,
@@ -11,13 +10,6 @@ import {
 } from 'admin-on-rest';
 
 const API_URL = process.env.REACT_APP_API_URL; 
-
-const preparePagination = params => {
-  const { page, perPage } = params.pagination;
-  let skip = (page - 1) * perPage;
-  let limit = perPage;
-  return { skip, limit };
-};
 
 /**
 * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -27,21 +19,20 @@ const preparePagination = params => {
 */
 const convertRESTRequestToHTTP = (type, resource, params) => {
   let url = '';
-  const { queryParameters } = fetchUtils;
   const options = {};
+  const { queryParameters } = fetchUtils;
   switch (type) {
   case COUNT: {
       url = `${API_URL}/${resource}/count`;
       break;
   }
   case GET_LIST: {
-      const { skip, limit } = preparePagination(params);
-      const query = {
-        skip: JSON.stringify(skip),
-        limit: JSON.stringify(limit),
-      };
-      url = `${API_URL}/${resource}`; //?${queryParameters(query)}
+      url = `${API_URL}/${resource}`;
       break;
+  }
+  case GET_MANY: {
+    url = `${API_URL}/${resource}?id=${JSON.stringify(params.ids)}`;
+    break;
   }
   case GET_ONE:
       url = `${API_URL}/${resource}/${params.id}`;
@@ -74,7 +65,7 @@ const convertRESTRequestToHTTP = (type, resource, params) => {
 * @returns {Object} REST response
 */
 const convertHTTPResponseToREST = (response, type, resource, params, count) => {
-  const { headers, json } = response;
+  const { json } = response;
   switch (type) {
   case COUNT:
       return json.count;

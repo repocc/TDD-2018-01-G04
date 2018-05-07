@@ -6,3 +6,5 @@
   [s]
   (if (re-find #"^-?\d+\.?\d*$" s)
     (read-string s)))
+
+(defn uuid [] (str (java.util.UUID/randomUUID)))
