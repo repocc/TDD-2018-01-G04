@@ -15,6 +15,7 @@
 (use 'controllers.event-controller)
 (use 'controllers.user-controller)
 (use 'controllers.dashboard-controller)
+(use 'controllers.chrono-controller)
 
 (defroutes app-routes
   (GET "/api/rule" {params :query-params}
@@ -43,6 +44,15 @@
     (get-dashboard-by-id id)
   )
   
+  (GET "/api/snapshot" [] 
+    {:status 200 :body (find-snapshot)}
+  )
+
+  (POST "/api/chrono" [] 
+    (run-chrono 20)
+    {:status 200}
+  )
+
   (DELETE "/api/dashboard/:id" [id] 
     {:status 200 :body (drop-dashboard-by-id id)}
   )
@@ -73,5 +83,6 @@
 )
 
 (defn -main [& args]
+  ;(run-chrono 20)
   (jetty/run-jetty app)
 )
