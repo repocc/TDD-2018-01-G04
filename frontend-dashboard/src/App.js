@@ -17,7 +17,6 @@ const messages = {
 };
 
 
-
 class App extends Component {
     render() {
         console.log(this.props); 
@@ -32,7 +31,7 @@ class App extends Component {
                         icon={VisitorIcon}
                     />,*/
                     permissions === 'admin'
-                        ? <Resource name="rule" list={RulesList} create={RuleCreate} icon={RuleIcon} />
+                        ? <Resource name="rule" view={RuleCreate} list={RulesList} create={RuleCreate} icon={RuleIcon} />
                         : null,
                 ]}
             </Admin>

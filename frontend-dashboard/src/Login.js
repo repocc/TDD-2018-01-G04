@@ -65,9 +65,9 @@ const renderInput = ({ meta: { touched, error } = {}, input: { ...inputProps }, 
 
 class Login extends Component {
 
-    login = ({ username, password }) => {
+    login = ({ username }) => {
         const { userLogin, location } = this.props;
-        userLogin({ username, password }, location.state ? location.state.nextPathname : '/');
+        userLogin({ username }, location.state ? location.state.nextPathname : '/');
     }
 
     render() {
@@ -89,14 +89,6 @@ class Login extends Component {
                                         name="username"
                                         component={renderInput}
                                         floatingLabelText={translate('aor.auth.username')}
-                                    />
-                                </div>
-                                <div style={styles.input}>
-                                    <Field
-                                        name="password"
-                                        component={renderInput}
-                                        floatingLabelText={translate('aor.auth.password')}
-                                        type="password"
                                     />
                                 </div>
                             </div>
@@ -132,7 +124,6 @@ const enhance = compose(
             const errors = {};
             const { translate } = props;
             if (!values.username) errors.username = translate('aor.validation.required');
-            if (!values.password) errors.password = translate('aor.validation.required');
             return errors;
         },
     }),
