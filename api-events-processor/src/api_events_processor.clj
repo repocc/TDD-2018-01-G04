@@ -33,7 +33,7 @@
   )
 
   (GET "/api/dashboard/count" [] 
-    {:status 200 :body (count-all-dashboards)}
+    {:status 200 :body (count-all-dashboards)})
   
   (GET "/api/counter" [] 
     {:status 200 :body (find-all-counters)}
