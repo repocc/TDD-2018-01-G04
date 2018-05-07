@@ -10,8 +10,10 @@
 
 ;;(use 'utils.string-util)
 (use 'db.db-client)
+(use 'db.seeds)
 (use 'controllers.rule-controller)
 (use 'controllers.event-controller)
+(use 'controllers.user-controller)
 
 (defroutes app-routes
   (GET "/api/rule" [] 
@@ -36,6 +38,9 @@
 
   (POST "/api/rule" request
     (store-rule request))
+  
+  (POST "/api/auth" request
+    (auth-by-username request))
 
   (POST "/api/event" request
     (process-events request))
