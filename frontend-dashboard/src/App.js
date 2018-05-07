@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Admin, Resource, Delete } from 'admin-on-rest';
+import { Admin, Resource } from 'admin-on-rest';
 
 import myApiRestClient from './common/restClient' 
 import authClient from './common/authClient';
 
-import { RulesList, RuleCreate, RuleEdit } from './rules';
+import { RulesList, RuleCreate } from './rules';
 import RuleIcon from 'material-ui/svg-icons/action/label';
 
 import spanishMessages from 'aor-language-spanish';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Datagrid, EditButton, TextField, translate } from 'admin-on-rest';
+import { List, Datagrid, TextField } from 'admin-on-rest';
 
 const RulesTitle = () => {
     return <span>Listado de Reglas</span>;
