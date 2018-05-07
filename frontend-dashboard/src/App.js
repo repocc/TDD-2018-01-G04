@@ -13,6 +13,8 @@ import customSpanishMessages from './common/i18n/es';
 
 import Login from './Login';
 
+const ADMIN_PROFILE = 'admin';
+
 const messages = {
     es: { ...spanishMessages, ...customSpanishMessages }
 };
@@ -27,12 +29,12 @@ class App extends Component {
                     <Resource
                         name="dashboard"
                         list={DashboardsList}
-                        create={permissions === 'admin' ? DashboardCreate : null}
-                        edit={permissions === 'admin' ? DashboardEdit : null}
-                        remove={permissions === 'admin' ? Delete : null}
+                        create={permissions === ADMIN_PROFILE ? DashboardCreate : null}
+                        edit={permissions === ADMIN_PROFILE ? DashboardEdit : null}
+                        remove={permissions === ADMIN_PROFILE ? Delete : null}
                         icon={GenericIcon}
                     />,
-                    permissions === 'admin'
+                    permissions === ADMIN_PROFILE
                         ? <Resource name="rule" list={RulesList} create={RuleCreate} icon={GenericIcon} />
                         : null,
                 ]}
