@@ -12,6 +12,7 @@
 (use 'db.db-client)
 (use 'db.seeds)
 (use 'controllers.rule-controller)
+(use 'controllers.event-controller)
 (use 'controllers.user-controller)
 (use 'controllers.dashboard-controller)
 
@@ -33,6 +34,9 @@
 
   (GET "/api/dashboard/count" [] 
     {:status 200 :body (count-all-dashboards)}
+  
+  (GET "/api/counter" [] 
+    {:status 200 :body (find-all-counters)}
   )
 
   (GET "/api/dashboard/:id" [id] 
@@ -48,6 +52,9 @@
   
   (POST "/api/auth" request
     (auth-by-username request))
+
+  (POST "/api/event" request
+    (process-events request))
 
   (route/resources "/")
 
