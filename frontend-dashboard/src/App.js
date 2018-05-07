@@ -4,7 +4,7 @@ import { Admin, Resource, Delete } from 'admin-on-rest';
 import myApiRestClient from './common/restClient' 
 import authClient from './common/authClient';
 
-import { DashboardsList, DashboardCreate, DashboardEdit } from './dashboards';
+import { DashboardsList, DashboardCreate, DashboardEdit, DashboardShow } from './dashboards';
 import { RulesList, RuleCreate } from './rules';
 import GenericIcon from 'material-ui/svg-icons/action/label';
 
@@ -29,6 +29,7 @@ class App extends Component {
                     <Resource
                         name="dashboard"
                         list={DashboardsList}
+                        show={DashboardShow}
                         create={permissions === ADMIN_PROFILE ? DashboardCreate : null}
                         edit={permissions === ADMIN_PROFILE ? DashboardEdit : null}
                         remove={permissions === ADMIN_PROFILE ? Delete : null}
