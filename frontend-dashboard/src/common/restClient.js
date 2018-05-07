@@ -20,7 +20,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 const convertRESTRequestToHTTP = (type, resource, params) => {
   let url = '';
   const options = {};
-  const { queryParameters } = fetchUtils;
   switch (type) {
   case COUNT: {
       url = `${API_URL}/${resource}/count`;

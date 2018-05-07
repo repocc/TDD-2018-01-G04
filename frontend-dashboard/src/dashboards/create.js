@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, SimpleForm, TextInput, maxLength, required, ReferenceInput, SelectInput, CheckboxGroupInput, ReferenceArrayInput, SelectArrayInput } from 'admin-on-rest';
+import { Create, SimpleForm, TextInput, maxLength, required, ReferenceArrayInput, SelectArrayInput } from 'admin-on-rest';
 
 const DashboardCreateTitle = () => {
     return <span>Crear dashboard</span>;

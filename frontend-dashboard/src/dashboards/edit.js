@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit, SimpleForm, TextInput, maxLength, required, ReferenceInput, SelectInput, CheckboxGroupInput, ReferenceArrayInput, SelectArrayInput } from 'admin-on-rest';
+import { Edit, SimpleForm, TextInput, maxLength, required, ReferenceArrayInput, SelectArrayInput } from 'admin-on-rest';
 
 const DashboardTitle = ({ record }) => {
     return <span>Dashboard {record ? `"${record.name}"` : ''}</span>;
