@@ -11,6 +11,7 @@
 ;;(use 'utils.string-util)
 (use 'db.db-client)
 (use 'controllers.rule-controller)
+(use 'controllers.event-controller)
 
 (defroutes app-routes
   (GET "/api/rule" [] 
@@ -19,6 +20,10 @@
 
   (GET "/api/rule/count" [] 
     {:status 200 :body (count-all-rules)}
+  )
+
+  (GET "/api/counter" [] 
+    {:status 200 :body (find-all-counters)}
   )
 
   (OPTIONS "/api/rule" [] 
@@ -31,6 +36,9 @@
 
   (POST "/api/rule" request
     (store-rule request))
+
+  (POST "/api/event" request
+    (process-events request))
 
   (route/resources "/")
 
