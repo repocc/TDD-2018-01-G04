@@ -29,6 +29,9 @@
 	{:status 200 :body (db-get-dashboard-by-id id)}
 )
 
+(defn drop-dashboard-by-id [id] (
+	db-drop-dashboard-by-id id))
+
 (defn update-dashboard-by-id [request] ( 
 	let [
 			id (get-in request [:params :id])
@@ -39,9 +42,6 @@
 	(drop-dashboard-by-id id)
 	(db-store-dashboard dashboard)
 	{:status 200 :body dashboard} ))
-
-(defn drop-dashboard-by-id [id] (
-	db-drop-dashboard-by-id id))
 
 (defn count-all-dashboards [] (
 	let [
