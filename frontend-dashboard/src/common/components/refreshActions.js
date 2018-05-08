@@ -4,6 +4,7 @@ import { CardActions } from 'material-ui/Card'
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
 import { connect } from 'react-redux'
 import { refreshView as refreshViewAction } from 'admin-on-rest/src/actions/uiActions'
+import { ListButton } from 'admin-on-rest';
 
 class MyRefresh extends Component {
     componentDidMount() {
@@ -37,6 +38,7 @@ const RefreshButton = connect(null, { refreshView: refreshViewAction })(MyRefres
 const RefreshActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter, refreshInterval }) => (
     <CardActions>
         {filters && React.cloneElement(filters, { resource, showFilter, displayedFilters, filterValues, context: 'button' }) }
+        <ListButton/>
         <RefreshButton primary label="Refresh" refreshInterval={refreshInterval} icon={<NavigationRefresh />} />
     </CardActions>
 );
