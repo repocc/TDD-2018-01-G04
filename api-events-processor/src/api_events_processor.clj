@@ -31,12 +31,12 @@
   (POST "/api/dashboard" request
     (store-dashboard request))
   
-  (GET "/api/dashboard" [] 
-    {:status 200 :body (find-all-dashboards)}
+  (GET "/api/dashboard" {params :query-params}
+    {:status 200 :body (find-all-dashboards params)}
   )
 
-  (GET "/api/dashboard/count" [] 
-    {:status 200 :body (count-all-dashboards)})
+  (GET "/api/dashboard/count" {params :query-params}
+    {:status 200 :body (count-all-dashboards params)})
   
   (GET "/api/counter" [] 
     {:status 200 :body (find-all-counters)}
