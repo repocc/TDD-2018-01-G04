@@ -6,3 +6,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 * npm install
 * npm start
+
+## Port
+
+* 3001
+
+## Login
+
+* admin
+* guest
