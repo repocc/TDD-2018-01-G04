@@ -9,11 +9,18 @@
 	]
 	converted-rule-ids ))
 
+(defn convert-enabled [enabled] (
+  let [
+		converted-enabled (if (nil? enabled) false (if (= "" enabled) false enabled))
+	]
+	converted-enabled ))
+
 (defn store-dashboard [request] (
 	let [
 			name (get-in request [:params :name])
+			enabled (convert-enabled (get-in request [:params :enabled]))
 			rule_ids (convert-rule-ids (get-in request [:params :rule_ids]))
-			dashboard {:id (uuid) :name name :rule_ids rule_ids} 
+			dashboard {:id (uuid) :name name :enabled enabled :rule_ids rule_ids} 
   ]
   (db-store-dashboard dashboard)
  	{:status 200 :body dashboard}
@@ -36,8 +43,9 @@
 	let [
 			id (get-in request [:params :id])
 			name (get-in request [:params :name])
+			enabled (convert-enabled (get-in request [:params :enabled]))
 			rule_ids (convert-rule-ids (get-in request [:params :rule_ids]))
-      dashboard {:id id :name name :rule_ids rule_ids} 
+      dashboard {:id id :name name :enabled enabled :rule_ids rule_ids} 
   ]
 	(drop-dashboard-by-id id)
 	(db-store-dashboard dashboard)

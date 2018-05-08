@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Datagrid, TextField, EditButton, ShowButton } from 'admin-on-rest';
+import { List, Datagrid, TextField, BooleanField, EditButton, ShowButton } from 'admin-on-rest';
 
 const DashboardsTitle = () => {
     return <span>Listado de Dashboards</span>;
@@ -13,6 +13,7 @@ export const DashboardsList = (props) => (
             <Datagrid>
                 <TextField source="id" label="resources.dashboard.fields.id" />
                 <TextField source="name" label="resources.dashboard.fields.name" />
+                <BooleanField source="enabled" label="resources.dashboard.fields.enabled" />
                 <ShowButton/>
                 {permissions === ADMIN_PROFILE && <EditButton />}
             </Datagrid>

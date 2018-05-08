@@ -15,6 +15,7 @@ export const messages = {
       fields: {
         id: 'ID',
         name: 'Nombre',
+        enabled: 'Habilitado',
         rule_ids: 'Reglas'
       }
     }

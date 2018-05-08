@@ -1,5 +1,5 @@
 import React from 'react';
-import { Show, SimpleShowLayout, TextField } from 'admin-on-rest';
+import { Show, SimpleShowLayout, TextField, BooleanField } from 'admin-on-rest';
 import RefreshActions from '../common/components/refreshActions'
 
 const DashboardTitle = ({ record }) => {
