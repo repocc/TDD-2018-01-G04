@@ -71,5 +71,5 @@
 	(db-drop-subcounters)
 	(db-store-subcounter {:removable true, :subcounter subcounters})
 
-	{:status 200, :body subcounters}
+	{:status 200}
 ))

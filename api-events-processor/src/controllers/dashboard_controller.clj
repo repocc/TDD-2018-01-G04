@@ -2,8 +2,7 @@
 (require '[clojure.string :as str])
 (use 'db.dashboard-model)
 (use 'utils.string-util)
-(use 'db.counter-model)
-(use 'controllers.snapshot-controller)
+(use 'utils.info_dashboard_util)
 
 (defn convert-rule-ids [rule_ids] (
   let [
@@ -39,39 +38,10 @@
 			(filter #(= (:enabled %) (read-string enabled)) dashboards)))))
 
 
-
-(defn get-snapshot-info [rule-id snapshot](
-	let[
-		date (:date snapshot)
-		subcounters-record (first (filter #(= (:id %) rule-id) (first (:subcounters snapshot))))
-	]
-	{:date date, :value (:subcounters subcounters-record)}
-))
-
-(defn get-counters-info [rule-id subcounters snapshot](
-	let[
-		subcounters-value (first (filter #(= (:id %) rule-id) subcounters))
-		snapshot-value (map #(get-snapshot-info rule-id %) snapshot)
-	]
-	{:id rule-id, :name (:name-rule subcounters-value), :value (:subcounters subcounters-value),:snapshot snapshot-value }
-
-))
-
-(defn get-dashboard-info [dashboard subcounters snapshot] (
-	let [
-		name-dashboard (dashboard :name) 
-		rule-ids (dashboard :rule_ids)
-		counters (map #(get-counters-info % subcounters snapshot) rule-ids)
-	]
-	{:name name-dashboard, :rule_ids rule-ids, :counters counters}
-))
-
 (defn get-dashboard-by-id [id] (
 	let [
 		dashboard (first (db-get-dashboard-by-id id))
-		subcounters (:subcounter (first (db-find-all-subcounters)))
-		snapshot (find-snapshot)
-		dashboard-info (get-dashboard-info dashboard subcounters snapshot)
+		dashboard-info (get-info dashboard)
 	]
 	{:status 200 :body dashboard-info}
 ))

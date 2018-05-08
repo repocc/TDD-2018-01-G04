@@ -30,7 +30,7 @@
 	]
 	(if (nil? subcounters) [] subcounters)))
 
-(defn store-counters [date] (
+(defn store-snapshot [date] (
 	let [
 		subcounters (map #(:subcounter %) (db-find-all-subcounters))
 		parsed-date (parser-date date)
@@ -43,5 +43,5 @@
 	(chime-at (periodic-seq (t/now)
 		(-> frequency t/seconds))
 			(fn [date]
-			(store-counters date)))
+			(store-snapshot date)))
 )
