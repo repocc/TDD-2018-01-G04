@@ -26,11 +26,15 @@
  	{:status 200 :body dashboard}
 ))
 
-(defn find-all-dashboards [] (
+(defn find-all-dashboards [params] (
 	let [
+		enabled (get params "enabled")
 		dashboards (db-find-all-dashboards)
 	]
-	(if (nil? dashboards) [] dashboards)))
+	(if (nil? dashboards) [] 
+		(if (nil? enabled) 
+			dashboards 
+			(filter #(= (:enabled %) (read-string enabled)) dashboards)))))
 
 (defn get-dashboard-by-id [id] 
 	{:status 200 :body (first (db-get-dashboard-by-id id))}
@@ -51,8 +55,13 @@
 	(db-store-dashboard dashboard)
 	{:status 200 :body dashboard} ))
 
-(defn count-all-dashboards [] (
+(defn count-all-dashboards [params] (
 	let [
-		count (db-count-all-dashboards)
+		enabled (get params "enabled")
+		dashboards (db-find-all-dashboards)
+		count (if (nil? dashboards) 0 
+			(if (nil? enabled) 
+				(count dashboards) 
+				(count (filter #(= (:enabled %) (read-string enabled)) dashboards))))
 	]
 	{:count count}))
