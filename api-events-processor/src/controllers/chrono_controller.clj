@@ -12,6 +12,18 @@
 (use 'core.data-processor)
 (use 'db.chrono-model)
 
+(defn parser-date [date](
+	let [
+		day (t/day date)
+		month (t/month date)
+		year (t/year date)
+		hour (- (t/hour date) 3)
+		minute (t/minute date)
+		seconds (t/second date)
+	]
+	{:day day, :month month, :year year, :hour hour, :minute minute, :seconds seconds}
+))
+
 (defn find-snapshot [] (
 	let [
 		subcounters (db-find-all-snapshot)
@@ -21,10 +33,10 @@
 (defn store-counters [date] (
 	let [
 		subcounters (map #(:subcounter %) (db-find-all-subcounters))
-		snapshot {:date (str date), :subcounters subcounters}
+		parsed-date (parser-date date)
+		snapshot {:date parsed-date, :subcounters subcounters}
 	]
 	(if (= subcounters []) nil (db-store-snapshot snapshot))
-	;(db-store-snapshot {:date (str date), :subcounters subcounters})
 ))
 
 (defn run-chrono [frequency]
