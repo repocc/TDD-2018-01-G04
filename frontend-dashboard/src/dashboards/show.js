@@ -1,15 +1,16 @@
 import React from 'react';
-import { Show, SimpleShowLayout, TextField, ReferenceArrayField } from 'admin-on-rest';
+import { Show, SimpleShowLayout, TextField } from 'admin-on-rest';
+import RefreshActions from '../common/components/refreshActions'
 
 const DashboardTitle = ({ record }) => {
-    return <span>Dashboard {record ? `"${record.name}"` : ''}</span>;
+    return <span>Dashboard</span>;
 };
 
 export const DashboardShow = (props) => (
-    <Show title={<DashboardTitle />} {...props}>
+    <Show title={<DashboardTitle />} {...props} actions={<RefreshActions refreshInterval="10000" />}>
         <SimpleShowLayout>
             <TextField source="name" />
-            
+            <TextField source="rule_ids" />
         </SimpleShowLayout>
     </Show>
 );

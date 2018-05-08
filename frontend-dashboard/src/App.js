@@ -22,7 +22,6 @@ const messages = {
 
 class App extends Component {
     render() {
-        console.log(this.props); 
         return (
             <Admin authClient={authClient} restClient={myApiRestClient} loginPage={Login} title="Dashboard" locale="es" messages={messages}>
                 {permissions => [
