@@ -3,7 +3,7 @@
 (use 'db.dashboard-model)
 (use 'utils.string-util)
 (use 'db.counter-model)
-(use 'controllers.chrono-controller)
+(use 'controllers.snapshot-controller)
 
 (defn convert-rule-ids [rule_ids] (
   let [

@@ -1,4 +1,4 @@
-(ns db.chrono-model)
+(ns db.snapshot-model)
 (use 'db.base-model)
 
 (defn db-store-snapshot [snapshot] (db-store :snapshot snapshot))

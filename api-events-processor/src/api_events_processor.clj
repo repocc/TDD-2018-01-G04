@@ -15,7 +15,7 @@
 (use 'controllers.event-controller)
 (use 'controllers.user-controller)
 (use 'controllers.dashboard-controller)
-(use 'controllers.chrono-controller)
+(use 'controllers.snapshot-controller)
 
 (def frequency 60)
 

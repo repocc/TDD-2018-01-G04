@@ -1,4 +1,4 @@
-(ns controllers.chrono-controller)
+(ns controllers.snapshot-controller)
 (require '[clojure.string :as str]
 			'[chime :refer [chime-ch]]
   			'[chime :refer [chime-at]]
@@ -10,7 +10,7 @@
 (use 'db.counter-model)
 (use 'core.rule)
 (use 'core.data-processor)
-(use 'db.chrono-model)
+(use 'db.snapshot-model)
 
 (defn parser-date [date](
 	let [
