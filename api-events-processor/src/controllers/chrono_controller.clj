@@ -21,12 +21,15 @@
 (defn store-counters [date] (
 	let [
 		subcounters (map #(:subcounter %) (db-find-all-subcounters))
+		snapshot {:date (str date), :subcounters subcounters}
 	]
-	(db-store-snapshot {:date (str date), :subcounters subcounters})
+	(if (= subcounters []) nil (db-store-snapshot snapshot))
+	;(db-store-snapshot {:date (str date), :subcounters subcounters})
 ))
 
 (defn run-chrono [frequency]
 	(chime-at (periodic-seq (t/now)
 		(-> frequency t/seconds))
 			(fn [date]
-			(store-counters date))))
+			(store-counters date)))
+)
