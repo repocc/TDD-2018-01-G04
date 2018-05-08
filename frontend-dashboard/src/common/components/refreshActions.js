@@ -39,7 +39,7 @@ const RefreshActions = ({ resource, filters, displayedFilters, filterValues, bas
     <CardActions>
         {filters && React.cloneElement(filters, { resource, showFilter, displayedFilters, filterValues, context: 'button' }) }
         <ListButton/>
-        <RefreshButton primary label="Refresh" refreshInterval={refreshInterval} icon={<NavigationRefresh />} />
+        <RefreshButton primary label="ACTUALIZAR" refreshInterval={refreshInterval} icon={<NavigationRefresh />} />
     </CardActions>
 );
 
