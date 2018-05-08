@@ -15,6 +15,9 @@
 (use 'controllers.event-controller)
 (use 'controllers.user-controller)
 (use 'controllers.dashboard-controller)
+(use 'controllers.chrono-controller)
+
+(def frequency 60)
 
 (defroutes app-routes
   (GET "/api/rule" {params :query-params}
@@ -42,10 +45,15 @@
   (GET "/api/dashboard/:id" [id] 
     (get-dashboard-by-id id)
   )
-  
+
   (PUT "/api/dashboard/:id" request
     (update-dashboard-by-id request)
   )
+
+  (GET "/api/snapshot" [] 
+    {:status 200 :body (find-snapshot)}
+  )
+
   (DELETE "/api/dashboard/:id" [id] 
     {:status 200 :body (drop-dashboard-by-id id)}
   )
@@ -83,6 +91,8 @@
       (wrap-exception-handling)
   )
 )
+
+(run-chrono frequency)
 
 (defn -main [& args]
   (jetty/run-jetty app)

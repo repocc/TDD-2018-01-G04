@@ -1,10 +1,10 @@
 (ns controllers.event-controller)
 (require '[clojure.string :as str])
+
 (use 'db.rule-model)
 (use 'db.counter-model)
 (use 'core.rule)
 (use 'core.data-processor)
-
 
 
 (defn get-subcounters [rule] (
