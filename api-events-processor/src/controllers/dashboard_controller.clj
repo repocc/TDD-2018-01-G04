@@ -2,6 +2,7 @@
 (require '[clojure.string :as str])
 (use 'db.dashboard-model)
 (use 'utils.string-util)
+(use 'utils.info_dashboard_util)
 
 (defn convert-rule-ids [rule_ids] (
   let [
@@ -36,9 +37,14 @@
 			dashboards 
 			(filter #(= (:enabled %) (read-string enabled)) dashboards)))))
 
-(defn get-dashboard-by-id [id] 
-	{:status 200 :body (first (db-get-dashboard-by-id id))}
-)
+
+(defn get-dashboard-by-id [id] (
+	let [
+		dashboard (first (db-get-dashboard-by-id id))
+		dashboard-info (get-info dashboard)
+	]
+	{:status 200 :body dashboard-info}
+))
 
 (defn drop-dashboard-by-id [id] (
 	db-drop-dashboard-by-id id))

@@ -7,12 +7,13 @@
 (use 'core.data-processor)
 
 
-(defn get-subcounters [rule] (
+(defn get-subcounters [rule id-rules] (
 	let [
 		name-rule (:name rule)
 		subcounters (:subcounters rule)
+		id (first (filter #(= name-rule (% :name-counter)) id-rules))
 	]
-	{:name name-rule, :subcounters subcounters}
+	{:name name-rule, :subcounters subcounters, :id (id :id-rule), :name-rule (id :name-rule)}
 ))
 
 
@@ -41,11 +42,22 @@
 	(if (nil? subcounters) [] subcounters)))
 
 
+(defn get-id-rules [rule] (
+	let[
+		id (:id rule)
+		name-rule (read-string (:name rule))
+		name-counter (second (read-string (:query rule)))
+	]
+	{:id-rule id, :name-rule name-rule, :name-counter name-counter}
+))
+
 (defn process-events [request] (
 	let [
 			event (get-in request [:params :event])
 			data (into {} (for [[k v] event] [(name k) v]))
-			rules (into '() (map #(read-string (:query %)) (db-find-all-rules)))
+			db-rules (db-find-all-rules)
+			rules (into '() (map #(read-string (:query %)) db-rules))
+			id-rules (map get-id-rules db-rules)
 			state (initialize-processor rules)
 
 			counters (get-counters (:counters state))
@@ -53,7 +65,7 @@
 
 			new-state (process-data current-state data)
 
-			subcounters (map get-subcounters (:counters (first new-state)))
+			subcounters (map #(get-subcounters % id-rules) (:counters (first new-state)))
 
 	]
 	(db-drop-subcounters)

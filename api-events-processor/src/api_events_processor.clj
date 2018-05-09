@@ -15,7 +15,7 @@
 (use 'controllers.event-controller)
 (use 'controllers.user-controller)
 (use 'controllers.dashboard-controller)
-(use 'controllers.chrono-controller)
+(use 'controllers.snapshot-controller)
 
 (def frequency 60)
 
@@ -50,12 +50,12 @@
     (update-dashboard-by-id request)
   )
 
-  (GET "/api/snapshot" [] 
-    {:status 200 :body (find-snapshot)}
-  )
-
   (DELETE "/api/dashboard/:id" [id] 
     {:status 200 :body (drop-dashboard-by-id id)}
+  )
+
+  (GET "/api/snapshot" [] 
+    {:status 200 :body (find-snapshot)}
   )
 
   (POST "/api/rule" request
