@@ -5,7 +5,16 @@ var events = [
   {"important": true},
   {"spam": true},
   {"important": false},
-  {"important": false}
+  {"important": false},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true},
+  {"spam": true}
 ]
 
 function postEvent(event){
