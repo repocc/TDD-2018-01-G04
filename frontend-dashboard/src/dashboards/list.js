@@ -10,7 +10,7 @@ const ADMIN_PROFILE = 'admin';
 export const DashboardsList = (props) => (
     <List title={<DashboardsTitle />} 
         //Sorry, I don't know how to take permissions in this case.
-        filter={(localStorage.getItem('role') !== ADMIN_PROFILE && {enabled: true})} 
+        filter={(localStorage.getItem('role') !== ADMIN_PROFILE ? {enabled: true} : {})} 
         {...props}>
         {permissions =>
             <Datagrid>
