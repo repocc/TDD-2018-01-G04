@@ -16,7 +16,7 @@
 		subcounters-value (first (filter #(= (:id %) rule-id) subcounters))
 		snapshot-value (map #(get-snapshot-info rule-id %) snapshot)
 	]
-	{:id rule-id, :name (:name-rule subcounters-value), :value (:subcounters subcounters-value),:snapshot snapshot-value }
+	{:id rule-id, :name (:name-rule subcounters-value), :value (:subcounters subcounters-value),:snapshots snapshot-value }
 
 ))
 
