@@ -7,16 +7,20 @@
 	let[
 		date (:date snapshot)
 		subcounters-record (first (filter #(= (:id %) rule-id) (first (:subcounters snapshot))))
+		value (if (= (:subcounters subcounters-record) {}) {[] 0} (:subcounters subcounters-record))
 	]
-	{:date date :value (:subcounters subcounters-record)}
+	{:date date :value value}
 ))
 
 (defn get-counters-info [rule-id subcounters snapshot](
 	let[
 		subcounters-value (first (filter #(= (:id %) rule-id) subcounters))
 		snapshot-value (map #(get-snapshot-info rule-id %) snapshot)
+		value (if (nil? subcounters-value) {[] 0} (:subcounters subcounters-value))
+		value (if (= value {}) {[] 0} value)
+		snapshots ( if (= [] snapshot-value) [] snapshot-value )
 	]
-	{:id rule-id, :name (:name-rule subcounters-value) :value (:subcounters subcounters-value),:snapshots snapshot-value }
+	{:id rule-id, :name (:name-rule subcounters-value), :value value, :snapshots snapshots}
 
 ))
 
