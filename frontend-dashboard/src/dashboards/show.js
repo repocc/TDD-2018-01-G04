@@ -13,7 +13,7 @@ const DashboardShowRecord = ({ record }) => (
         return (
             <td key={c.id}>
                 <h4>Regla "{c.name}"</h4>
-                <p>Valor: {Object.values(c.value)[0]}</p>
+                <p>Valor: {c.value && Object.values(c.value)[0]}</p>
                 <table className="dashboard-data">
                     <tr>
                         <td className="title">Fecha</td>
@@ -23,7 +23,7 @@ const DashboardShowRecord = ({ record }) => (
                         return (
                             <tr key={s.date}>
                                 <td>{s.date}</td>
-                                <td>{Object.values(s.value)[0]}</td>
+                                <td>{s.value && Object.values(s.value)[0]}</td>
                             </tr>
                         )
                     })}
@@ -35,7 +35,7 @@ const DashboardShowRecord = ({ record }) => (
 );
 
 export const DashboardShow = (props) => (
-    <Show title={<DashboardTitle />} {...props} actions={<RefreshActions refreshInterval="5000" />}>
+    <Show title={<DashboardTitle />} {...props} actions={<RefreshActions refreshInterval="1000" />}>
         <SimpleShowLayout>
             <DashboardShowRecord/>
         </SimpleShowLayout>
