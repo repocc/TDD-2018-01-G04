@@ -12,7 +12,7 @@ const DashboardShowRecord = ({ record }) => (
     {record.counters && record.counters.map(c => {
         return (
             <td key={c.id}>
-                <h4>Regla "{c.name}"</h4>
+                <h4>"{c.name}"</h4>
                 <p>Valor: {c.value && Object.values(c.value)[0]}</p>
                 <table className="dashboard-data">
                     <tr>

@@ -2,11 +2,12 @@
 (use 'db.counter-model)
 (use 'db.rule-model)
 (use 'controllers.snapshot-controller)
+(use 'rule)
 
 (defn get-name-rule [rule-id] (
 	let [
 		rule (first (filter #(= (:id %) rule-id) (db-find-all-rules)))
-		name (second (read-string(:query rule)))
+		name (:name (evaluate-function (read-string(:query rule))))
 	]
 	name
 ))

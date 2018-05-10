@@ -13,7 +13,6 @@ var events = [
   {"spam": true},
   {"spam": true},
   {"spam": true},
-  {"spam": true},
   {"spam": true}
 ]
 
