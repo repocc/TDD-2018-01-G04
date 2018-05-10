@@ -1,7 +1,15 @@
 (ns utils.info_dashboard_util)
 (use 'db.counter-model)
+(use 'db.rule-model)
 (use 'controllers.snapshot-controller)
 
+(defn get-name-rule [rule-id] (
+	let [
+		rule (first (filter #(= (:id %) rule-id) (db-find-all-rules)))
+		name (second (read-string(:query rule)))
+	]
+	name
+))
 
 (defn get-snapshot-info [rule-id snapshot](
 	let[
@@ -18,9 +26,10 @@
 		snapshot-value (map #(get-snapshot-info rule-id %) snapshot)
 		value (if (nil? subcounters-value) {[] 0} (:subcounters subcounters-value))
 		value (if (= value {}) {[] 0} value)
-		snapshots ( if (= [] snapshot-value) [] snapshot-value )
+		snapshots ( if (= [] snapshot-value) [] snapshot-value)
+		name (get-name-rule rule-id)
 	]
-	{:id rule-id, :name (:name-rule subcounters-value), :value value, :snapshots snapshots}
+	{:id rule-id, :name name, :value value, :snapshots snapshots}
 
 ))
 
