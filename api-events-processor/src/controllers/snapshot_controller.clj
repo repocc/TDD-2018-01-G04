@@ -1,4 +1,5 @@
-(ns controllers.snapshot-controller)
+(ns controllers.snapshot-controller
+	(:import [org.joda.time DateTimeConstants DateTimeZone]))
 (require '[clojure.string :as str]
 			'[chime :refer [chime-ch]]
   			'[chime :refer [chime-at]]
@@ -28,8 +29,9 @@
 ))
 
 (defn run-chrono [frequency]
-	(chime-at (periodic-seq (t/now)
-		(-> frequency t/seconds))
+	(chime-at (periodic-seq (.. (t/now)
+                       (withZone (DateTimeZone/forID "America/Argentina/Buenos_Aires")))
+                   (-> frequency t/seconds))
 			(fn [date]
 			(store-snapshot date)))
 )
