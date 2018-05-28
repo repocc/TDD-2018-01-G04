@@ -29,7 +29,7 @@ public class IdentificationController extends Controller {
 
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(view.areFieldsEmpty())
+				if(view.isFieldEmpty())
 				{
 					view.closeWindow();
 					view.showView();
