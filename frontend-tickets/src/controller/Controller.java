@@ -4,7 +4,7 @@ import model.Model;
 
 public class Controller{
 
-    Model model;
+    private Model model;
 
     public Controller(Model model)
     {
@@ -14,6 +14,16 @@ public class Controller{
     public void showView()
     {
     	
+    }
+    
+    public boolean authenticateUser(String username)
+	{
+    	return model.authenticateUser(username);
+	}
+	
+    public void notifyContextLogin()
+    {
+    	model.notifyContextLogin();
     }
        
 }

@@ -89,5 +89,10 @@ public class IdentificationView extends View {
 	{
 		return (user.getText().isEmpty() || password.getPassword().length == 0);
 	}
+
+	public String getUsername()
+	{
+		return user.getText();
+	}
 	
 }

@@ -29,17 +29,20 @@ public class IdentificationController extends Controller {
 
 			public void actionPerformed(ActionEvent arg0)
 			{
-				//TODO: Authentify user
-				
 				if(view.areFieldsEmpty())
 				{
 					view.closeWindow();
 					view.showView();
 				}	
+				else if (authenticateUser(view.getUsername()))
+				{
+					view.closeWindow();
+					notifyContextLogin();
+				}
 				else
 				{
 					view.closeWindow();
-					model.notifyContext();
+					view.showView();
 				}
 			}
 		}	
