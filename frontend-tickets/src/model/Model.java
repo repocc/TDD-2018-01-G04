@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Observable;
+import java.util.Vector;
 
 import controller.AdminController;
 import controller.ControllerContext;
@@ -10,6 +11,7 @@ public class Model extends Observable
 {
 	private ControllerContext context;
 	private User user;
+	private Vector<Project> projects = new Vector<Project>();
 	private TicketsSystemAdapter adapter;
 	
 	public Model(ControllerContext context)
