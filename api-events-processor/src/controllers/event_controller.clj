@@ -16,6 +16,14 @@
 	{:name name-rule, :subcounters subcounters, :id (id :id-rule), :name-rule (id :name-rule)}
 ))
 
+(defn get-signals [signal id-rules] (
+	let [
+		name-rule (first (keys signal))
+		subcounters (signal name-rule)
+		id (first (filter #(= name-rule (% :name-counter)) id-rules))
+	]
+	{:name name-rule, :subcounters {"[]" subcounters}, :id (id :id-rule), :name-rule (id :name-rule)}
+))
 
 (defn merge-counter [counter subcounters] (
 	let [
@@ -42,11 +50,19 @@
 	(if (nil? subcounters) [] subcounters)))
 
 
+(defmulti get-name-rule (fn[rule] (first rule)))
+
+(defmethod get-name-rule 'define-counter [rule]
+    (second rule))
+
+(defmethod get-name-rule 'define-signal [rule]
+    (first (keys (second rule))))
+
 (defn get-id-rules [rule] (
 	let[
 		id (:id rule)
 		name-rule (read-string (:name rule))
-		name-counter (second (read-string (:query rule)))
+		name-counter (get-name-rule (read-string (:query rule)))
 	]
 	{:id-rule id, :name-rule name-rule, :name-counter name-counter}
 ))
@@ -66,10 +82,11 @@
 			new-state (process-data current-state data)
 
 			subcounters (map #(get-subcounters % id-rules) (:counters (first new-state)))
+			signals (map #(get-signals % id-rules) (second new-state))
 
 	]
 	(db-drop-subcounters)
-	(db-store-subcounter {:removable true, :subcounter subcounters})
+	(db-store-subcounter {:removable true, :subcounter (concat signals subcounters)})
 
 	{:status 200}
 ))
