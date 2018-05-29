@@ -2,7 +2,7 @@ package controller;
 
 import model.Model;
 
-public class Controller{
+public abstract class Controller{
 
     private Model model;
 
@@ -11,10 +11,7 @@ public class Controller{
         this.model = model;
     }
 
-    public void showView()
-    {
-    	
-    }
+    public abstract void showView();
     
     public boolean authenticateUser(String username)
 	{
@@ -24,6 +21,11 @@ public class Controller{
     public void notifyContextLogin()
     {
     	model.notifyContextLogin();
+    }
+    
+    public Model getModel()
+    {
+    	return model;
     }
        
 }

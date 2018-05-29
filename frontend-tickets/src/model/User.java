@@ -10,18 +10,24 @@ public class User {
 		this.name = name;
 	}
 
+	public User(String username, String role) {
+		this.name = name;
+		this.role = role;
+	}
+
 	public void setRole(String role)
 	{
 		this.role = role.toLowerCase();
-	}
-
-	public boolean isAdmin()
-	{
-		return (role.equals("admin"));
 	}
 	
 	public String getName()
 	{
 		return this.name;
 	}
+	
+	public String toString()
+	{
+		return this.name;
+	}
 }
+

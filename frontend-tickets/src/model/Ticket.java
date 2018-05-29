@@ -15,4 +15,8 @@ public class Ticket {
 		this.description = description;
 		this.type = type;
 	}
+
+	public String toString() {
+		return "<html>Title: "+ title + "<br/>Description: " + description + "<br/>Type: " + type + "</html>";
+	}
 }

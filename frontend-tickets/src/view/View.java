@@ -1,9 +1,8 @@
 package view;
 
-import controller.Controller;
 import model.Model;
 
-public class View {
+public abstract class View {
 
 	private Model model;
 	
@@ -12,14 +11,11 @@ public class View {
 		this.model = model;
 	}
 
-	public void showView()
+	public abstract void showView();
+	
+	public Model getModel()
 	{
-		
-	}
-
-	public void initializeViewActionListeners(Controller controller)
-	{
-		
+		return model;
 	}
 		
 }
