@@ -54,5 +54,9 @@ public class Project {
 		}
 		return names;
 	}
+
+	public Vector<TicketState> getStates() {
+		return ticketStates;
+	}
 	
 }

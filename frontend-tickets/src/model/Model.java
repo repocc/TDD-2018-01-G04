@@ -24,19 +24,30 @@ public class Model extends Observable
 		users.add(new User("Pepe"));
 		users.add(new User("Dylan"));
 		users.add(new User("Tom"));
-		Project p1 = new Project("Hello Project", new User("Pepe"), users, null);
-		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1"));
+		
+		//Model example
+		Vector<TicketState> states1 = new Vector<TicketState>();
+		states1.add(new TicketState("OPEN", null));
+		Project p1 = new Project("Hello Project", new User("Pepe"), users, states1);
+		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
 		projects.add(p1);
 		
-		p1 = new Project("Hello Project2", new User("Pepe"), users, null);
-		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1"));
-		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2"));
+		Vector<TicketState> states2 = new Vector<TicketState>();
+		states2.add(new TicketState("OPEN", null));
+		states2.add(new TicketState("IN PROGRESS", null));
+		p1 = new Project("Hello Project2", new User("Pepe"), users, states2);
+		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
+		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2", "IN PROGRESS"));
 		projects.add(p1);
 		
-		p1 = new Project("Hello Project3", new User("Pepe"), users, null);
-		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1"));
-		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2"));
-		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3"));
+		Vector<TicketState> states3 = new Vector<TicketState>();
+		states3.add(new TicketState("OPEN", null));
+		states3.add(new TicketState("IN PROGRESS", null));
+		states3.add(new TicketState("CLOSED", null));
+		p1 = new Project("Hello Project3", new User("Pepe"), users, states3);
+		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
+		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "CLOSED"));
 		projects.add(p1);
 		
 	}
@@ -63,7 +74,6 @@ public class Model extends Observable
 	
 	public Vector<Ticket> getTicketsFromProject(String projectName)
 	{
-		Vector<String> names = new Vector<String>();
 		Iterator i = this.projects.iterator();
 	
 		while(i.hasNext())
@@ -78,5 +88,19 @@ public class Model extends Observable
 		return null;
 	}
 	
+	public Vector<TicketState> getStatesFromProject(String projectName)
+	{
+		Iterator i = this.projects.iterator();
 	
+		while(i.hasNext())
+		{
+			Project project = (Project)i.next();
+			if(project.toString().equals(projectName))
+			{
+				return project.getStates();
+			}
+		}
+
+		return null;
+	}
 }

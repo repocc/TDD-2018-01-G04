@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -26,15 +29,17 @@ import controller.MainController;
 import model.Model;
 import model.Project;
 import model.Ticket;
+import model.TicketState;
 
 public class MainView extends View {
 
 	private JFrame window;
 	private JButton newProjectButton = new JButton("New Project");
 	private JList projectsList = new JList();
-	private JList ticketsList = new JList();
+	//private JList ticketsList = new JList();
 	private JScrollPane projectsListScroller;
-	private JScrollPane ticketsListScroller;
+	private JScrollPane ticketsListMainScroller;
+	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
 	public MainView(Model model) {
 		super(model);
@@ -73,14 +78,14 @@ public class MainView extends View {
         c.weightx = 0.25;
 		window.add(projectsListScroller, c);
 		
-		//TODO: Change the way tickets display according to state
-		ticketsListScroller = new JScrollPane(ticketsList);
+		ticketsListMainPanel.setLayout(new GridLayout(2, 2, 10, 10));
+
 		c.gridx = 2;
 		c.gridwidth = 3;
 		c.gridy = 0;
 		c.weighty = 1.0;
         c.weightx = 1.0;
-		window.add(ticketsListScroller, c);
+		window.add(ticketsListMainPanel, c);
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -119,7 +124,7 @@ public class MainView extends View {
 	public void showProjectsList()
 	{
 		projectsList.setVisible(true);
-		ticketsList.setVisible(true);
+		//ticketsList.setVisible(true);
 		
 		Vector<Project> projects = (getModel().getProjects());
 		
@@ -137,21 +142,45 @@ public class MainView extends View {
 	
 	public void showTicketsFromProject(String name)
 	{
-		
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
+		Vector<TicketState> states = (getModel().getStatesFromProject(name));
 		
-		DefaultListModel model = new DefaultListModel();
+		Iterator iStates = states.iterator();
 		
-		Iterator i = tickets.iterator();
+		ticketsListMainPanel.removeAll();
 		
-		while(i.hasNext())
+		while(iStates.hasNext())
 		{
-			Ticket ticket = (Ticket)i.next();
-			model.addElement(ticket);
-		}
-		ticketsList.setModel(model);
+			DefaultListModel model = new DefaultListModel();
+			TicketState state = (TicketState)iStates.next();
+			Iterator iTickets = tickets.iterator();
+			
+			while(iTickets.hasNext())
+			{
+				Ticket ticket = (Ticket)iTickets.next();
+				if(ticket.isCurrentState(state.getName()))
+				{
+					model.addElement(ticket);
+					System.out.println(ticket.toString());
+				}
+			}
+			JList<Ticket> ticketsList = new JList<>(model);
+			ticketsList.setVisible(true);
+			JScrollPane scrollPanel = new JScrollPane(ticketsList);
+			scrollPanel.setBackground(Color.red);
+			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+            // Border around the jscrollpane showing the state
+            JPanel container = new JPanel(new BorderLayout());
+            container.add(scrollPanel);
+            container.setBorder(BorderFactory.createTitledBorder(state.getName()));
+
+			ticketsListMainPanel.add(container);
+		}	
+		ticketsListMainPanel.revalidate();
+		ticketsListMainPanel.repaint();
 	}
+	
 	
 	private JPanel createLabelWith(String label, JComponent component)
 	{

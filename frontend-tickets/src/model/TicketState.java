@@ -12,4 +12,9 @@ public class TicketState {
 		this.name = name;
 		this.roles = roles;
 	}
+	
+	public String getName()
+	{
+		return this.name;
+	}
 }
