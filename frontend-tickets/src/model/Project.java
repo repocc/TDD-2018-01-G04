@@ -11,10 +11,10 @@ public class Project {
 	private User owner;
 	private Vector<Ticket> tickets = new Vector<Ticket>();
 	private Vector<User> users = new Vector<User>();
+	private Vector<String> roles = new Vector<String>();
+	private Vector<TicketState> ticketStates = new Vector<TicketState>();
 	
-	private Vector<String> ticketStates = new Vector<String>();
-	
-	public Project(String name, User owner, Vector<User> users, Vector<String> ticketStates)
+	public Project(String name, User owner, Vector<User> users, Vector<TicketState> ticketStates)
 	{
 		this.name = name;
 		this.owner = owner;

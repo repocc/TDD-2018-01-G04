@@ -8,6 +8,7 @@ public class Ticket {
 	private String description;
 	private String type;
 	private Vector<Comment> comments = new Vector<Comment>();
+	private String currentState;
 	
 	public Ticket(String title, String description, String type)
 	{

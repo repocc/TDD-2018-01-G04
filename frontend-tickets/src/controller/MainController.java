@@ -25,18 +25,6 @@ public class MainController extends Controller {
     {
     	view.showView();
     }
-	
-    public ActionListener getProjectsListener()
-	{
-		class projectsListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				view.showProjectsList();
-			}
-		}	
-		return new projectsListener();
-	}
     
     public MouseListener getListSelectionListener()
 	{

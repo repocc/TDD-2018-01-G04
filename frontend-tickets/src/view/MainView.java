@@ -1,7 +1,10 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
@@ -27,7 +30,6 @@ import model.Ticket;
 public class MainView extends View {
 
 	private JFrame window;
-	private JButton viewProjectsButton = new JButton("Projects");
 	private JButton newProjectButton = new JButton("New Project");
 	private JList projectsList = new JList();
 	private JList ticketsList = new JList();
@@ -41,29 +43,44 @@ public class MainView extends View {
 	public void showView()
 	{
 		window = new JFrame("Tickets System");
-		window.setLayout(new GridLayout(1, 1));
+		window.setPreferredSize(new Dimension(800, 600));
 		
+		window.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(viewProjectsButton);
-		buttonPanel.add(newProjectButton);
+		buttonPanel.add(newProjectButton, c);
 		
 		window.add(buttonPanel);
 		
 		projectsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		projectsList.setLayoutOrientation(JList.VERTICAL);
 		projectsList.setVisibleRowCount(-1);
-		projectsList.setVisible(false);
+		showProjectsList();
 
 		projectsListScroller = new JScrollPane(projectsList);
-		projectsListScroller.setPreferredSize(new Dimension(300, 500));
-
-		//TODO: Change the way tickets display according to state
-		ticketsList.setVisible(false);
-		ticketsListScroller = new JScrollPane(ticketsList);
-		ticketsListScroller.setPreferredSize(new Dimension(300, 500));
+		c.gridx = 1;
+		c.gridwidth = 1;
+		c.gridheight = 5;
+		c.gridy = 0;
+		c.weighty = 1.0;
+        c.weightx = 0.25;
+		window.add(projectsListScroller, c);
 		
-		window.add(projectsListScroller);
-		window.add(ticketsListScroller);
+		//TODO: Change the way tickets display according to state
+		ticketsListScroller = new JScrollPane(ticketsList);
+		c.gridx = 2;
+		c.gridwidth = 3;
+		c.gridy = 0;
+		c.weighty = 1.0;
+        c.weightx = 1.0;
+		window.add(ticketsListScroller, c);
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -78,14 +95,10 @@ public class MainView extends View {
 	
 	public void initializeViewActionListeners(MainController controller)
 	{
-		initViewProjectsButton(controller.getProjectsListener());
 		initProjectsListListener(controller.getListSelectionListener());
 		initNewProjectButton(controller.getNewProjectListener());
-	}
-	
-	public void initViewProjectsButton(ActionListener listener)
-	{
-		viewProjectsButton.addActionListener(listener);
+		
+		initNewProjectMenuListeners(controller);
 	}
 	
 	public void initNewProjectButton(ActionListener listener)
@@ -98,6 +111,11 @@ public class MainView extends View {
 		projectsList.addMouseListener(listener);
 	}
 
+	public void initNewProjectMenuListeners(MainController controller)
+	{
+		//Ej: button1.addActionListener(controller.getButton1Listener()); ...
+	}
+	
 	public void showProjectsList()
 	{
 		projectsList.setVisible(true);
@@ -119,6 +137,7 @@ public class MainView extends View {
 	
 	public void showTicketsFromProject(String name)
 	{
+		
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
 		
 		DefaultListModel model = new DefaultListModel();
