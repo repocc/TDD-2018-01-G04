@@ -2,7 +2,7 @@
 (use 'db.counter-model)
 (use 'db.rule-model)
 (use 'controllers.snapshot-controller)
-(use 'rule)
+(use 'core.rule)
 
 (defn get-name-rule [rule-id] (
 	let [
