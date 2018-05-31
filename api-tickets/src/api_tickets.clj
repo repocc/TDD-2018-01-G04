@@ -18,6 +18,10 @@
   (POST "/api/auth" request
     (auth-by-username request))
 
+  (GET "/api/user" [] 
+    {:status 200 :body (find-all-users)}
+  )
+
   (GET "/api/role" [] 
     {:status 200 :body (find-all-roles)}
   )

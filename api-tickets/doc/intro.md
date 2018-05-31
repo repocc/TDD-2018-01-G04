@@ -13,3 +13,6 @@ POST http://localhost:3000/api/auth
 
 ## Get all roles
 GET http://localhost:3000/api/role
+
+## Get all users
+GET http://localhost:3000/api/user
