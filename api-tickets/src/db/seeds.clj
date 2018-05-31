@@ -3,14 +3,24 @@
 
 (use 'db.db-client)
 
+;Roles
+(rdb/insert db :roles
+  {:key "pl"})
+
+(rdb/insert db :roles
+  {:key "dev"})
+
+(rdb/insert db :roles
+  {:key "qa"})
+
+;Users
 (rdb/insert db :users
-  {:username "pl"
-   :role  "pl"})
+  {:username "maxiejbe92@gmail.com"})
 
 (rdb/insert db :users
-  {:username "dev"
-   :role  "dev"})
+  {:username "mafvidal@gmail.com"})
 
 (rdb/insert db :users
-  {:username "qa"
-   :role  "qa"})
+  {:username "jbponce36@gmail.com"})
+
+

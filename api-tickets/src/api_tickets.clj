@@ -11,10 +11,16 @@
 (use 'db.db-client)
 (use 'db.seeds)
 (use 'controllers.user-controller)
+(use 'controllers.role-controller)
 
 (defroutes app-routes
+
   (POST "/api/auth" request
     (auth-by-username request))
+
+  (GET "/api/role" [] 
+    {:status 200 :body (find-all-roles)}
+  )
 
   (route/resources "/")
 
