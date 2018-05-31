@@ -2,16 +2,17 @@
   (:require [rage-db.core :as rdb]))
 
 (use 'db.db-client)
+(use 'utils.string-util)
 
 ;Roles
 (rdb/insert db :roles
-  {:key "pl"})
+  {:id "pl"})
 
 (rdb/insert db :roles
-  {:key "dev"})
+  {:id "dev"})
 
 (rdb/insert db :roles
-  {:key "qa"})
+  {:id "qa"})
 
 ;Users
 (rdb/insert db :users
@@ -24,3 +25,15 @@
   {:username "jbponce36@gmail.com"})
 
 
+;Ticket types
+(rdb/insert db :tickettypes
+  {:id (uuid) :name "Abierto"})
+
+(rdb/insert db :tickettypes
+  {:id (uuid) :name "En progreso"})
+
+(rdb/insert db :tickettypes
+  {:id (uuid) :name "QA"})
+
+(rdb/insert db :tickettypes
+  {:id (uuid) :name "Terminado"})
