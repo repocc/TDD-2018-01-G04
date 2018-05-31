@@ -13,10 +13,12 @@ import javax.swing.border.Border;
 
 import view.MainView;
 import model.Model;
+import model.Ticket;
 
 public class MainController extends Controller {
 	
 	private MainView view;
+	private Ticket selectedTicket;
 
 	public MainController(Model model)
 	{
@@ -30,7 +32,7 @@ public class MainController extends Controller {
     	view.showView();
     }
     
-    public MouseListener getListSelectionListener()
+    public MouseListener getProjectsListSelectionListener()
 	{
 		class projectsListListener implements MouseListener
 		{
@@ -88,9 +90,16 @@ public class MainController extends Controller {
 		class ticketLabelListener implements MouseListener
 		{
 			@Override
-			public void mouseClicked(MouseEvent e)
+			public void mouseClicked(MouseEvent mouseEvent)
 			{
-				
+				JList list = (JList)mouseEvent.getSource();
+				if (mouseEvent.getClickCount() == 1) 
+				{
+					int index = list.locationToIndex(mouseEvent.getPoint());
+					if (index >= 0) {
+						selectedTicket = (Ticket)list.getModel().getElementAt(index);
+					}
+				}
 			}
 
 			@Override
@@ -114,6 +123,17 @@ public class MainController extends Controller {
 			}
 		}	
 		return new ticketLabelListener();
+	}
+
+	public ActionListener getChangeStateListener() {
+		class changeStateListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				System.out.println(selectedTicket);
+			}
+		}	
+		return new changeStateListener();
 	}
     
     

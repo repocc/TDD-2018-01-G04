@@ -46,6 +46,7 @@ public class MainView extends View {
 	private JScrollPane projectsListScroller;
 	private JScrollPane ticketsListMainScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
+    private JButton changeStateButton = new JButton(">");
 
 	private MouseListener ticketLabelListener;
 	
@@ -108,12 +109,13 @@ public class MainView extends View {
 	
 	public void initializeViewActionListeners(MainController controller)
 	{
-		initProjectsListListener(controller.getListSelectionListener());
+		initProjectsListListener(controller.getProjectsListSelectionListener());
 		initNewProjectButton(controller.getNewProjectListener());
 		
 		initNewProjectMenuListeners(controller);
 		
 		ticketLabelListener = controller.getTicketLabelListener();
+		changeStateButton.addActionListener(controller.getChangeStateListener());
 	}
 	
 	public void initNewProjectButton(ActionListener listener)
@@ -150,7 +152,7 @@ public class MainView extends View {
 		projectsList.setModel(model);
 	}
 	
-	public void showTicketsFromProject(String name)
+	/*public void showTicketsFromProject(String name)
 	{
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
 		Vector<TicketState> states = (getModel().getStatesFromProject(name));
@@ -214,8 +216,52 @@ public class MainView extends View {
 		}	
 		ticketsListMainPanel.revalidate();
 		ticketsListMainPanel.repaint();
-	}
+	}*/
 	
+	public void showTicketsFromProject(String name)
+	{
+		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
+		Vector<TicketState> states = (getModel().getStatesFromProject(name));
+		
+		Iterator iStates = states.iterator();
+		
+		ticketsListMainPanel.removeAll();
+		
+		while(iStates.hasNext())
+		{
+			DefaultListModel model = new DefaultListModel();
+			TicketState state = (TicketState)iStates.next();
+			Iterator iTickets = tickets.iterator();
+			
+			while(iTickets.hasNext())
+			{
+				Ticket ticket = (Ticket)iTickets.next();
+				if(ticket.isCurrentState(state.getName()))
+				{
+					model.addElement(ticket);
+				}
+			}
+			JList<Ticket> ticketsList = new JList<>(model);
+			ticketsList.setVisible(true);
+			ticketsList.addMouseListener(ticketLabelListener);
+			
+			JScrollPane scrollPanel = new JScrollPane(ticketsList);
+			scrollPanel.setBackground(Color.red);
+			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+            // Border around the jscrollpane showing the state
+            JPanel container = new JPanel();
+            container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
+            container.add(scrollPanel);
+            
+            container.add(changeStateButton);
+            container.setBorder(BorderFactory.createTitledBorder(state.getName()));
+
+			ticketsListMainPanel.add(container);
+		}	
+		ticketsListMainPanel.revalidate();
+		ticketsListMainPanel.repaint();
+	}	
 	
 	private JPanel createLabelWith(String label, JComponent component)
 	{
