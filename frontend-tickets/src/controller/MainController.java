@@ -5,7 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 import view.MainView;
 import model.Model;
@@ -78,6 +82,38 @@ public class MainController extends Controller {
 			}
 		}	
 		return new newProjectListener();
+	}
+
+	public MouseListener getTicketLabelListener() {
+		class ticketLabelListener implements MouseListener
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		}	
+		return new ticketLabelListener();
 	}
     
     

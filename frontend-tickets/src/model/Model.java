@@ -38,6 +38,14 @@ public class Model extends Observable
 		p1 = new Project("Hello Project2", new User("Pepe"), users, states2);
 		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
 		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
+		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "IN PROGRESS"));
 		projects.add(p1);
 		
 		Vector<TicketState> states3 = new Vector<TicketState>();

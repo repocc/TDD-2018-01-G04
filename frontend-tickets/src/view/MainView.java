@@ -7,12 +7,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.TextField;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,6 +27,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 import controller.MainController;
 import model.Model;
@@ -41,6 +47,8 @@ public class MainView extends View {
 	private JScrollPane ticketsListMainScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
+	private MouseListener ticketLabelListener;
+	
 	public MainView(Model model) {
 		super(model);
 	}
@@ -104,6 +112,8 @@ public class MainView extends View {
 		initNewProjectButton(controller.getNewProjectListener());
 		
 		initNewProjectMenuListeners(controller);
+		
+		ticketLabelListener = controller.getTicketLabelListener();
 	}
 	
 	public void initNewProjectButton(ActionListener listener)
@@ -151,24 +161,49 @@ public class MainView extends View {
 		
 		while(iStates.hasNext())
 		{
-			DefaultListModel model = new DefaultListModel();
 			TicketState state = (TicketState)iStates.next();
 			Iterator iTickets = tickets.iterator();
+			
+			JPanel mainPanel = new JPanel();
+			mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+			
+			JScrollPane scrollPanel = new JScrollPane(mainPanel);
+			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			
+			GridBagConstraints c = new GridBagConstraints();
 			
 			while(iTickets.hasNext())
 			{
 				Ticket ticket = (Ticket)iTickets.next();
 				if(ticket.isCurrentState(state.getName()))
 				{
-					model.addElement(ticket);
-					System.out.println(ticket.toString());
+					JPanel ticketPanel = new JPanel();
+					ticketPanel.setLayout(new GridBagLayout());
+					
+					c.insets = new Insets(5, 5, 5, 5);
+					c.weightx = 1.0;
+					c.gridwidth = 1;
+					c.gridheight = 1;
+					c.fill = GridBagConstraints.BOTH;
+					c.gridx = 0;
+
+					JButton ticketLabel = new JButton(ticket.toString());
+					ticketLabel.addMouseListener(ticketLabelListener);
+					ticketLabel.setHorizontalAlignment(SwingConstants.LEFT);
+					ticketPanel.add(ticketLabel, c);
+					
+					JButton button = new JButton(">");
+					c.insets = new Insets(5, 5, 5, 5);
+					c.weightx = 0.1;
+					c.gridwidth = 1;
+					c.gridheight = 1;
+					c.fill = GridBagConstraints.BOTH;
+					c.gridx = 3;
+					ticketPanel.add(button, c);
+					
+					mainPanel.add(ticketPanel);
 				}
 			}
-			JList<Ticket> ticketsList = new JList<>(model);
-			ticketsList.setVisible(true);
-			JScrollPane scrollPanel = new JScrollPane(ticketsList);
-			scrollPanel.setBackground(Color.red);
-			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             // Border around the jscrollpane showing the state
             JPanel container = new JPanel(new BorderLayout());
@@ -225,6 +260,14 @@ public class MainView extends View {
 		{
 			System.out.println("Project name: " + nameText.getText());
 		}
+	}
+
+	public void selectLabel(JLabel label) {
+		Border emptyBorder  = BorderFactory.createEmptyBorder(1,1,1,1);
+	    Border selectBorder = BorderFactory.createLineBorder(Color.blue);
+	    label.setOpaque(true);
+	    label.setBackground(UIManager.getColor("Label.foreground"));
+	    label.setBorder(selectBorder);
 	}
 
 }
