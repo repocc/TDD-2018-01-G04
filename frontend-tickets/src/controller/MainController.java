@@ -45,6 +45,7 @@ public class MainController extends Controller {
 					if (index >= 0) {
 						String name = list.getModel().getElementAt(index).toString();
 						view.showTicketsFromProject(name);
+						selectedTicket = null;
 					}
 				}
 			}
@@ -130,7 +131,7 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				System.out.println(selectedTicket);
+
 			}
 		}	
 		return new changeStateListener();

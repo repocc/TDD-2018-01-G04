@@ -46,9 +46,10 @@ public class MainView extends View {
 	private JScrollPane projectsListScroller;
 	private JScrollPane ticketsListMainScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
-    private JButton changeStateButton = new JButton(">");
+    //private JButton changeStateButton = new JButton(">");
 
 	private MouseListener ticketLabelListener;
+	private ActionListener changeStateListener;
 	
 	public MainView(Model model) {
 		super(model);
@@ -115,7 +116,7 @@ public class MainView extends View {
 		initNewProjectMenuListeners(controller);
 		
 		ticketLabelListener = controller.getTicketLabelListener();
-		changeStateButton.addActionListener(controller.getChangeStateListener());
+		changeStateListener = (controller.getChangeStateListener());
 	}
 	
 	public void initNewProjectButton(ActionListener listener)
@@ -254,6 +255,8 @@ public class MainView extends View {
             container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
             container.add(scrollPanel);
             
+            JButton changeStateButton = new JButton(">");
+            changeStateButton.addActionListener(changeStateListener);
             container.add(changeStateButton);
             container.setBorder(BorderFactory.createTitledBorder(state.getName()));
 
