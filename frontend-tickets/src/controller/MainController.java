@@ -13,11 +13,13 @@ import javax.swing.border.Border;
 
 import view.MainView;
 import model.Model;
+import model.Project;
 import model.Ticket;
 
 public class MainController extends Controller {
 	
 	private MainView view;
+	private Project selectedProject;
 	private Ticket selectedTicket;
 
 	public MainController(Model model)
@@ -43,7 +45,9 @@ public class MainController extends Controller {
 				{
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
-						String name = list.getModel().getElementAt(index).toString();
+						Project project = (Project)list.getModel().getElementAt(index);
+						String name = project.toString();
+						selectedProject = project;
 						view.showTicketsFromProject(name);
 						selectedTicket = null;
 					}
@@ -131,7 +135,10 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-
+				if(selectedTicket != null)
+				{
+					getModel().changeTicketState(selectedTicket, selectedProject);
+				}
 			}
 		}	
 		return new changeStateListener();

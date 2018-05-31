@@ -24,10 +24,10 @@ public class User {
 	{
 		return this.name;
 	}
-	
-	public String toString()
+
+	public String getRole()
 	{
-		return this.name;
+		return role;
 	}
 }
 

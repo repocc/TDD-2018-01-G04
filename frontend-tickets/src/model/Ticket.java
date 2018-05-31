@@ -26,4 +26,9 @@ public class Ticket {
 	public String toString() {
 		return "<html>Title: "+ title + "<br/>Description: " + description + "<br/>Type: " + type + "</html>";
 	}
+
+	public String getCurrentState()
+	{
+		return this.currentState;
+	}
 }

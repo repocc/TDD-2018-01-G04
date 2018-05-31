@@ -22,7 +22,7 @@ public class Project {
 		this.ticketStates = ticketStates;
 	}
 	
-	public String toString()
+	public String getName()
 	{
 		return name;
 	}
@@ -57,6 +57,27 @@ public class Project {
 
 	public Vector<TicketState> getStates() {
 		return ticketStates;
+	}
+
+	public boolean canUserChangeTicketState(User user, Ticket ticket)
+	{
+		String currentState = ticket.getCurrentState();
+		Iterator i = this.ticketStates.iterator();
+		
+		while(i.hasNext())
+		{
+			TicketState state = (TicketState)i.next();
+			if(state.getName().equals(currentState))
+			{
+				return state.canChangeState(user.getRole());
+			}
+		}
+		return false;
+	}
+
+	public void changeTicketState(Ticket selectedTicket)
+	{
+		System.out.println(selectedTicket.getCurrentState());
 	}
 	
 }

@@ -17,4 +17,9 @@ public class TicketState {
 	{
 		return this.name;
 	}
+	
+	public boolean canChangeState(String role)
+	{
+		return roles.contains(role);
+	}
 }
