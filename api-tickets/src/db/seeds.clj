@@ -6,13 +6,13 @@
 
 ;Roles
 (rdb/insert db :roles
-  {:key "pl"})
+  {:id "pl"})
 
 (rdb/insert db :roles
-  {:key "dev"})
+  {:id "dev"})
 
 (rdb/insert db :roles
-  {:key "qa"})
+  {:id "qa"})
 
 ;Users
 (rdb/insert db :users
@@ -27,13 +27,13 @@
 
 ;Ticket types
 (rdb/insert db :tickettypes
-  {:id (uuid) :key "Abierto"})
+  {:id (uuid) :name "Abierto"})
 
 (rdb/insert db :tickettypes
-  {:id (uuid) :key "En progreso"})
+  {:id (uuid) :name "En progreso"})
 
 (rdb/insert db :tickettypes
-  {:id (uuid) :key "QA"})
+  {:id (uuid) :name "QA"})
 
 (rdb/insert db :tickettypes
-  {:id (uuid) :key "Terminado"})
+  {:id (uuid) :name "Terminado"})
