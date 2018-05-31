@@ -12,6 +12,7 @@
 (use 'db.seeds)
 (use 'controllers.user-controller)
 (use 'controllers.role-controller)
+(use 'controllers.tickettype-controller)
 
 (defroutes app-routes
 
@@ -24,6 +25,10 @@
 
   (GET "/api/role" [] 
     {:status 200 :body (find-all-roles)}
+  )
+
+  (GET "/api/tickettype" [] 
+    {:status 200 :body (find-all-ticket-types)}
   )
 
   (route/resources "/")

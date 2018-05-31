@@ -16,3 +16,6 @@ GET http://localhost:3000/api/role
 
 ## Get all users
 GET http://localhost:3000/api/user
+
+## Get all ticket types
+GET http://localhost:3000/api/tickettype
