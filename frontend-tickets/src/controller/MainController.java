@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
+import model.TicketState;
 import view.MainView;
 import model.Model;
 import model.Project;
@@ -36,6 +37,8 @@ public class MainController extends Controller {
     
     public MouseListener getProjectsListSelectionListener()
 	{
+		MainController controller = this;
+
 		class projectsListListener implements MouseListener
 		{
 			public void mouseClicked(MouseEvent mouseEvent)
@@ -48,7 +51,7 @@ public class MainController extends Controller {
 						Project project = (Project)list.getModel().getElementAt(index);
 						String name = project.toString();
 						selectedProject = project;
-						view.showTicketsFromProject(name);
+						view.showTicketsFromProject(name, controller);
 						selectedTicket = null;
 					}
 				}
@@ -130,15 +133,18 @@ public class MainController extends Controller {
 		return new ticketLabelListener();
 	}
 
-	public ActionListener getChangeStateListener() {
+	public ActionListener getChangeStateListener(TicketState ticketState)
+	{
+		MainController controller = this;
+
 		class changeStateListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(selectedTicket != null)
+				if((selectedTicket != null) && (selectedTicket.isCurrentState(ticketState.getName())))
 				{
 					getModel().changeTicketState(selectedTicket, selectedProject);
-					view.showTicketsFromProject(selectedProject.getName());
+					view.showTicketsFromProject(selectedProject.getName(), controller);
 				}
 			}
 		}	

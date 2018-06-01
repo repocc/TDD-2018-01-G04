@@ -52,8 +52,11 @@ public class Model extends Observable
 		projects.add(p1);
 		
 		Vector<TicketState> states3 = new Vector<TicketState>();
+		Vector<String> roles3 = new Vector<String>();
+		roles3.add("guest");
 		states3.add(new TicketState("OPEN", roles));
 		states3.add(new TicketState("IN PROGRESS", roles));
+		states3.add(new TicketState("QA", roles3));
 		states3.add(new TicketState("CLOSED", null));
 		p1 = new Project("Hello Project3", new User("Pepe"), users, states3);
 		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
@@ -118,4 +121,10 @@ public class Model extends Observable
 	{
 		selectedProject.changeTicketState(currentUser, selectedTicket);
 	}
+
+	public boolean canUserChangeToState(TicketState state)
+	{
+		return state.canChangeState(currentUser.getRole());
+	}
+
 }

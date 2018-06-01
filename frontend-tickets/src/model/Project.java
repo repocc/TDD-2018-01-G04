@@ -67,7 +67,6 @@ public class Project {
 
 	public void changeTicketState(User user, Ticket ticket)
 	{
-		System.out.println(ticket.getCurrentState());
 		String currentState = ticket.getCurrentState();
 		Iterator i = this.ticketStates.iterator();
 		
