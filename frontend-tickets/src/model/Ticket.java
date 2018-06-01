@@ -36,4 +36,20 @@ public class Ticket {
 	{
 		this.currentState = state;
 	}
+
+	public String getName()
+	{
+		return this.title;
+	}
+
+	public String getDescription()
+	{
+		return this.description;
+	}
+
+	public String getType()
+	{
+		return this.type;
+	}
+
 }

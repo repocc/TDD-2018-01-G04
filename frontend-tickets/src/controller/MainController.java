@@ -108,6 +108,14 @@ public class MainController extends Controller {
 						selectedTicket = (Ticket)list.getModel().getElementAt(index);
 					}
 				}
+				else if (mouseEvent.getClickCount() == 2)
+				{
+					int index = list.locationToIndex(mouseEvent.getPoint());
+					if (index >= 0) {
+						selectedTicket = (Ticket)list.getModel().getElementAt(index);
+						view.showTicketDetails(selectedTicket);
+					}
+				}
 			}
 
 			@Override

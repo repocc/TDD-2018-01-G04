@@ -17,5 +17,5 @@ public abstract class View {
 	{
 		return model;
 	}
-		
+
 }

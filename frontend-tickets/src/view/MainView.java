@@ -1,34 +1,12 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.TextField;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import controller.MainController;
@@ -247,12 +225,65 @@ public class MainView extends View {
 		}
 	}
 
-	public void selectLabel(JLabel label) {
-		Border emptyBorder  = BorderFactory.createEmptyBorder(1,1,1,1);
-	    Border selectBorder = BorderFactory.createLineBorder(Color.blue);
-	    label.setOpaque(true);
-	    label.setBackground(UIManager.getColor("Label.foreground"));
-	    label.setBorder(selectBorder);
+	private GridBagConstraints createGbc(int x, int y) {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = x;
+		gbc.gridy = y;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+
+		gbc.anchor = (x == 0) ? GridBagConstraints.WEST : GridBagConstraints.EAST;
+		gbc.fill = (x == 0) ? GridBagConstraints.BOTH
+				: GridBagConstraints.HORIZONTAL;
+
+		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.weightx = (x == 0) ? 0.1 : 1.0;
+		gbc.weighty = 1.0;
+		return gbc;
 	}
 
+	public void showTicketDetails(Ticket ticket)
+	{
+		JPanel informationPanel = new JPanel();
+		informationPanel.setLayout(new GridLayout(4, 2));
+
+		informationPanel.add(new JLabel("Title: "));
+		informationPanel.add(new JLabel(ticket.getName()));
+		informationPanel.add(new JLabel("Description: " ));
+		informationPanel.add(new JLabel(ticket.getDescription()));
+		informationPanel.add(new JLabel("Type: " ));
+		informationPanel.add(new JLabel(ticket.getType()));
+		informationPanel.add(new JLabel("State: " ));
+		informationPanel.add(new JLabel(ticket.getCurrentState()));
+
+		//JPanel commentsPanel = new JPanel();
+		//commentsPanel.setLayout(new GridLayout(0, 1, 5, 5));
+
+		JLabel commentLabel = new JLabel("New comment: " );
+		commentLabel.setHorizontalAlignment(JLabel.LEFT);
+		//commentsPanel.add(commentLabel);
+
+		JTextArea commentArea = new JTextArea(5, 30);
+		commentArea.setLineWrap(true);
+		commentArea.setWrapStyleWord(true);
+		commentArea.setBorder(new JTextField().getBorder());
+		//commentsPanel.add(commentArea);
+
+		JButton postButton = new JButton("Post");
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridBagLayout());
+
+		GridBagConstraints c = createGbc(0, 0);
+		mainPanel.add(informationPanel, c);
+		c = createGbc(0, 1);
+		mainPanel.add(commentLabel, c);
+		c = createGbc(0, 2);
+		mainPanel.add(commentArea,c);
+		c = createGbc(0, 3);
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.EAST;
+		mainPanel.add(postButton, c);
+		JOptionPane.showMessageDialog(window, mainPanel, "Ticket", JOptionPane.INFORMATION_MESSAGE);
+
+	}
 }
