@@ -27,6 +27,11 @@ public class Project {
 		return name;
 	}
 
+	public String toString()
+	{
+		return name;
+	}
+
 	public Vector<Ticket> getTickets()
 	{
 		return tickets;
