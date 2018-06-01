@@ -31,4 +31,9 @@ public class Ticket {
 	{
 		return this.currentState;
 	}
+
+	public void changeState(String state)
+	{
+		this.currentState = state;
+	}
 }

@@ -20,6 +20,10 @@ public class TicketState {
 	
 	public boolean canChangeState(String role)
 	{
-		return roles.contains(role);
+		if (roles != null)
+		{
+			return roles.contains(role);
+		}
+		return false;
 	}
 }

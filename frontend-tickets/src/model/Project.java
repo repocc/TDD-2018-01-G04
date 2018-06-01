@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
@@ -64,8 +65,9 @@ public class Project {
 		return ticketStates;
 	}
 
-	public boolean canUserChangeTicketState(User user, Ticket ticket)
+	public void changeTicketState(User user, Ticket ticket)
 	{
+		System.out.println(ticket.getCurrentState());
 		String currentState = ticket.getCurrentState();
 		Iterator i = this.ticketStates.iterator();
 		
@@ -74,15 +76,18 @@ public class Project {
 			TicketState state = (TicketState)i.next();
 			if(state.getName().equals(currentState))
 			{
-				return state.canChangeState(user.getRole());
+				if(state.canChangeState(user.getRole()))
+				{
+					try {
+						ticket.changeState(((TicketState) i.next()).getName());
+					}
+					catch (NoSuchElementException e) {
+						return;
+					}
+				}
 			}
 		}
-		return false;
+
 	}
 
-	public void changeTicketState(Ticket selectedTicket)
-	{
-		System.out.println(selectedTicket.getCurrentState());
-	}
-	
 }

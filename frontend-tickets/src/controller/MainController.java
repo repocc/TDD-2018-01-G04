@@ -138,6 +138,7 @@ public class MainController extends Controller {
 				if(selectedTicket != null)
 				{
 					getModel().changeTicketState(selectedTicket, selectedProject);
+					view.showTicketsFromProject(selectedProject.getName());
 				}
 			}
 		}	
