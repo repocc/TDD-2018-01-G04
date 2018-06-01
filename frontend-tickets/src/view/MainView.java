@@ -188,10 +188,13 @@ public class MainView extends View {
             JPanel container = new JPanel();
             container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
             container.add(scrollPanel);
-            
-            JButton changeStateButton = new JButton(">");
-            changeStateButton.addActionListener(changeStateListener);
-            container.add(changeStateButton);
+
+            if(iStates.hasNext())
+            {
+				JButton changeStateButton = new JButton(">");
+				changeStateButton.addActionListener(changeStateListener);
+				container.add(changeStateButton);
+			}
             container.setBorder(BorderFactory.createTitledBorder(state.getName()));
 
 			ticketsListMainPanel.add(container);
