@@ -63,7 +63,6 @@ public class Model extends Observable
 		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2", "IN PROGRESS"));
 		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "CLOSED"));
 		projects.add(p1);
-		
 	}
 	
 	public void notifyContextLogin()
@@ -97,7 +96,6 @@ public class Model extends Observable
 				return project.getTickets();
 			}
 		}
-
 		return null;
 	}
 	
@@ -113,18 +111,23 @@ public class Model extends Observable
 				return project.getStates();
 			}
 		}
-
 		return null;
 	}
 
 	public void changeTicketState(Ticket selectedTicket, Project selectedProject)
 	{
 		selectedProject.changeTicketState(currentUser, selectedTicket);
+		//TODO: Update ticket state in API
 	}
 
 	public boolean canUserChangeToState(TicketState state)
 	{
 		return state.canChangeState(currentUser.getRole());
+	}
+
+	public User getCurrentUser()
+	{
+		return this.currentUser;
 	}
 
 }

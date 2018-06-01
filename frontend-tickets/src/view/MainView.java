@@ -242,7 +242,7 @@ public class MainView extends View {
 		return gbc;
 	}
 
-	public void showTicketDetails(Ticket ticket)
+	public void showTicketDetails(Ticket ticket, MainController controller)
 	{
 		JPanel informationPanel = new JPanel();
 		informationPanel.setLayout(new GridLayout(4, 2));
@@ -256,20 +256,18 @@ public class MainView extends View {
 		informationPanel.add(new JLabel("State: " ));
 		informationPanel.add(new JLabel(ticket.getCurrentState()));
 
-		//JPanel commentsPanel = new JPanel();
-		//commentsPanel.setLayout(new GridLayout(0, 1, 5, 5));
-
 		JLabel commentLabel = new JLabel("New comment: " );
 		commentLabel.setHorizontalAlignment(JLabel.LEFT);
-		//commentsPanel.add(commentLabel);
 
 		JTextArea commentArea = new JTextArea(5, 30);
 		commentArea.setLineWrap(true);
 		commentArea.setWrapStyleWord(true);
 		commentArea.setBorder(new JTextField().getBorder());
-		//commentsPanel.add(commentArea);
+		commentArea.setText(null);
 
 		JButton postButton = new JButton("Post");
+		postButton.addActionListener(controller.getPostCommentListener(commentArea));
+
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridBagLayout());
 

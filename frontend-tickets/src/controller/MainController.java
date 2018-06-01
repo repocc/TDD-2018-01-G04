@@ -5,17 +5,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
-import model.TicketState;
+import model.*;
 import view.MainView;
-import model.Model;
-import model.Project;
-import model.Ticket;
 
 public class MainController extends Controller {
 	
@@ -94,7 +89,10 @@ public class MainController extends Controller {
 		return new newProjectListener();
 	}
 
-	public MouseListener getTicketLabelListener() {
+	public MouseListener getTicketLabelListener()
+	{
+		MainController controller = this;
+
 		class ticketLabelListener implements MouseListener
 		{
 			@Override
@@ -113,7 +111,7 @@ public class MainController extends Controller {
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
 						selectedTicket = (Ticket)list.getModel().getElementAt(index);
-						view.showTicketDetails(selectedTicket);
+						view.showTicketDetails(selectedTicket, controller);
 					}
 				}
 			}
@@ -158,6 +156,22 @@ public class MainController extends Controller {
 		}	
 		return new changeStateListener();
 	}
-    
-    
+
+	public ActionListener getPostCommentListener(JTextArea comment)
+	{
+		class postCommentListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg)
+			{
+				if(comment.getText() != null)
+				{
+					Comment c = new Comment(getModel().getCurrentUser(), comment.getText());
+					comment.setText(null);
+					selectedTicket.addComment(c);
+					//TODO: Post comment c
+				}
+			}
+		}
+		return new postCommentListener();
+	}
 }

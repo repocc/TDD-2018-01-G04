@@ -52,4 +52,8 @@ public class Ticket {
 		return this.type;
 	}
 
+	public void addComment(Comment comment)
+	{
+		comments.add(comment);
+	}
 }
