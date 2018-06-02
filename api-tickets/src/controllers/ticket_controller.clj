@@ -16,7 +16,7 @@
 			ticket {:id (uuid) :title title :description description :type type :assigned assigned :project project :state initial-state} 
   ]
   (db-store-ticket ticket)
- 	;(log-create-ticket ticket)
+ 	(log-ticket ticket)
  	{:status 200 :body ticket}
 ))
 
@@ -28,6 +28,6 @@
 			ticket (merge ticket-data {:state state})
   ]
 	(db-drop-ticket-by-id id)
-	;(log-update-ticket ticket)
 	(db-store-ticket ticket)
+	(log-ticket ticket)
 	{:status 200 :body ticket} ))
