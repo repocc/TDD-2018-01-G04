@@ -13,6 +13,7 @@
 (use 'controllers.user-controller)
 (use 'controllers.role-controller)
 (use 'controllers.tickettype-controller)
+(use 'controllers.project-controller)
 
 (defroutes app-routes
 
@@ -30,6 +31,14 @@
   (GET "/api/tickettype" [] 
     {:status 200 :body (find-all-ticket-types)}
   )
+
+  (POST "/api/project" request
+    (store-project request))
+
+  (GET "/api/project" {params :query-params}
+    {:status 200 :body (find-all-projects params)}
+  )
+
 
   (route/resources "/")
 
