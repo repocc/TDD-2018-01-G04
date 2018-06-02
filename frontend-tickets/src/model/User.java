@@ -4,6 +4,7 @@ public class User {
 
 	private String name;
 	private String role;
+	private String ID;
 	
 	public User(String name)
 	{
@@ -28,6 +29,14 @@ public class User {
 	public String getRole()
 	{
 		return role;
+	}
+
+	public void setID(String ID) {
+		this.ID = ID;
+	}
+
+	public String getID() {
+		return this.ID;
 	}
 }
 

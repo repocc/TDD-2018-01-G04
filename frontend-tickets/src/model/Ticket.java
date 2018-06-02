@@ -9,6 +9,7 @@ public class Ticket {
 	private String type;
 	private Vector<Comment> comments = new Vector<Comment>();
 	private String currentState;
+	private String ID;
 	
 	public Ticket(String title, String description, String type, String initialState)
 	{
@@ -80,5 +81,13 @@ public class Ticket {
 	public Vector<Comment> getComments()
 	{
 		return this.comments;
+	}
+
+	public void setID(String ID) {
+		this.ID = ID;
+	}
+
+	public String getID() {
+		return this.ID;
 	}
 }

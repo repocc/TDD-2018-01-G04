@@ -14,7 +14,8 @@ public class Project {
 	private Vector<User> users = new Vector<User>();
 	private Vector<String> roles = new Vector<String>();
 	private Vector<TicketState> ticketStates = new Vector<TicketState>();
-	
+	private String ID;
+
 	public Project(String name, User owner, Vector<User> users, Vector<TicketState> ticketStates)
 	{
 		this.name = name;
@@ -89,4 +90,11 @@ public class Project {
 
 	}
 
+	public void setID(String ID) {
+		this.ID = ID;
+	}
+
+	public String getID() {
+		return this.ID;
+	}
 }
