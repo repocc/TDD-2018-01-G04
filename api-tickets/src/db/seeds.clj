@@ -27,13 +27,10 @@
 
 ;Ticket types
 (rdb/insert db :tickettypes
-  {:id (uuid) :name "Abierto"})
+  {:id (uuid) :name "bug"})
 
 (rdb/insert db :tickettypes
-  {:id (uuid) :name "En progreso"})
+  {:id (uuid) :name "feature"})
 
 (rdb/insert db :tickettypes
-  {:id (uuid) :name "QA"})
-
-(rdb/insert db :tickettypes
-  {:id (uuid) :name "Terminado"})
+  {:id (uuid) :name "improvement"})
