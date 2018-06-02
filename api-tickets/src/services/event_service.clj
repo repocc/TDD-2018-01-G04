@@ -7,6 +7,6 @@
 (defn log-create-project [] (
 	let [
 		url (str api-events-processor-base-url "/event")
-		body {:event {:source source :type "created-project"}}
+		body {:event {:source source :type "create-project"}}
 	]
 	(client/post url {:form-params body :content-type :json})))

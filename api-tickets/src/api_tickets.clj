@@ -36,7 +36,7 @@
     (store-project request))
 
   (GET "/api/project" {params :query-params}
-    {:status 200 :body (find-all-projects params)}
+    {:status 200 :body (find-projects-by-username params)}
   )
 
 

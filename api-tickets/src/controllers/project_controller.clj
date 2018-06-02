@@ -23,3 +23,19 @@
 		projects (db-find-all-projects)
 	]
 	(if (nil? projects) [] projects)))
+
+(defn in? 
+  "true if coll contains elm"
+  [coll elm]  
+  (some #(= elm (:id %)) coll))
+
+(defn find-projects-by-username [params] (
+	let [
+		username (get params "username")
+		users (db-find-all-projects)
+	]
+	(if (nil? users) [] 
+		(if (nil? username) 
+			users 
+			(filter #(or (= (:owner %) username) (in? (:users %) username)) users)))
+))
