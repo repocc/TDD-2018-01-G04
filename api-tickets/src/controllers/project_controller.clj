@@ -5,8 +5,12 @@
 (defn store-project [request] (
 	let [
 			name (get-in request [:params :name])
+			owner (get-in request [:params :owner])
+			ticket-types (get-in request [:params :ticket-types])
+			states (get-in request [:params :states])
+			users (get-in request [:params :users])
 			;parsed-query (try (evaluate-function (read-string query)) (catch Exception e nil))
-			project {:id (uuid) :name name} 
+			project {:id (uuid) :name name :owner owner :ticket-types ticket-types :states states :users users} 
   ]
   (db-store-project project)
  	{:status 200 :body project}
