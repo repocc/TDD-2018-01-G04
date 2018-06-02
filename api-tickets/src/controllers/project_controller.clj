@@ -1,6 +1,7 @@
 (ns controllers.project-controller)
 (use 'db.project-model)
 (use 'utils.string-util)
+(use 'services.event-service)
 
 (defn store-project [request] (
 	let [
@@ -13,6 +14,7 @@
 			project {:id (uuid) :name name :owner owner :ticket-types ticket-types :states states :users users} 
   ]
   (db-store-project project)
+ 	(log-create-project)
  	{:status 200 :body project}
 ))
 
