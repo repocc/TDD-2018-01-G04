@@ -59,8 +59,8 @@ public class Model extends Observable
 		states3.add(new TicketState("QA", roles3));
 		states3.add(new TicketState("CLOSED", null));
 		p1 = new Project("Hello Project3", new User("Pepe"), users, states3);
-		p1.addTicket(new Ticket("Titulo1", "Descripcion1", "Tipo1", "OPEN"));
-		p1.addTicket(new Ticket("Titulo2", "Descripcion2", "Tipo2", "IN PROGRESS"));
+		p1.addTicket(new Ticket("", "Descripcion1", "Tipo1", "OPEN"));
+		p1.addTicket(new Ticket("Titulo2", "", "Tipo2", "IN PROGRESS"));
 		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "CLOSED"));
 		projects.add(p1);
 	}

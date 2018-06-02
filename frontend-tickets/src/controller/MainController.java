@@ -157,8 +157,10 @@ public class MainController extends Controller {
 		return new changeStateListener();
 	}
 
-	public ActionListener getPostCommentListener(JTextArea comment)
+	public ActionListener getPostCommentListener(JTextArea comment,JList commentsList)
 	{
+		MainController controller = this;
+
 		class postCommentListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg)
@@ -168,6 +170,7 @@ public class MainController extends Controller {
 					Comment c = new Comment(getModel().getCurrentUser(), comment.getText());
 					comment.setText(null);
 					selectedTicket.addComment(c);
+					view.putCommentsInList(commentsList, selectedTicket.getComments());
 					//TODO: Post comment c
 				}
 			}

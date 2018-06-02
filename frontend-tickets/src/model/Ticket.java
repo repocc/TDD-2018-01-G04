@@ -24,7 +24,27 @@ public class Ticket {
 	}
 	
 	public String toString() {
-		return "<html>Title: "+ title + "<br/>Description: " + description + "<br/>Type: " + type + "</html>";
+		String label = "<html>";
+		if (!title.isEmpty()) {
+			label = label + "Title: " + title;
+		}
+
+		if (!description.isEmpty()) {
+			if(!title.isEmpty()){
+				label = label + "<br/>";
+			}
+			label = label + "Description: " + description;
+		}
+
+		if (!type.isEmpty()) {
+			if(!(description.isEmpty() && title.isEmpty())){
+				label = label + "<br/>";
+			}
+			label = label + "Type: " + type;
+		}
+		label = label + "</html>";
+
+		return label;
 	}
 
 	public String getCurrentState()
@@ -55,5 +75,10 @@ public class Ticket {
 	public void addComment(Comment comment)
 	{
 		comments.add(comment);
+	}
+
+	public Vector<Comment> getComments()
+	{
+		return this.comments;
 	}
 }

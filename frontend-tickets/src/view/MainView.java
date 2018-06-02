@@ -10,17 +10,13 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import controller.MainController;
-import model.Model;
-import model.Project;
-import model.Ticket;
-import model.TicketState;
+import model.*;
 
 public class MainView extends View {
 
 	private JFrame window;
 	private JButton newProjectButton = new JButton("New Project");
 	private JList projectsList = new JList();
-	//private JList ticketsList = new JList();
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
@@ -151,7 +147,6 @@ public class MainView extends View {
 			ticketsList.addMouseListener(controller.getTicketLabelListener());
 			
 			JScrollPane scrollPanel = new JScrollPane(ticketsList);
-			scrollPanel.setBackground(Color.red);
 			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 			//Container for jscrollpane and change state button
@@ -244,44 +239,93 @@ public class MainView extends View {
 
 	public void showTicketDetails(Ticket ticket, MainController controller)
 	{
-		JPanel informationPanel = new JPanel();
-		informationPanel.setLayout(new GridLayout(4, 2));
+		JPanel mainPanel = createTicketDetails(ticket, controller);
+		JOptionPane.showMessageDialog(window, mainPanel, "Ticket", JOptionPane.INFORMATION_MESSAGE);
+	}
 
-		informationPanel.add(new JLabel("Title: "));
-		informationPanel.add(new JLabel(ticket.getName()));
-		informationPanel.add(new JLabel("Description: " ));
-		informationPanel.add(new JLabel(ticket.getDescription()));
-		informationPanel.add(new JLabel("Type: " ));
-		informationPanel.add(new JLabel(ticket.getType()));
+	public JPanel createTicketDetails(Ticket ticket, MainController controller)
+	{
+		JPanel informationPanel = new JPanel();
+		informationPanel.setLayout(new GridLayout(0, 2));
+
+		if (!ticket.getName().isEmpty()){
+			informationPanel.add(new JLabel("Title: "));
+			informationPanel.add(new JLabel(ticket.getName()));
+		}
+		if (!ticket.getDescription().isEmpty()){
+			informationPanel.add(new JLabel("Description: " ));
+			informationPanel.add(new JLabel(ticket.getDescription()));
+		}
+		if (!ticket.getType().isEmpty()){
+			informationPanel.add(new JLabel("Type: " ));
+			informationPanel.add(new JLabel(ticket.getType()));
+		}
+
 		informationPanel.add(new JLabel("State: " ));
 		informationPanel.add(new JLabel(ticket.getCurrentState()));
+
+		JPanel usersCommentsPanel = new JPanel();
+		usersCommentsPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = createGbc(0, 0);
+
+		usersCommentsPanel.add(new JLabel("Comments: "), c);
+
+		Vector<Comment> comments = ticket.getComments();
+
+		JList commentsList = new JList();
+		commentsList.setVisibleRowCount(3);
+		commentsList.setFixedCellHeight(35);
+
+		putCommentsInList(commentsList, comments);
+
+		JScrollPane commentsScrollPane = new JScrollPane(commentsList);
+
+		c = createGbc(0, 1);
+		usersCommentsPanel.add(commentsScrollPane, c);
 
 		JLabel commentLabel = new JLabel("New comment: " );
 		commentLabel.setHorizontalAlignment(JLabel.LEFT);
 
-		JTextArea commentArea = new JTextArea(5, 30);
+		JTextArea commentArea = new JTextArea(4, 30);
 		commentArea.setLineWrap(true);
 		commentArea.setWrapStyleWord(true);
 		commentArea.setBorder(new JTextField().getBorder());
 		commentArea.setText(null);
 
-		JButton postButton = new JButton("Post");
-		postButton.addActionListener(controller.getPostCommentListener(commentArea));
-
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridBagLayout());
 
-		GridBagConstraints c = createGbc(0, 0);
+		JButton postButton = new JButton("Post");
+		postButton.addActionListener(controller.getPostCommentListener(commentArea, commentsList));
+
+		c = createGbc(0, 0);
 		mainPanel.add(informationPanel, c);
 		c = createGbc(0, 1);
-		mainPanel.add(commentLabel, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		mainPanel.add(usersCommentsPanel, c);
 		c = createGbc(0, 2);
-		mainPanel.add(commentArea,c);
+		mainPanel.add(commentLabel, c);
 		c = createGbc(0, 3);
+		mainPanel.add(commentArea,c);
+		c = createGbc(0, 4);
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;
 		mainPanel.add(postButton, c);
-		JOptionPane.showMessageDialog(window, mainPanel, "Ticket", JOptionPane.INFORMATION_MESSAGE);
 
+		return mainPanel;
+	}
+
+	public JList putCommentsInList(JList list, Vector<Comment> comments)
+	{
+		DefaultListModel model = new DefaultListModel();
+		Iterator iComments = comments.iterator();
+
+		while(iComments.hasNext())
+		{
+			Comment comment = (Comment)iComments.next();
+			model.addElement(comment);
+		}
+		list.setModel(model);
+		return list;
 	}
 }
