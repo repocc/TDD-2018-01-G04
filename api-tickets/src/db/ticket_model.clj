@@ -3,6 +3,8 @@
 
 (defn db-find-all-tickets [] (db-find-all :tickets))
 
+(defn db-find-ticket-by-id [id] (db-find-where :tickets :id id))
+
 (defn db-get-tickets-by-project [project] (db-find-where :tickets :project project))
 
 (defn db-drop-ticket-by-id [id] (db-drop-where :tickets :id id))

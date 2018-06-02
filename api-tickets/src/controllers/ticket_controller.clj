@@ -23,13 +23,9 @@
 (defn update-ticket-by-id [request] ( 
 	let [
 			id (get-in request [:params :id])
-			title (get-in request [:params :title])
-			description (get-in request [:params :description])
-			type (get-in request [:params :type])
-			assigned (get-in request [:params :assigned])
 			state (get-in request [:params :state])
-			project (get-in request [:params :project])
-			ticket {:id (uuid) :title title :description description :type type :assigned assigned :project project :state state}
+			ticket-data (first (db-find-ticket-by-id id))
+			ticket (merge ticket-data {:state state})
   ]
 	(db-drop-ticket-by-id id)
 	;(log-update-ticket ticket)
