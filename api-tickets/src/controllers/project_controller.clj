@@ -1,5 +1,6 @@
 (ns controllers.project-controller)
 (use 'db.project-model)
+(use 'db.ticket-model)
 (use 'utils.string-util)
 (use 'services.event-service)
 
@@ -10,7 +11,6 @@
 			ticket-types (get-in request [:params :ticket-types])
 			states (get-in request [:params :states])
 			users (get-in request [:params :users])
-			;parsed-query (try (evaluate-function (read-string query)) (catch Exception e nil))
 			project {:id (uuid) :name name :owner owner :ticket-types ticket-types :states states :users users} 
   ]
   (db-store-project project)
@@ -23,6 +23,15 @@
 		projects (db-find-all-projects)
 	]
 	(if (nil? projects) [] projects)))
+
+(defn find-project-by-id [id] (
+	let [
+		project (first (db-find-project-by-id id))
+		tickets (db-get-tickets-by-project id)
+		result (merge project {:tickets tickets})
+	]
+	{:status 200 :body result}
+))
 
 (defn in? 
   "true if coll contains elm"

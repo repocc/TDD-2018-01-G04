@@ -14,6 +14,7 @@
 (use 'controllers.role-controller)
 (use 'controllers.tickettype-controller)
 (use 'controllers.project-controller)
+(use 'controllers.ticket-controller)
 
 (defroutes app-routes
 
@@ -39,6 +40,16 @@
     {:status 200 :body (find-projects-by-username params)}
   )
 
+  (GET "/api/project/:id" [id] 
+    (find-project-by-id id)
+  )
+
+  (POST "/api/ticket" request
+    (store-ticket request))
+
+  (PUT "/api/ticket/:id" request
+    (update-ticket-by-id request)
+  )
 
   (route/resources "/")
 
