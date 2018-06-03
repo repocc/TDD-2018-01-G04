@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -11,11 +12,14 @@ import javax.swing.border.Border;
 
 import controller.MainController;
 import model.*;
+import service.ProjectService;
+import service.TicketService;
 
 public class MainView extends View {
 
 	private JFrame window;
 	private JButton newProjectButton = new JButton("New Project");
+	private JButton newTicketButton = new JButton("New Ticket");
 	private JList projectsList = new JList();
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
@@ -59,12 +63,24 @@ public class MainView extends View {
 		
 		ticketsListMainPanel.setLayout(new GridLayout(2, 2, 10, 10));
 
+		JPanel ticketsGeneralPanel = new JPanel();
+		ticketsGeneralPanel.setLayout(new BorderLayout());
+
+		JPanel ticketButtonPanel = new JPanel();
+		ticketButtonPanel.setLayout(new BorderLayout());
+		ticketButtonPanel.add(newTicketButton, BorderLayout.EAST);
+		newTicketButton.setVisible(false);
+
+		ticketsGeneralPanel.add(ticketButtonPanel,BorderLayout.NORTH);
+		ticketsGeneralPanel.add(ticketsListMainPanel,BorderLayout.CENTER);
+
+
 		c.gridx = 2;
 		c.gridwidth = 3;
 		c.gridy = 0;
 		c.weighty = 1.0;
         c.weightx = 1.0;
-		window.add(ticketsListMainPanel, c);
+		window.add(ticketsGeneralPanel, c);
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -81,6 +97,7 @@ public class MainView extends View {
 	{
 		initProjectsListListener(controller.getProjectsListSelectionListener());
 		initNewProjectButton(controller.getNewProjectListener());
+		initNewTicketButton(controller.getNewTicketListener());
 		
 		initNewProjectMenuListeners(controller);
 	}
@@ -88,6 +105,11 @@ public class MainView extends View {
 	public void initNewProjectButton(ActionListener listener)
 	{
 		newProjectButton.addActionListener(listener);
+	}
+
+	public void initNewTicketButton(ActionListener listener)
+	{
+		newTicketButton.addActionListener(listener);
 	}
 	
 	public void initProjectsListListener(MouseListener listener)
@@ -170,7 +192,10 @@ public class MainView extends View {
 			container.setBorder(BorderFactory.createTitledBorder(state.getName()));
 
 			ticketsListMainPanel.add(container);
-		}	
+		}
+
+		newTicketButton.setVisible(true);
+
 		ticketsListMainPanel.revalidate();
 		ticketsListMainPanel.repaint();
 	}	
@@ -199,8 +224,14 @@ public class MainView extends View {
 		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Ticket", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION)
 		{
-			System.out.println("Title: " + titleText.getText());
-		    System.out.println("Description: " + descriptionText.getText());
+			String state = "OPEN";
+			Ticket ticket = new Ticket(titleText.getText(),descriptionText.getText(),typeText.getText(),state);
+			TicketService service = new TicketService();
+			try {
+				service.postTicket(ticket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -216,7 +247,30 @@ public class MainView extends View {
 		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION)
 		{
-			System.out.println("Project name: " + nameText.getText());
+			Vector<TicketState> states3 = new Vector<TicketState>();
+			Vector<String> roles3 = new Vector<String>();
+			Vector<String> roles = new Vector<String>();
+			roles3.add("guest");
+			roles.add("admin");
+			roles.add("guest");
+			states3.add(new TicketState("OPEN", roles));
+			states3.add(new TicketState("IN PROGRESS", roles));
+			states3.add(new TicketState("QA", roles3));
+			states3.add(new TicketState("CLOSED", null));
+			Vector<User> users = new Vector<User>();
+			users.add(new User("Pepe"));
+			users.add(new User("Dylan"));
+			users.add(new User("Tom"));
+
+			Project project = new Project(nameText.getText(), new User("Pepe"),users, states3);
+
+			ProjectService service = new ProjectService();
+			try {
+				service.postProject(project);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 

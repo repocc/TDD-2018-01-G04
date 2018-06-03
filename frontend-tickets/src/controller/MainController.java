@@ -89,6 +89,17 @@ public class MainController extends Controller {
 		return new newProjectListener();
 	}
 
+	public ActionListener getNewTicketListener() {
+		class newTicketListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				view.showNewTicketMenu();
+			}
+		}
+		return new newTicketListener();
+	}
+
 	public MouseListener getTicketLabelListener()
 	{
 		MainController controller = this;
