@@ -240,14 +240,117 @@ public class MainView extends View {
 		JTextField nameText = new JTextField(30);
 
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(3, 1));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		mainPanel.add(createLabelWith("Project name:", nameText));
-	
+
+		//Select users
+		/*Roles*/
+		Vector<String> roles = new Vector<String>();
+		roles.add("admin");
+		roles.add("guest");
+		/*Roles*/
+		/*Users*/
+		Vector<User> users = new Vector<User>();
+		users.add(new User("Pepe"));
+		users.add(new User("Dylan"));
+		users.add(new User("Tom"));
+		/*Users*/
+
+		JPanel containerSelectUsers = new JPanel();
+		containerSelectUsers.setBorder(BorderFactory.createTitledBorder("Select Users"));
+		containerSelectUsers.setLayout(new BoxLayout(containerSelectUsers, BoxLayout.Y_AXIS));
+
+		for (User user: users) {
+
+			JPanel containerUser = new JPanel();
+			containerUser.setLayout(new BorderLayout());
+
+			JCheckBox check = new JCheckBox(user.getName());
+			containerUser.add(BorderLayout.WEST,check);
+			JComboBox comboBox = new JComboBox(roles);
+			containerUser.add(BorderLayout.EAST,comboBox);
+
+			containerSelectUsers.add(containerUser);
+		}
+
+		mainPanel.add(containerSelectUsers);
+
+
+		//Listados obligatorios por tipo de ticket
+		/*TYPETICKETS*/
+		Vector<String> ticketsTypes = new Vector<String>();
+		ticketsTypes.add("Bug");
+		ticketsTypes.add("Feature");
+		/*TYPETICKETS*/
+
+		/*FIELDSREQUIRED*/
+		Vector<String> fieldsRequired = new Vector<String>();
+		fieldsRequired.add("Title");
+		fieldsRequired.add("Description");
+		fieldsRequired.add("Type");
+		/*FIELDSREQUIRED*/
+
+
+		JPanel containerFieldsRequired = new JPanel();
+		containerFieldsRequired.setBorder(BorderFactory.createTitledBorder("Fields Required "));
+		containerFieldsRequired.setLayout(new BoxLayout(containerFieldsRequired , BoxLayout.Y_AXIS));
+
+		for (String type:ticketsTypes) {
+			JPanel fieldRequiredPanel = new JPanel();
+			fieldRequiredPanel.setLayout(new BorderLayout());
+
+			fieldRequiredPanel.add(BorderLayout.WEST,new JLabel(type));
+
+			JPanel fieldPanel = new JPanel();
+			fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.X_AXIS));
+			for (String field:fieldsRequired) {
+				fieldPanel.add(new JCheckBox(field));
+			}
+			fieldRequiredPanel.add(BorderLayout.EAST,fieldPanel);
+			containerFieldsRequired.add(fieldRequiredPanel);
+		}
+
+		mainPanel.add(containerFieldsRequired);
+
+
+		//Roles que pueden cambiar de estado
+		/*STATES*/
+		Vector<String> states = new Vector<String>();
+		states.add("OPEN");
+		states.add("IN PROGRESS");
+		states.add("QA");
+		states.add("CLOSED");
+		/*STATES*/
+
+		JPanel containerStateRoles = new JPanel();
+		containerStateRoles.setBorder(BorderFactory.createTitledBorder("Roles Change States"));
+		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
+
+		for (String state:states) {
+			JPanel statePanel = new JPanel();
+			statePanel.setLayout(new BorderLayout());
+			statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+			statePanel.add(BorderLayout.WEST,new JLabel("  "+state));
+
+			JPanel rolesPanel = new JPanel();
+			rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
+
+			for (String rol:roles) {
+				rolesPanel.add(new JCheckBox(rol));
+			}
+
+			statePanel.add(BorderLayout.EAST,rolesPanel);
+			containerStateRoles.add(statePanel);
+		}
+
+		mainPanel.add(containerStateRoles);
+
 		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION)
 		{
-			Vector<TicketState> states3 = new Vector<TicketState>();
+			/*Vector<TicketState> states3 = new Vector<TicketState>();
 			Vector<String> roles3 = new Vector<String>();
 			Vector<String> roles = new Vector<String>();
 			roles3.add("guest");
@@ -269,7 +372,8 @@ public class MainView extends View {
 				service.postProject(project);
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
+			System.out.println("Description: " + nameText.getText());
 
 		}
 	}
