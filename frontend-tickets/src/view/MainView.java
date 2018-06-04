@@ -367,7 +367,11 @@ public class MainView extends View {
 			}
 
 		}
-
+		showProjectsList();
+		/*ticketsListMainPanel.removeAll();
+		ticketsListMainPanel.revalidate();
+		ticketsListMainPanel.repaint();
+*/
 	}
 
 	private Vector<User> getSelectedUser() {
