@@ -1,9 +1,13 @@
 package service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import model.Ticket;
+import model.TicketTypes;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Vector;
 
 public class TicketService {
 
@@ -37,11 +41,13 @@ public class TicketService {
 
     }
 
-    public String getTypes() throws IOException {
+    public Vector<TicketTypes> getTypes() throws IOException {
 
-        String response = this.httpService.get(Consts.URI_GET_TYPES_TICKETS);
+        String ticketTypesJson = this.httpService.get(Consts.URI_GET_TYPES_TICKETS);
+        Type listType = new TypeToken<Vector<TicketTypes>>(){}.getType();
+        Vector<TicketTypes> ticketTypes = gson.fromJson(ticketTypesJson,listType);
 
-        return response;
+        return ticketTypes;
 
     }
 

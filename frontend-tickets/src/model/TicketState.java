@@ -1,13 +1,18 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashSet;
 import java.util.Vector;
 
 public class TicketState {
 
+	@SerializedName("state")
 	private String name;
-	private Vector<String> roles = new Vector<String>();
+	@SerializedName("roles")
+	private HashSet<String> roles = new HashSet<>();
 	
-	public TicketState(String name,  Vector<String> roles)
+	public TicketState(String name,  HashSet<String> roles)
 	{
 		this.name = name;
 		this.roles = roles;

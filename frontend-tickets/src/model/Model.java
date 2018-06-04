@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Vector;
@@ -26,7 +27,7 @@ public class Model extends Observable
 		users.add(new User("Tom"));
 		
 		//Model example
-		Vector<String> roles = new Vector<String>();
+		HashSet<String> roles = new HashSet<String>();
 		roles.add("admin");
 		roles.add("guest");
 		Vector<TicketState> states1 = new Vector<TicketState>();
@@ -52,7 +53,7 @@ public class Model extends Observable
 		projects.add(p1);
 		
 		Vector<TicketState> states3 = new Vector<TicketState>();
-		Vector<String> roles3 = new Vector<String>();
+		HashSet<String> roles3 = new HashSet<String>();
 		roles3.add("guest");
 		states3.add(new TicketState("OPEN", roles));
 		states3.add(new TicketState("IN PROGRESS", roles));

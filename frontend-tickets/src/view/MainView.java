@@ -4,16 +4,17 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import com.google.gson.Gson;
 import controller.MainController;
 import model.*;
 import service.ProjectService;
 import service.TicketService;
+import service.UserService;
 
 public class MainView extends View {
 
@@ -23,6 +24,11 @@ public class MainView extends View {
 	private JList projectsList = new JList();
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
+
+	//create project
+	private Map<String,String> selectUsers =new HashMap<>();
+	private Map<String,HashSet<String>> fieldsRequired = new HashMap<>();
+	private Map<String,HashSet<String>> rolesChangeState = new HashMap<>();
 
 	public MainView(Model model) {
 		super(model);
@@ -235,8 +241,9 @@ public class MainView extends View {
 		}
 	}
 	
-	public void showNewProjectMenu()
+	public void showNewProjectMenu(MainController controller)
 	{
+
 		JTextField nameText = new JTextField(30);
 
 		JPanel mainPanel = new JPanel();
@@ -245,17 +252,27 @@ public class MainView extends View {
 		mainPanel.add(createLabelWith("Project name:", nameText));
 
 		//Select users
-		/*Roles*/
-		Vector<String> roles = new Vector<String>();
-		roles.add("admin");
-		roles.add("guest");
-		/*Roles*/
-		/*Users*/
-		Vector<User> users = new Vector<User>();
-		users.add(new User("Pepe"));
-		users.add(new User("Dylan"));
-		users.add(new User("Tom"));
-		/*Users*/
+		UserService userService = new UserService();
+
+		Vector<Role> roles = null;
+		try {
+			roles = userService.getRoles();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Vector<String> rolesList = new Vector<String>();
+		for (Role role:roles) {
+			rolesList.add(role.getId());
+		}
+
+
+		Vector<User> users = null;
+		try {
+			users = userService.getUsers();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		JPanel containerSelectUsers = new JPanel();
 		containerSelectUsers.setBorder(BorderFactory.createTitledBorder("Select Users"));
@@ -268,35 +285,41 @@ public class MainView extends View {
 
 			JCheckBox check = new JCheckBox(user.getName());
 			containerUser.add(BorderLayout.WEST,check);
-			JComboBox comboBox = new JComboBox(roles);
+			JComboBox comboBox = new JComboBox(rolesList);
 			containerUser.add(BorderLayout.EAST,comboBox);
 
+			check.addActionListener(controller.getRoleSelectedListener(check,comboBox));
+			comboBox.addActionListener(controller.getRoleSelectedListener(check,comboBox));
+
 			containerSelectUsers.add(containerUser);
+
+
 		}
 
 		mainPanel.add(containerSelectUsers);
 
+		//Ticket types
+		TicketService ticketService = new TicketService();
+		Vector<TicketTypes> ticketsTypes = null;
+		try {
+			ticketsTypes = ticketService.getTypes();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		//Listados obligatorios por tipo de ticket
-		/*TYPETICKETS*/
-		Vector<String> ticketsTypes = new Vector<String>();
-		ticketsTypes.add("Bug");
-		ticketsTypes.add("Feature");
-		/*TYPETICKETS*/
+		Vector<String> ticketsTypesList = new Vector<String>();
+		for (TicketTypes ticket:ticketsTypes) {
+			ticketsTypesList.add(ticket.getType());
+		}
 
-		/*FIELDSREQUIRED*/
-		Vector<String> fieldsRequired = new Vector<String>();
-		fieldsRequired.add("Title");
-		fieldsRequired.add("Description");
-		fieldsRequired.add("Type");
-		/*FIELDSREQUIRED*/
-
+		//Fields required
+		String[] fieldsRequired = new String[]{"Title", "Description", "Type"};
 
 		JPanel containerFieldsRequired = new JPanel();
 		containerFieldsRequired.setBorder(BorderFactory.createTitledBorder("Fields Required "));
 		containerFieldsRequired.setLayout(new BoxLayout(containerFieldsRequired , BoxLayout.Y_AXIS));
 
-		for (String type:ticketsTypes) {
+		for (String type:ticketsTypesList) {
 			JPanel fieldRequiredPanel = new JPanel();
 			fieldRequiredPanel.setLayout(new BorderLayout());
 
@@ -304,24 +327,22 @@ public class MainView extends View {
 
 			JPanel fieldPanel = new JPanel();
 			fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.X_AXIS));
+
 			for (String field:fieldsRequired) {
-				fieldPanel.add(new JCheckBox(field));
+				JCheckBox checkBox = new JCheckBox(field);
+				checkBox.addActionListener(controller.getFieldRequiredListener(type));
+				fieldPanel.add(checkBox);
 			}
+
 			fieldRequiredPanel.add(BorderLayout.EAST,fieldPanel);
 			containerFieldsRequired.add(fieldRequiredPanel);
+
 		}
 
 		mainPanel.add(containerFieldsRequired);
 
-
-		//Roles que pueden cambiar de estado
-		/*STATES*/
-		Vector<String> states = new Vector<String>();
-		states.add("OPEN");
-		states.add("IN PROGRESS");
-		states.add("QA");
-		states.add("CLOSED");
-		/*STATES*/
+		//States
+		String[] states = new String[]{"OPEN", "IN PROGRESS", "QA", "CLOSED"};
 
 		JPanel containerStateRoles = new JPanel();
 		containerStateRoles.setBorder(BorderFactory.createTitledBorder("Roles Change States"));
@@ -337,45 +358,83 @@ public class MainView extends View {
 			JPanel rolesPanel = new JPanel();
 			rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
 
-			for (String rol:roles) {
-				rolesPanel.add(new JCheckBox(rol));
+			for (String role:rolesList) {
+				JCheckBox checkBox = new JCheckBox(role);
+				checkBox.addActionListener(controller.getRolesChangeStateListener(state));
+				rolesPanel.add(checkBox);
 			}
 
 			statePanel.add(BorderLayout.EAST,rolesPanel);
 			containerStateRoles.add(statePanel);
+
 		}
 
 		mainPanel.add(containerStateRoles);
 
 		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
+
 		if (result == JOptionPane.OK_OPTION)
 		{
-			/*Vector<TicketState> states3 = new Vector<TicketState>();
-			Vector<String> roles3 = new Vector<String>();
-			Vector<String> roles = new Vector<String>();
-			roles3.add("guest");
-			roles.add("admin");
-			roles.add("guest");
-			states3.add(new TicketState("OPEN", roles));
-			states3.add(new TicketState("IN PROGRESS", roles));
-			states3.add(new TicketState("QA", roles3));
-			states3.add(new TicketState("CLOSED", null));
-			Vector<User> users = new Vector<User>();
-			users.add(new User("Pepe"));
-			users.add(new User("Dylan"));
-			users.add(new User("Tom"));
 
-			Project project = new Project(nameText.getText(), new User("Pepe"),users, states3);
+			ProjectService projectService = new ProjectService();
 
-			ProjectService service = new ProjectService();
+			Project project = new Project();
+
+			String nameProject = nameText.getText();
+
+			project.setName(nameProject);
+
+			//TODO: replace real owner
+			project.setOwner("owner");
+
+			Vector<TicketTypes> ticketTypesList = new Vector<>();
+
+			for(Map.Entry m:this.fieldsRequired.entrySet()){
+
+				TicketTypes ticketTypes = new TicketTypes();
+				ticketTypes.setType((String) m.getKey());
+				ticketTypes.setFields((HashSet<String>) m.getValue());
+				ticketTypesList.add(ticketTypes);
+			}
+			this.fieldsRequired.clear();
+
+			project.setTicketTypes(ticketTypesList);
+
+			Vector<TicketState> ticketStates = new Vector<>();
+
+			for(Map.Entry m:this.rolesChangeState.entrySet()){
+
+				String stateName = (String) m.getKey();
+				HashSet<String> rolesState = (HashSet<String>) m.getValue();
+				ticketStates.add(new TicketState(stateName,rolesState));
+
+			}
+			this.rolesChangeState.clear();
+
+			project.setTicketStates(ticketStates);
+
+			Vector<User> selectedUsers = new Vector<>();
+
+			for(Map.Entry m:selectUsers.entrySet()){
+
+				String userID = (String) m.getKey();
+				Role userRole = new Role((String) m.getValue());
+
+				selectedUsers.add(new User(userID,userRole,userID));
+
+			}
+			this.selectUsers.clear();
+
+			project.setUsers(selectedUsers);
+
 			try {
-				service.postProject(project);
+				projectService.postProject(project);
 			} catch (IOException e) {
 				e.printStackTrace();
-			}*/
-			System.out.println("Description: " + nameText.getText());
+			}
 
 		}
+
 	}
 
 	private GridBagConstraints createGbc(int x, int y) {
@@ -486,4 +545,56 @@ public class MainView extends View {
 		list.setModel(model);
 		return list;
 	}
+
+	public void putUserSelect(String userID,String role) {
+		this.selectUsers.put(userID,role);
+
+	}
+
+	public void removeUserSelect(String userID) {
+		if (this.selectUsers.containsKey(userID)) {
+			this.selectUsers.remove(userID);
+		}
+
+	}
+
+	public void putFieldRequired(String typeTicket,String field) {
+
+		HashSet fields;
+		if (this.fieldsRequired.containsKey(typeTicket)) {
+			fields = this.fieldsRequired.get(typeTicket);
+		} else {
+			fields = new HashSet();
+		}
+		fields.add(field);
+		this.fieldsRequired.put(typeTicket,fields);
+	}
+
+	public void removeFieldRequired(String typeTicket,String field) {
+		if (this.fieldsRequired.containsKey(typeTicket)) {
+			HashSet fields = this.fieldsRequired.get(typeTicket);
+			fields.remove(field);
+		}
+	}
+
+	public void putRolesChangeState(String state,String role) {
+
+		HashSet roles;
+		if (this.rolesChangeState.containsKey(state)) {
+			roles = this.rolesChangeState.get(state);
+		} else {
+			roles = new HashSet();
+		}
+		roles.add(role);
+		this.rolesChangeState.put(state,roles);
+	}
+
+	public void removeRolesChangeState(String state,String role) {
+		if (this.rolesChangeState.containsKey(state)) {
+			HashSet fields = this.rolesChangeState.get(state);
+			fields.remove(role);
+		}
+	}
+
+
 }
