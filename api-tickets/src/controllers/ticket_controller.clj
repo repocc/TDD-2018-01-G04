@@ -1,6 +1,7 @@
 (ns controllers.ticket-controller)
 (use 'db.project-model)
 (use 'db.ticket-model)
+(use 'db.comment-model)
 (use 'utils.string-util)
 (use 'services.event-service)
 
@@ -31,3 +32,12 @@
 	(db-store-ticket ticket)
 	(log-ticket ticket)
 	{:status 200 :body ticket} ))
+
+(defn find-ticket-by-id [id] (
+	let [
+		ticket (first (db-find-ticket-by-id id))
+		comments (db-get-comments-by-ticket id)
+		result (merge ticket {:comments comments})
+	]
+	{:status 200 :body result}
+))
