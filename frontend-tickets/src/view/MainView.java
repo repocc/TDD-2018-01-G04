@@ -307,7 +307,7 @@ public class MainView extends View {
 			e.printStackTrace();
 		}
 
-		Vector<String> ticketsTypesList = new Vector<String>();
+		Vector<String> ticketsTypesList = new Vector<>();
 		for (TicketTypes ticket:ticketsTypes) {
 			ticketsTypesList.add(ticket.getType());
 		}
@@ -320,6 +320,9 @@ public class MainView extends View {
 		containerFieldsRequired.setLayout(new BoxLayout(containerFieldsRequired , BoxLayout.Y_AXIS));
 
 		for (String type:ticketsTypesList) {
+
+			this.fieldsRequired.put(type,new HashSet<>());
+
 			JPanel fieldRequiredPanel = new JPanel();
 			fieldRequiredPanel.setLayout(new BorderLayout());
 
@@ -349,6 +352,9 @@ public class MainView extends View {
 		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
 
 		for (String state:states) {
+
+			this.rolesChangeState.put(state,new HashSet<>());
+
 			JPanel statePanel = new JPanel();
 			statePanel.setLayout(new BorderLayout());
 			statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
