@@ -28,8 +28,8 @@ public class MainView extends View {
 	private Map<String,String> selectUsers =new HashMap<>();
 	private Map<String,HashSet<String>> fieldsRequired = new HashMap<>();
 	private FlowStates flowStates = new FlowStates();
-	private String userAsigned = "";
-	private String typeAsigned = "";
+	private String userAssigned = "";
+	private String typeAssigned = "";
 
 	public MainView(Model model) {
 		super(model);
@@ -241,8 +241,8 @@ public class MainView extends View {
 			Ticket ticket = new Ticket();//(tittle,description,this.typeAsigned,state);
 			ticket.setTitle(tittle);
 			ticket.setDescription(description);
-			ticket.setUserAsigned(this.userAsigned);
-			ticket.setType(this.typeAsigned);
+			ticket.setUserAsigned(this.userAssigned);
+			ticket.setType(this.typeAssigned);
 			ticket.setProjectAsigned(selectedProject.getID());
 
 			TicketService service = new TicketService();
@@ -342,8 +342,9 @@ public class MainView extends View {
 
 			project.setName(nameProject);
 
-			//TODO: replace real owner
-			project.setOwner("owner");
+			String owner = getModel().getCurrentUser().getName();
+			project.setOwner(owner);
+
 
 			Vector<TicketTypes> ticketTypesList = this.getTicketTypeList();
 
@@ -718,30 +719,18 @@ public class MainView extends View {
 
 	public void putRolesChangeState(String state,String role) {
 		this.flowStates.addRoleInState(state,role);
-		/*HashSet roles;
-		if (this.rolesChangeState.containsKey(state)) {
-			roles = this.rolesChangeState.get(state);
-		} else {
-			roles = new HashSet();
-		}
-		roles.add(role);
-		this.rolesChangeState.put(state,roles);*/
 	}
 
 	public void removeRolesChangeState(String state,String role) {
 		this.flowStates.removeRoleInState(state,role);
-		/*if (this.rolesChangeState.containsKey(state)) {
-			HashSet fields = this.rolesChangeState.get(state);
-			fields.remove(role);
-		}*/
 	}
 
 	public void assignUser(String user) {
-		this.userAsigned = user;
+		this.userAssigned = user;
 	}
 
 	public void assignType(String type) {
-		this.typeAsigned = type;
+		this.typeAssigned = type;
 	}
 
 }
