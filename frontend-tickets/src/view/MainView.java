@@ -217,8 +217,8 @@ public class MainView extends View {
 		return panel;
 	}
 
-	public void showNewTicketMenu(Project selectedProject, MainController controller)
-	{
+	public void showNewTicketMenu(Project selectedProject, MainController controller) {
+
 		JTextField titleText = new JTextField(30);
 		JTextField descriptionText = new JTextField(30);
 		
@@ -229,7 +229,35 @@ public class MainView extends View {
 		mainPanel.add(createLabelWith("Title:", titleText));
 		mainPanel.add(createLabelWith("Description:", descriptionText));
 
-		UserService userService = new UserService();
+		this.addTypeTicketSelectMenu(controller,mainPanel);
+		this.addSelectUserAsigned(controller,mainPanel);
+		
+		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Ticket", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION)
+		{
+
+			String tittle = titleText.getText();
+			String description = descriptionText.getText();
+
+			Ticket ticket = new Ticket();
+			ticket.setTitle(tittle);
+			ticket.setDescription(description);
+			ticket.setUserAsigned(this.userAsigned);
+			ticket.setType(this.typeAsigned);
+			ticket.setProjectAsigned(selectedProject.getID());
+
+			TicketService service = new TicketService();
+
+			try {
+				service.postTicket(ticket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private void addTypeTicketSelectMenu(MainController controller, JPanel mainPanel) {
 
 		TicketService ticketService = new TicketService();
 		Vector<TicketTypes> ticketsTypes = null;
@@ -254,6 +282,11 @@ public class MainView extends View {
 
 		mainPanel.add(containertype);
 
+	}
+
+	private void addSelectUserAsigned(MainController controller, JPanel mainPanel) {
+		UserService userService = new UserService();
+
 		Vector<User> users = null;
 		try {
 			users = userService.getUsers();
@@ -276,39 +309,7 @@ public class MainView extends View {
 		}
 
 		mainPanel.add(containerSelectUser);
-		
-		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Ticket", JOptionPane.OK_CANCEL_OPTION);
-		if (result == JOptionPane.OK_OPTION)
-		{
-
-			String tittle = titleText.getText();
-			String description = descriptionText.getText();
-
-			Ticket ticket = new Ticket();//(tittle,description,this.typeAsigned,state);
-			ticket.setTitle(tittle);
-			ticket.setDescription(description);
-			ticket.setUserAsigned(this.userAsigned);
-			ticket.setType(this.typeAsigned);
-			ticket.setProjectAsigned(selectedProject.getID());
-
-			System.out.println(this.userAsigned);
-			System.out.println(this.typeAsigned);
-
-			Gson gson = new Gson();
-			String json = gson.toJson(ticket);
-			System.out.println(json);
-
-			TicketService service = new TicketService();
-
-			try {
-				service.postTicket(ticket);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
 	}
-
 
 	public void showNewProjectMenu(MainController controller) {
 
