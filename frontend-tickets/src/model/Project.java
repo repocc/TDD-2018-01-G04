@@ -24,6 +24,7 @@ public class Project {
 	private Vector<User> users = new Vector<User>();
 	private Vector<Ticket> tickets = new Vector<Ticket>();
 	private Vector<String> roles = new Vector<String>();
+	@SerializedName("id")
 	private String ID;
 
 	public Project(){

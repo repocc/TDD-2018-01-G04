@@ -239,12 +239,18 @@ public class MainView extends View {
 			String tittle = titleText.getText();
 			String description = descriptionText.getText();
 
-			Ticket ticket = new Ticket();
+			Ticket ticket = new Ticket();//(tittle,description,this.typeAsigned,state);
 			ticket.setTitle(tittle);
 			ticket.setDescription(description);
 			ticket.setUserAsigned(this.userAsigned);
 			ticket.setType(this.typeAsigned);
 			ticket.setProjectAsigned(selectedProject.getID());
+
+			Gson gson = new Gson();
+			String json = gson.toJson(ticket);
+			System.out.println(json);
+
+			System.out.println(gson.toJson(selectedProject));
 
 			TicketService service = new TicketService();
 

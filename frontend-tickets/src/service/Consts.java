@@ -9,5 +9,7 @@ public final class Consts {
     public static final String URI_GET_USERS = URI + "/user";
     public static final String URI_GET_ROLES = URI + "/role";
     public static final String URI_GET_PROJECTS_BY_USER = URI + "/projects";
+    public static final String URI_GET_PROJECTS = URI + "/project";
+
 
 }
