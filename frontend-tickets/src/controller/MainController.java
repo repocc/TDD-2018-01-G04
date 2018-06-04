@@ -92,12 +92,44 @@ public class MainController extends Controller {
 		return new newProjectListener();
 	}
 
+
+	public ActionListener getAssignUserTicket() {
+
+		class newProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+
+				JRadioButton radioButton = (JRadioButton) arg0.getSource();
+
+				view.assignUser(radioButton.getText());
+			}
+		}
+		return new newProjectListener();
+	}
+
+	public ActionListener getAssignTypeTicket() {
+
+		class newProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+
+				JRadioButton radioButton = (JRadioButton) arg0.getSource();
+
+				view.assignType(radioButton.getText());
+			}
+		}
+		return new newProjectListener();
+	}
+
 	public ActionListener getNewTicketListener() {
+
+		MainController controller = this;
+
 		class newTicketListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				view.showNewTicketMenu();
+				view.showNewTicketMenu(selectedProject,controller);
 			}
 		}
 		return new newTicketListener();

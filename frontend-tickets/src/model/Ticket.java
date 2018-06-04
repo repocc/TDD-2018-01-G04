@@ -1,16 +1,29 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Vector;
 
 public class Ticket {
 
+	@SerializedName("title")
 	private String title;
+	@SerializedName("description")
 	private String description;
+	@SerializedName("type")
 	private String type;
-	private Vector<Comment> comments = new Vector<Comment>();
+	@SerializedName("asigned")
+	private String userAsigned;
+	@SerializedName("project")
+	private String projectAsigned;
+	private Vector<Comment> comments = new Vector<>();
 	private String currentState;
 	private String ID;
-	
+
+	public Ticket(){
+
+	}
+
 	public Ticket(String title, String description, String type, String initialState)
 	{
 		this.title = title;
@@ -89,5 +102,25 @@ public class Ticket {
 
 	public String getID() {
 		return this.ID;
+	}
+
+	public void setProjectAsigned(String projectAsigned) {
+		this.projectAsigned = projectAsigned;
+	}
+
+	public void setUserAsigned(String userAsigned) {
+		this.userAsigned = userAsigned;
+	}
+
+	public void setTitle(String tittle) {
+		this.title = tittle;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }
