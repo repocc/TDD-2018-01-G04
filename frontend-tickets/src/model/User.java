@@ -1,10 +1,17 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
 
+	@SerializedName("username")
 	private String name;
+	@SerializedName("noRole")
 	private String role;
-	private String ID;
+	@SerializedName("role")
+	private Role roleReal;
+	@SerializedName("id")
+	private String id;
 	
 	public User(String name)
 	{
@@ -16,11 +23,21 @@ public class User {
 		this.role = role;
 	}
 
+	public User(String username, Role role, String id) {
+		this.name = username;
+		this.roleReal = role;
+		this.id = id;
+	}
+
 	public void setRole(String role)
 	{
 		this.role = role.toLowerCase();
 	}
-	
+
+	public void setRoleReal(Role role) {
+		this.roleReal = role;
+	}
+
 	public String getName()
 	{
 		return this.name;
@@ -31,12 +48,12 @@ public class User {
 		return role;
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public String getID() {
-		return this.ID;
+		return this.id;
 	}
 }
 

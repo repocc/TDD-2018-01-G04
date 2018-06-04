@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -79,14 +80,60 @@ public class MainController extends Controller {
 	}
 
 	public ActionListener getNewProjectListener() {
+
+		MainController controller = this;
+
 		class newProjectListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				view.showNewProjectMenu();
+				view.showNewProjectMenu(controller);
 			}
 		}	
 		return new newProjectListener();
+	}
+
+
+	public ActionListener getAssignUserTicket() {
+
+		class newProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+
+				JRadioButton radioButton = (JRadioButton) arg0.getSource();
+
+				view.assignUser(radioButton.getText());
+			}
+		}
+		return new newProjectListener();
+	}
+
+	public ActionListener getAssignTypeTicket() {
+
+		class newProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+
+				JRadioButton radioButton = (JRadioButton) arg0.getSource();
+
+				view.assignType(radioButton.getText());
+			}
+		}
+		return new newProjectListener();
+	}
+
+	public ActionListener getNewTicketListener() {
+
+		MainController controller = this;
+
+		class newTicketListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				view.showNewTicketMenu(selectedProject,controller);
+			}
+		}
+		return new newTicketListener();
 	}
 
 	public MouseListener getTicketLabelListener()
@@ -177,4 +224,76 @@ public class MainController extends Controller {
 		}
 		return new postCommentListener();
 	}
+
+	public ActionListener getRoleSelectedListener(JCheckBox check,JComboBox comboBox){
+
+		class postRoleSelectedListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg){
+
+				String userName = check.getText();
+				if (check.isSelected()) {
+					String role = (String) comboBox.getSelectedItem();
+					view.putUserSelect(userName,role);
+				} else {
+					view.removeUserSelect(userName);
+				}
+			}
+		}
+		return new postRoleSelectedListener();
+	}
+
+	public ActionListener getFieldRequiredListener(String type) {
+
+		class postFieldRequiredListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg){
+				JCheckBox checkBox = (JCheckBox) arg.getSource();
+				String field = checkBox.getText();
+				if (checkBox.isSelected()) {
+					view.putFieldRequired(type,field);
+				} else {
+					view.removeFieldRequired(type,field);
+				}
+			}
+		}
+		return new postFieldRequiredListener();
+	}
+
+	public ActionListener getRolesChangeStateListener(String state) {
+
+		class postRolesChangeStateListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg){
+				JCheckBox check = (JCheckBox) arg.getSource();
+				String role = check.getText();
+				if (check.isSelected()) {
+					view.putRolesChangeState(state,role);
+				} else {
+					view.removeRolesChangeState(state,role);
+				}
+			}
+		}
+		return new postRolesChangeStateListener();
+	}
+
+
+	public ActionListener getAddStateListener(JTextField nameText, FlowStates flowStates, JPanel panel){
+
+		MainController controller = this;
+
+		class postNewStateListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg){
+				if (!nameText.getText().equals("")){
+					flowStates.setState(nameText.getText());
+					view.addPanelNewState(controller,panel,nameText.getText());
+					nameText.setText("");
+				}
+			}
+		}
+		return new postNewStateListener();
+
+	}
+
 }

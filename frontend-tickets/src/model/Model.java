@@ -1,17 +1,20 @@
 package model;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Vector;
 
 import controller.ControllerContext;
 import controller.MainController;
+import service.ProjectService;
 
 public class Model extends Observable 
 {
 	private ControllerContext context;
 	private User currentUser;
-	private Vector<Project> projects = new Vector<Project>();
+	private Vector<Project> projects = new Vector<>();
 	private TicketsSystemAdapter adapter;
 	
 	public Model(ControllerContext context)
@@ -20,13 +23,13 @@ public class Model extends Observable
 		this.context = context;
 		
 		//TODO: Use adapter to get projects
-		Vector<User> users = new Vector<User>();
+		/*Vector<User> users = new Vector<User>();
 		users.add(new User("Pepe"));
 		users.add(new User("Dylan"));
 		users.add(new User("Tom"));
 		
 		//Model example
-		Vector<String> roles = new Vector<String>();
+		HashSet<String> roles = new HashSet<String>();
 		roles.add("admin");
 		roles.add("guest");
 		Vector<TicketState> states1 = new Vector<TicketState>();
@@ -52,7 +55,7 @@ public class Model extends Observable
 		projects.add(p1);
 		
 		Vector<TicketState> states3 = new Vector<TicketState>();
-		Vector<String> roles3 = new Vector<String>();
+		HashSet<String> roles3 = new HashSet<String>();
 		roles3.add("guest");
 		states3.add(new TicketState("OPEN", roles));
 		states3.add(new TicketState("IN PROGRESS", roles));
@@ -62,7 +65,7 @@ public class Model extends Observable
 		p1.addTicket(new Ticket("", "Descripcion1", "Tipo1", "OPEN"));
 		p1.addTicket(new Ticket("Titulo2", "", "Tipo2", "IN PROGRESS"));
 		p1.addTicket(new Ticket("Titulo3", "Descripcion3", "Tipo3", "CLOSED"));
-		projects.add(p1);
+		projects.add(p1);*/
 	}
 	
 	public void notifyContextLogin()
@@ -81,6 +84,14 @@ public class Model extends Observable
 	
 	public Vector<Project> getProjects()
 	{
+		ProjectService projectService = new ProjectService();
+
+		try {
+			projects = projectService.getProjects();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return projects;
 	}
 	
@@ -93,6 +104,13 @@ public class Model extends Observable
 			Project project = (Project)i.next();
 			if(project.toString().equals(projectName))
 			{
+				ProjectService projectService = new ProjectService();
+				try {
+					project = projectService.getProjet(project);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				return project.getTickets();
 			}
 		}

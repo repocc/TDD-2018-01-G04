@@ -1,29 +1,41 @@
 package service;
 
 import com.google.gson.Gson;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+import model.Role;
 import model.User;
 
 import java.io.IOException;
+import java.util.Vector;
 
 public class UserService {
 
     private HttpService httpService;
-    //private Gson gson;
+    private Gson gson;
 
     public UserService() {
         this.httpService = new HttpService();
-        //this.gson = new Gson();
+        this.gson = new Gson();
     }
 
-    public String getUsers() throws IOException {
+    public Vector<User> getUsers() throws IOException {
 
-        return this.httpService.get(Consts.URI_GET_USERS);
+        String usersJson = this.httpService.get(Consts.URI_GET_USERS);
+        Type listType = new TypeToken<Vector<User>>(){}.getType();
+        Vector<User> users = gson.fromJson(usersJson,listType);
+
+        return users;
 
     }
 
-    public String getRoles() throws IOException {
+    public Vector<Role> getRoles() throws IOException {
 
-        return this.httpService.get(Consts.URI_GET_ROLES);
+        String roleJson = this.httpService.get(Consts.URI_GET_ROLES);
+        Type listType = new TypeToken<Vector<Role>>(){}.getType();
+        Vector<Role> roles = gson.fromJson(roleJson,listType);
+
+        return roles;
 
     }
 
