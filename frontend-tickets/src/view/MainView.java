@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
-import com.google.gson.Gson;
 import controller.MainController;
 import model.*;
 import service.ProjectService;
@@ -24,11 +22,12 @@ public class MainView extends View {
 	private JList projectsList = new JList();
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
+	private JPanel projectMenuPanel = new JPanel();
 
 	//create project
 	private Map<String,String> selectUsers =new HashMap<>();
 	private Map<String,HashSet<String>> fieldsRequired = new HashMap<>();
-	private Map<String,HashSet<String>> rolesChangeState = new HashMap<>();
+	private FlowStates flowStates = new FlowStates();
 	private String userAsigned = "";
 	private String typeAsigned = "";
 
@@ -246,12 +245,6 @@ public class MainView extends View {
 			ticket.setType(this.typeAsigned);
 			ticket.setProjectAsigned(selectedProject.getID());
 
-			Gson gson = new Gson();
-			String json = gson.toJson(ticket);
-			System.out.println(json);
-
-			System.out.println(gson.toJson(selectedProject));
-
 			TicketService service = new TicketService();
 
 			try {
@@ -261,6 +254,7 @@ public class MainView extends View {
 			}
 
 		}
+		this.showTicketsFromProject(selectedProject.toString(),controller);
 	}
 
 	private void addTypeTicketSelectMenu(MainController controller, JPanel mainPanel) {
@@ -319,21 +313,24 @@ public class MainView extends View {
 
 	public void showNewProjectMenu(MainController controller) {
 
+		projectMenuPanel.removeAll();
+
 		JTextField nameText = new JTextField(30);
 
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		
-		mainPanel.add(createLabelWith("Project name:", nameText));
+		projectMenuPanel.setLayout(new BoxLayout(projectMenuPanel, BoxLayout.Y_AXIS));
 
-		this.addSelectUsersNewProjectMenu(controller,mainPanel);
+		projectMenuPanel.add(createLabelWith("Project name:", nameText));
 
-		this.addTicketsTypesNewProjectMenu(controller,mainPanel);
+		this.addSelectUsersNewProjectMenu(controller);
 
-		this.addRolesStatesNewProjectMenu(controller,mainPanel);
+		this.addTicketsTypesNewProjectMenu(controller);
 
+		JPanel panel = this.addMenuAddNewState(controller);
 
-		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
+		//this.addRolesStatesNewProjectMenu(controller,projectMenuPanel);
+
+		int result = JOptionPane.showConfirmDialog(null, projectMenuPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
+
 
 		if (result == JOptionPane.OK_OPTION) {
 
@@ -352,7 +349,7 @@ public class MainView extends View {
 
 			project.setTicketTypes(ticketTypesList);
 
-			Vector<TicketState> ticketStates = this.getTicketStates();
+			Vector<TicketState> ticketStates = this.flowStates.getTicketStates();//this.getTicketStates();
 
 			project.setTicketStates(ticketStates);
 
@@ -367,11 +364,11 @@ public class MainView extends View {
 			}
 
 		}
+
+		flowStates.clear();
+
 		showProjectsList();
-		/*ticketsListMainPanel.removeAll();
-		ticketsListMainPanel.revalidate();
-		ticketsListMainPanel.repaint();
-*/
+
 	}
 
 	private Vector<User> getSelectedUser() {
@@ -410,27 +407,7 @@ public class MainView extends View {
 
 	}
 
-
-	private Vector<TicketState> getTicketStates() {
-
-		Vector<TicketState> ticketStates = new Vector<>();
-
-		for(Map.Entry m:this.rolesChangeState.entrySet()){
-
-			String stateName = (String) m.getKey();
-			HashSet<String> rolesState = (HashSet<String>) m.getValue();
-			ticketStates.add(new TicketState(stateName,rolesState));
-
-		}
-
-		this.rolesChangeState.clear();
-
-		return ticketStates;
-
-	}
-
-
-	private void addSelectUsersNewProjectMenu(MainController controller, JPanel mainPanel) {
+	private void addSelectUsersNewProjectMenu(MainController controller) {
 
 		UserService userService = new UserService();
 
@@ -475,10 +452,10 @@ public class MainView extends View {
 
 		}
 
-		mainPanel.add(containerSelectUsers);
+		projectMenuPanel.add(containerSelectUsers);
 	}
 
-	private void addTicketsTypesNewProjectMenu(MainController controller, JPanel mainPanel) {
+	private void addTicketsTypesNewProjectMenu(MainController controller) {
 
 		TicketService ticketService = new TicketService();
 		Vector<TicketTypes> ticketsTypes = null;
@@ -523,11 +500,33 @@ public class MainView extends View {
 
 		}
 
-		mainPanel.add(containerFieldsRequired);
+		projectMenuPanel.add(containerFieldsRequired);
 
 	}
 
-	private void addRolesStatesNewProjectMenu(MainController controller, JPanel mainPanel) {
+	private JPanel addMenuAddNewState(MainController controller) {
+
+		JPanel containerNewState = new JPanel();
+		containerNewState.setBorder(BorderFactory.createTitledBorder("New State "));
+		containerNewState.setLayout(new BoxLayout(containerNewState, BoxLayout.Y_AXIS));
+
+		JTextField nameText = new JTextField(5);
+		containerNewState.add(createLabelWith("Name state", nameText));
+
+		JButton button = new JButton("Add");
+		containerNewState.add(button);
+
+		projectMenuPanel.add(containerNewState);
+
+		JPanel panel = this.generatePanelStates();
+
+		button.addActionListener(controller.getAddStateListener(nameText,this.flowStates,panel));
+
+		return panel;
+
+	}
+
+	public void addPanelNewState(MainController controller,JPanel panel, String state){
 
 		UserService userService = new UserService();
 
@@ -538,45 +537,44 @@ public class MainView extends View {
 			e.printStackTrace();
 		}
 
-		Vector<String> rolesList = new Vector<String>();
+		JPanel statePanel = new JPanel();
+		statePanel.setLayout(new BorderLayout());
+		statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+		statePanel.add(BorderLayout.WEST,new JLabel("  "+state));
+
+		JPanel rolesPanel = new JPanel();
+		rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
+
 		for (Role role:roles) {
-			rolesList.add(role.getId());
+			JCheckBox checkBox = new JCheckBox(role.getId());
+			checkBox.addActionListener(controller.getRolesChangeStateListener(state));
+			rolesPanel.add(checkBox);
 		}
 
-		//States
-		String[] states = new String[]{"OPEN", "IN PROGRESS", "QA", "CLOSED"};
+		statePanel.add(BorderLayout.EAST,rolesPanel);
+		panel.add(statePanel);
 
-		JPanel containerStateRoles = new JPanel();
-		containerStateRoles.setBorder(BorderFactory.createTitledBorder("Roles Change States"));
-		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
-
-		for (String state:states) {
-
-			this.rolesChangeState.put(state,new HashSet<>());
-
-			JPanel statePanel = new JPanel();
-			statePanel.setLayout(new BorderLayout());
-			statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-
-			statePanel.add(BorderLayout.WEST,new JLabel("  "+state));
-
-			JPanel rolesPanel = new JPanel();
-			rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
-
-			for (String role:rolesList) {
-				JCheckBox checkBox = new JCheckBox(role);
-				checkBox.addActionListener(controller.getRolesChangeStateListener(state));
-				rolesPanel.add(checkBox);
-			}
-
-			statePanel.add(BorderLayout.EAST,rolesPanel);
-			containerStateRoles.add(statePanel);
-
-		}
-
-		mainPanel.add(containerStateRoles);
+		projectMenuPanel.revalidate();
+		projectMenuPanel.repaint();
 
 	}
+
+	private JPanel generatePanelStates(){
+
+		JPanel containerStateRoles = new JPanel();
+		containerStateRoles.setBorder(BorderFactory.createTitledBorder("States"));
+		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
+
+		JScrollPane scrollPanel = new JScrollPane(containerStateRoles);
+		scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanel.setPreferredSize(new Dimension(100,100));
+
+		projectMenuPanel.add(scrollPanel);
+
+		return containerStateRoles;
+	}
+
 
 	private GridBagConstraints createGbc(int x, int y) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -719,22 +717,23 @@ public class MainView extends View {
 	}
 
 	public void putRolesChangeState(String state,String role) {
-
-		HashSet roles;
+		this.flowStates.addRoleInState(state,role);
+		/*HashSet roles;
 		if (this.rolesChangeState.containsKey(state)) {
 			roles = this.rolesChangeState.get(state);
 		} else {
 			roles = new HashSet();
 		}
 		roles.add(role);
-		this.rolesChangeState.put(state,roles);
+		this.rolesChangeState.put(state,roles);*/
 	}
 
 	public void removeRolesChangeState(String state,String role) {
-		if (this.rolesChangeState.containsKey(state)) {
+		this.flowStates.removeRoleInState(state,role);
+		/*if (this.rolesChangeState.containsKey(state)) {
 			HashSet fields = this.rolesChangeState.get(state);
 			fields.remove(role);
-		}
+		}*/
 	}
 
 	public void assignUser(String user) {

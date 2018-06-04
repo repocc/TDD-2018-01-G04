@@ -10,13 +10,14 @@ public class TicketState {
 	@SerializedName("state")
 	private String name;
 	@SerializedName("roles")
-	private HashSet<String> roles = new HashSet<>();
+	private HashSet<String> roles;
 	
 	public TicketState(String name,  HashSet<String> roles)
 	{
 		this.name = name;
 		this.roles = roles;
 	}
+
 	
 	public String getName()
 	{

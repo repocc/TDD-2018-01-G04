@@ -104,6 +104,13 @@ public class Model extends Observable
 			Project project = (Project)i.next();
 			if(project.toString().equals(projectName))
 			{
+				ProjectService projectService = new ProjectService();
+				try {
+					project = projectService.getProjet(project);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				return project.getTickets();
 			}
 		}

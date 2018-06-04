@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -276,5 +277,23 @@ public class MainController extends Controller {
 		return new postRolesChangeStateListener();
 	}
 
+
+	public ActionListener getAddStateListener(JTextField nameText, FlowStates flowStates, JPanel panel){
+
+		MainController controller = this;
+
+		class postNewStateListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg){
+				if (!nameText.getText().equals("")){
+					flowStates.setState(nameText.getText());
+					view.addPanelNewState(controller,panel,nameText.getText());
+					nameText.setText("");
+				}
+			}
+		}
+		return new postNewStateListener();
+
+	}
 
 }

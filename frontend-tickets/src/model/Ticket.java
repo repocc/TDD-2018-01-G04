@@ -12,12 +12,14 @@ public class Ticket {
 	private String description;
 	@SerializedName("type")
 	private String type;
-	@SerializedName("asigned")
+	@SerializedName("assigned")
 	private String userAsigned;
 	@SerializedName("project")
 	private String projectAsigned;
 	private Vector<Comment> comments = new Vector<>();
+	@SerializedName("state")
 	private String currentState;
+	@SerializedName("id")
 	private String ID;
 
 	public Ticket(){

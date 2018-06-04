@@ -3,7 +3,6 @@ package service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Project;
-import model.TicketTypes;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -40,14 +39,15 @@ public class ProjectService {
 
     }
 
-    public String getProjet(Project project) throws IOException {
+    public Project getProjet(Project project) throws IOException {
 
         String ID = project.getID();
         String uri = Consts.URI_GET_PROJECT + "/" + ID;
 
         String response = this.httpService.get(uri);
+        Project projectResponse = gson.fromJson(response,Project.class);
 
-        return response;
+        return projectResponse;
 
     }
 
