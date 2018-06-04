@@ -240,9 +240,9 @@ public class MainView extends View {
 			}
 		}
 	}
-	
-	public void showNewProjectMenu(MainController controller)
-	{
+
+
+	public void showNewProjectMenu(MainController controller) {
 
 		JTextField nameText = new JTextField(30);
 
@@ -251,7 +251,158 @@ public class MainView extends View {
 		
 		mainPanel.add(createLabelWith("Project name:", nameText));
 
-		//Select users
+		this.addSelectUsersNewProjectMenu(controller,mainPanel);
+
+		this.addTicketsTypesNewProjectMenu(controller,mainPanel);
+
+		this.addRolesStatesNewProjectMenu(controller,mainPanel);
+
+
+		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
+
+		if (result == JOptionPane.OK_OPTION) {
+
+			ProjectService projectService = new ProjectService();
+
+			Project project = new Project();
+
+			String nameProject = nameText.getText();
+
+			project.setName(nameProject);
+
+			//TODO: replace real owner
+			project.setOwner("owner");
+
+			Vector<TicketTypes> ticketTypesList = this.getTicketTypeList();
+
+			project.setTicketTypes(ticketTypesList);
+
+			Vector<TicketState> ticketStates = this.getTicketStates();
+
+			project.setTicketStates(ticketStates);
+
+			Vector<User> selectedUsers = getSelectedUser();
+
+			project.setUsers(selectedUsers);
+
+			try {
+				projectService.postProject(project);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	private Vector<User> getSelectedUser() {
+
+		Vector<User> selectedUsers = new Vector<>();
+
+		for(Map.Entry m:selectUsers.entrySet()){
+
+			String userID = (String) m.getKey();
+			Role userRole = new Role((String) m.getValue());
+
+			selectedUsers.add(new User(userID,userRole,userID));
+
+		}
+
+		this.selectUsers.clear();
+
+		return selectedUsers;
+	}
+
+	private Vector<TicketTypes> getTicketTypeList(){
+
+		Vector<TicketTypes> ticketTypesList = new Vector<>();
+
+		for(Map.Entry m:this.fieldsRequired.entrySet()){
+
+			TicketTypes ticketTypes = new TicketTypes();
+			ticketTypes.setType((String) m.getKey());
+			ticketTypes.setFields((HashSet<String>) m.getValue());
+			ticketTypesList.add(ticketTypes);
+		}
+
+		this.fieldsRequired.clear();
+
+		return  ticketTypesList;
+
+	}
+
+
+	private Vector<TicketState> getTicketStates() {
+
+		Vector<TicketState> ticketStates = new Vector<>();
+
+		for(Map.Entry m:this.rolesChangeState.entrySet()){
+
+			String stateName = (String) m.getKey();
+			HashSet<String> rolesState = (HashSet<String>) m.getValue();
+			ticketStates.add(new TicketState(stateName,rolesState));
+
+		}
+
+		this.rolesChangeState.clear();
+
+		return ticketStates;
+
+	}
+
+	private void addRolesStatesNewProjectMenu(MainController controller, JPanel mainPanel) {
+
+		UserService userService = new UserService();
+
+		Vector<Role> roles = null;
+		try {
+			roles = userService.getRoles();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Vector<String> rolesList = new Vector<String>();
+		for (Role role:roles) {
+			rolesList.add(role.getId());
+		}
+
+		//States
+		String[] states = new String[]{"OPEN", "IN PROGRESS", "QA", "CLOSED"};
+
+		JPanel containerStateRoles = new JPanel();
+		containerStateRoles.setBorder(BorderFactory.createTitledBorder("Roles Change States"));
+		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
+
+		for (String state:states) {
+
+			this.rolesChangeState.put(state,new HashSet<>());
+
+			JPanel statePanel = new JPanel();
+			statePanel.setLayout(new BorderLayout());
+			statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+			statePanel.add(BorderLayout.WEST,new JLabel("  "+state));
+
+			JPanel rolesPanel = new JPanel();
+			rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
+
+			for (String role:rolesList) {
+				JCheckBox checkBox = new JCheckBox(role);
+				checkBox.addActionListener(controller.getRolesChangeStateListener(state));
+				rolesPanel.add(checkBox);
+			}
+
+			statePanel.add(BorderLayout.EAST,rolesPanel);
+			containerStateRoles.add(statePanel);
+
+		}
+
+		mainPanel.add(containerStateRoles);
+
+	}
+
+	private void addSelectUsersNewProjectMenu(MainController controller, JPanel mainPanel) {
+
 		UserService userService = new UserService();
 
 		Vector<Role> roles = null;
@@ -293,12 +444,13 @@ public class MainView extends View {
 
 			containerSelectUsers.add(containerUser);
 
-
 		}
 
 		mainPanel.add(containerSelectUsers);
+	}
 
-		//Ticket types
+	private void addTicketsTypesNewProjectMenu(MainController controller, JPanel mainPanel) {
+
 		TicketService ticketService = new TicketService();
 		Vector<TicketTypes> ticketsTypes = null;
 		try {
@@ -343,103 +495,6 @@ public class MainView extends View {
 		}
 
 		mainPanel.add(containerFieldsRequired);
-
-		//States
-		String[] states = new String[]{"OPEN", "IN PROGRESS", "QA", "CLOSED"};
-
-		JPanel containerStateRoles = new JPanel();
-		containerStateRoles.setBorder(BorderFactory.createTitledBorder("Roles Change States"));
-		containerStateRoles.setLayout(new BoxLayout(containerStateRoles , BoxLayout.Y_AXIS));
-
-		for (String state:states) {
-
-			this.rolesChangeState.put(state,new HashSet<>());
-
-			JPanel statePanel = new JPanel();
-			statePanel.setLayout(new BorderLayout());
-			statePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-
-			statePanel.add(BorderLayout.WEST,new JLabel("  "+state));
-
-			JPanel rolesPanel = new JPanel();
-			rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
-
-			for (String role:rolesList) {
-				JCheckBox checkBox = new JCheckBox(role);
-				checkBox.addActionListener(controller.getRolesChangeStateListener(state));
-				rolesPanel.add(checkBox);
-			}
-
-			statePanel.add(BorderLayout.EAST,rolesPanel);
-			containerStateRoles.add(statePanel);
-
-		}
-
-		mainPanel.add(containerStateRoles);
-
-		int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
-
-		if (result == JOptionPane.OK_OPTION)
-		{
-
-			ProjectService projectService = new ProjectService();
-
-			Project project = new Project();
-
-			String nameProject = nameText.getText();
-
-			project.setName(nameProject);
-
-			//TODO: replace real owner
-			project.setOwner("owner");
-
-			Vector<TicketTypes> ticketTypesList = new Vector<>();
-
-			for(Map.Entry m:this.fieldsRequired.entrySet()){
-
-				TicketTypes ticketTypes = new TicketTypes();
-				ticketTypes.setType((String) m.getKey());
-				ticketTypes.setFields((HashSet<String>) m.getValue());
-				ticketTypesList.add(ticketTypes);
-			}
-			this.fieldsRequired.clear();
-
-			project.setTicketTypes(ticketTypesList);
-
-			Vector<TicketState> ticketStates = new Vector<>();
-
-			for(Map.Entry m:this.rolesChangeState.entrySet()){
-
-				String stateName = (String) m.getKey();
-				HashSet<String> rolesState = (HashSet<String>) m.getValue();
-				ticketStates.add(new TicketState(stateName,rolesState));
-
-			}
-			this.rolesChangeState.clear();
-
-			project.setTicketStates(ticketStates);
-
-			Vector<User> selectedUsers = new Vector<>();
-
-			for(Map.Entry m:selectUsers.entrySet()){
-
-				String userID = (String) m.getKey();
-				Role userRole = new Role((String) m.getValue());
-
-				selectedUsers.add(new User(userID,userRole,userID));
-
-			}
-			this.selectUsers.clear();
-
-			project.setUsers(selectedUsers);
-
-			try {
-				projectService.postProject(project);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
 
 	}
 
