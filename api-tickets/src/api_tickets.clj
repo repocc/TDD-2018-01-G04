@@ -15,6 +15,7 @@
 (use 'controllers.tickettype-controller)
 (use 'controllers.project-controller)
 (use 'controllers.ticket-controller)
+(use 'controllers.comment-controller)
 
 (defroutes app-routes
 
@@ -49,6 +50,13 @@
 
   (PUT "/api/ticket/:id" request
     (update-ticket-by-id request)
+  )
+
+  (POST "/api/comment" request
+    (store-comment request))
+
+  (GET "/api/ticket/:id" [id] 
+    (find-ticket-by-id id)
   )
 
   (route/resources "/")
