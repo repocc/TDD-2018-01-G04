@@ -1,6 +1,9 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Role {
+    @SerializedName("id")
     private String id;
 
     public Role(String id) {

@@ -325,9 +325,7 @@ public class MainView extends View {
 
 		this.addTicketsTypesNewProjectMenu(controller);
 
-		JPanel panel = this.addMenuAddNewState(controller);
-
-		//this.addRolesStatesNewProjectMenu(controller,projectMenuPanel);
+		this.addMenuAddNewState(controller);
 
 		int result = JOptionPane.showConfirmDialog(null, projectMenuPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
 
@@ -344,7 +342,6 @@ public class MainView extends View {
 
 			String owner = getModel().getCurrentUser().getName();
 			project.setOwner(owner);
-
 
 			Vector<TicketTypes> ticketTypesList = this.getTicketTypeList();
 
@@ -505,7 +502,7 @@ public class MainView extends View {
 
 	}
 
-	private JPanel addMenuAddNewState(MainController controller) {
+	private void addMenuAddNewState(MainController controller) {
 
 		JPanel containerNewState = new JPanel();
 		containerNewState.setBorder(BorderFactory.createTitledBorder("New State "));
@@ -522,8 +519,6 @@ public class MainView extends View {
 		JPanel panel = this.generatePanelStates();
 
 		button.addActionListener(controller.getAddStateListener(nameText,this.flowStates,panel));
-
-		return panel;
 
 	}
 

@@ -12,20 +12,21 @@ public class Project {
 
 	@SerializedName("name")
 	private String name;
-	@SerializedName("owner-otro")
+	@SerializedName("UserOwner")
 	private User owner;
 	@SerializedName("owner")
-	private String owner2;
+	private String nameOwner;
 	@SerializedName("ticket-types")
 	private Vector<TicketTypes> ticketTypes = new Vector<>();
 	@SerializedName("states")
 	private Vector<TicketState> ticketStates = new Vector<>();
 	@SerializedName("users")
-	private Vector<User> users = new Vector<User>();
-	private Vector<Ticket> tickets = new Vector<Ticket>();
-	private Vector<String> roles = new Vector<String>();
+	private Vector<User> users = new Vector<>();
+	@SerializedName("tickets")
+	private Vector<Ticket> tickets = new Vector<>();
+	private Vector<String> roles = new Vector<>();
 	@SerializedName("id")
-	private String ID;
+	private String id;
 
 	public Project(){
 
@@ -49,7 +50,7 @@ public class Project {
 	}
 
 	public void setOwner(String owner) {
-		this.owner2 = owner;
+		this.nameOwner = owner;
 	}
 
 	public String toString()
@@ -113,12 +114,12 @@ public class Project {
 
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public String getID() {
-		return this.ID;
+		return this.id;
 	}
 
 	public void setTicketTypes(Vector<TicketTypes> ticketTypes) {

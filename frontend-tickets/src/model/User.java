@@ -11,7 +11,7 @@ public class User {
 	@SerializedName("role")
 	private Role roleReal;
 	@SerializedName("id")
-	private String ID;
+	private String id;
 	
 	public User(String name)
 	{
@@ -23,10 +23,10 @@ public class User {
 		this.role = role;
 	}
 
-	public User(String username, Role role, String ID) {
+	public User(String username, Role role, String id) {
 		this.name = username;
 		this.roleReal = role;
-		this.ID = ID;
+		this.id = id;
 	}
 
 	public void setRole(String role)
@@ -48,12 +48,12 @@ public class User {
 		return role;
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public String getID() {
-		return this.ID;
+		return this.id;
 	}
 }
 

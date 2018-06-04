@@ -20,7 +20,7 @@ public class Ticket {
 	@SerializedName("state")
 	private String currentState;
 	@SerializedName("id")
-	private String ID;
+	private String id;
 
 	public Ticket(){
 
@@ -98,12 +98,12 @@ public class Ticket {
 		return this.comments;
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public String getID() {
-		return this.ID;
+		return this.id;
 	}
 
 	public void setProjectAsigned(String projectAsigned) {
