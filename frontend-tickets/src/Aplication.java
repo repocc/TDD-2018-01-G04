@@ -1,11 +1,10 @@
-import controller.TicketsSystem;
-import service.ProjectService;
+import container.TicketsSystemContainer;
 
 public class Aplication
 {
 	public static void main(String args[])
 	{
-        TicketsSystem ticketsSystem = new TicketsSystem();
-        ticketsSystem.initialize();
+        TicketsSystemContainer ticketsSystemContainer = new TicketsSystemContainer();
+        ticketsSystemContainer.initialize();
     }
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import container.TicketsSystemContainer;
 import model.*;
 import service.TicketService;
 import view.MainView;
@@ -18,11 +19,15 @@ public class MainController extends Controller {
 	private Project selectedProject;
 	private Ticket selectedTicket;
 
-	public MainController(Model model, TicketsSystem container)
+	private TicketController ticketController;
+
+	public MainController(Model model, TicketsSystemContainer container)
 	{
 		super(model, container);
 		view = new MainView(model);
 		view.initializeViewActionListeners(this);
+
+		ticketController = new TicketController(getModel(), container);
 	}
 	
 	public void showView()
@@ -98,9 +103,7 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0) {
 				view.closeWindow();
-				//TODO: check better way
-				TicketsSystem ticketsSystem = new TicketsSystem();
-				ticketsSystem.initialize();
+				getContainer().initialize();
 			}
 		}
 		return new newProjectListener();
@@ -159,7 +162,7 @@ public class MainController extends Controller {
 			public void mouseClicked(MouseEvent mouseEvent)
 			{
 				JList list = (JList)mouseEvent.getSource();
-				if (mouseEvent.getClickCount() == 1) 
+				if (mouseEvent.getClickCount() == 1)
 				{
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
@@ -171,31 +174,32 @@ public class MainController extends Controller {
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
 						selectedTicket = (Ticket)list.getModel().getElementAt(index);
-						view.showTicketDetails(selectedTicket, controller);
+						ticketController.setSelectedTicket(selectedTicket);
+						ticketController.showTicketDetail();
 					}
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-		}	
+		}
 		return new ticketLabelListener();
 	}
 
@@ -225,34 +229,6 @@ public class MainController extends Controller {
 			}
 		}	
 		return new changeStateListener();
-	}
-
-	public ActionListener getPostCommentListener(JTextArea commentArea,JList commentsList)
-	{
-		MainController controller = this;
-
-		class postCommentListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg)
-			{
-				if(commentArea.getText() != null)
-				{
-					Comment comment = new Comment(getModel().getCurrentUser(), commentArea.getText(), selectedTicket);
-					commentArea.setText(null);
-					selectedTicket.addComment(comment);
-
-					TicketService service = new TicketService();
-					try {
-						service.postComment(comment);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-					view.putCommentsInList(commentsList, view.getTicketComments(selectedTicket));
-				}
-			}
-		}
-		return new postCommentListener();
 	}
 
 	public ActionListener getRoleSelectedListener(JCheckBox check,JComboBox comboBox){

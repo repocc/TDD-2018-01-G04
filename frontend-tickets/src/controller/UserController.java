@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import container.TicketsSystemContainer;
 import model.Model;
 import model.User;
 import service.UserService;
@@ -14,7 +15,7 @@ public class UserController extends Controller {
 	private LoginView view;
 	private UserService userService;
 
-	public UserController(Model model, TicketsSystem container)
+	public UserController(Model model, TicketsSystemContainer container)
 	{
 		super(model, container);
 		userService = new UserService();
@@ -59,6 +60,7 @@ public class UserController extends Controller {
 				}
 				else if (authenticateUser(view.getUsername()))
 				{
+                    view.closeWindow();
 					notifyContextLogin();
 				}
 				else

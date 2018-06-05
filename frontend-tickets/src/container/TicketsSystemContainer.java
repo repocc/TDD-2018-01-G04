@@ -1,14 +1,17 @@
-package controller;
+package container;
 
+import controller.Controller;
+import controller.MainController;
+import controller.UserController;
 import model.Model;
 
 
-public class TicketsSystem 
+public class TicketsSystemContainer
 {	
     private Controller currentController;
     private Model currentModel;
 
-    public TicketsSystem() 
+    public TicketsSystemContainer()
     {
         this.currentModel = new Model();
     }

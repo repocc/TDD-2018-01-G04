@@ -121,7 +121,7 @@ public class MainView extends View {
 	{
 		newTicketButton.addActionListener(listener);
 	}
-	
+
 	public void initProjectsListListener(MouseListener listener)
 	{
 		projectsList.addMouseListener(listener);
@@ -585,130 +585,6 @@ public class MainView extends View {
 		projectMenuPanel.add(scrollPanel);
 
 		return containerStateRoles;
-	}
-
-
-	private GridBagConstraints createGbc(int x, int y) {
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = x;
-		gbc.gridy = y;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-
-		gbc.anchor = (x == 0) ? GridBagConstraints.WEST : GridBagConstraints.EAST;
-		gbc.fill = (x == 0) ? GridBagConstraints.BOTH
-				: GridBagConstraints.HORIZONTAL;
-
-		gbc.insets = new Insets(5, 5, 5, 5);
-		gbc.weightx = (x == 0) ? 0.1 : 1.0;
-		gbc.weighty = 1.0;
-		return gbc;
-	}
-
-	public void showTicketDetails(Ticket ticket, MainController controller)
-	{
-		JPanel mainPanel = createTicketDetails(ticket, controller);
-		JOptionPane.showMessageDialog(window, mainPanel, "Ticket", JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	public JPanel createTicketDetails(Ticket ticket, MainController controller)
-	{
-		JPanel informationPanel = new JPanel();
-		informationPanel.setLayout(new GridLayout(0, 2));
-
-		if (!ticket.getName().isEmpty()){
-			informationPanel.add(new JLabel("Title: "));
-			informationPanel.add(new JLabel(ticket.getName()));
-		}
-		if (!ticket.getDescription().isEmpty()){
-			informationPanel.add(new JLabel("Description: " ));
-			informationPanel.add(new JLabel(ticket.getDescription()));
-		}
-		if (!ticket.getType().isEmpty()){
-			informationPanel.add(new JLabel("Type: " ));
-			informationPanel.add(new JLabel(ticket.getType()));
-		}
-
-		informationPanel.add(new JLabel("State: " ));
-		informationPanel.add(new JLabel(ticket.getCurrentState()));
-
-		JPanel usersCommentsPanel = new JPanel();
-		usersCommentsPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = createGbc(0, 0);
-
-		usersCommentsPanel.add(new JLabel("Comments: "), c);
-
-		Vector<Comment> comments = this.getTicketComments(ticket);
-
-		JList commentsList = new JList();
-		commentsList.setVisibleRowCount(3);
-		commentsList.setFixedCellHeight(35);
-
-		putCommentsInList(commentsList, comments);
-
-		JScrollPane commentsScrollPane = new JScrollPane(commentsList);
-
-		c = createGbc(0, 1);
-		usersCommentsPanel.add(commentsScrollPane, c);
-
-		JLabel commentLabel = new JLabel("New comment: " );
-		commentLabel.setHorizontalAlignment(JLabel.LEFT);
-
-		JTextArea commentArea = new JTextArea(4, 30);
-		commentArea.setLineWrap(true);
-		commentArea.setWrapStyleWord(true);
-		commentArea.setBorder(new JTextField().getBorder());
-		commentArea.setText(null);
-
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridBagLayout());
-
-		JButton postButton = new JButton("Post");
-		postButton.addActionListener(controller.getPostCommentListener(commentArea, commentsList));
-
-		c = createGbc(0, 0);
-		mainPanel.add(informationPanel, c);
-		c = createGbc(0, 1);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(usersCommentsPanel, c);
-		c = createGbc(0, 2);
-		mainPanel.add(commentLabel, c);
-		c = createGbc(0, 3);
-		mainPanel.add(commentArea,c);
-		c = createGbc(0, 4);
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.EAST;
-		mainPanel.add(postButton, c);
-
-		return mainPanel;
-	}
-
-	public Vector<Comment> getTicketComments(Ticket selectedTicket)
-	{
-		TicketService ticketService = new TicketService();
-		Ticket ticket = null;
-		try {
-			ticket = ticketService.getTicket(selectedTicket);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Vector<Comment> comments = ticket.getComments();
-		return comments;
-	}
-
-	public JList putCommentsInList(JList list, Vector<Comment> comments)
-	{
-		DefaultListModel model = new DefaultListModel();
-		Iterator iComments = comments.iterator();
-
-		while(iComments.hasNext())
-		{
-			Comment comment = (Comment)iComments.next();
-			model.addElement(comment);
-		}
-		list.setModel(model);
-		return list;
 	}
 
 	public void putUserSelect(String userID,String role) {

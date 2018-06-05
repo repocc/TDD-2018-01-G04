@@ -1,17 +1,14 @@
 package controller;
 
+import container.TicketsSystemContainer;
 import model.Model;
-import model.User;
-import service.UserService;
-
-import java.io.IOException;
 
 public abstract class Controller{
 
     private Model model;
-    private TicketsSystem container;
+    private TicketsSystemContainer container;
 
-    public Controller(Model model, TicketsSystem container)
+    public Controller(Model model, TicketsSystemContainer container)
     {
         this.model = model;
         this.container = container;
@@ -21,7 +18,7 @@ public abstract class Controller{
 
     public Model getModel() { return model; }
 
-    public TicketsSystem getContainer()
+    public TicketsSystemContainer getContainer()
     {
         return container;
     }
