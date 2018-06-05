@@ -45,7 +45,7 @@ public class User {
 
 	public String getRole()
 	{
-		return role;
+		return this.roleReal.getId();
 	}
 
 	public void setID(String id) {

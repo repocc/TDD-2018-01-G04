@@ -10,11 +10,11 @@ import java.util.Vector;
 
 public class ProjectService {
 
-    private HttpService httpService;
+    private BaseService baseService;
     private Gson gson;
 
     public ProjectService() {
-        this.httpService = new HttpService();
+        this.baseService = new BaseService();
         this.gson = new Gson();
     }
 
@@ -23,7 +23,7 @@ public class ProjectService {
 
         String json = this.gson.toJson(project);
 
-        String response = this.httpService.post(Consts.URI_POST_PROJECT,json);
+        String response = this.baseService.post(Consts.URI_POST_PROJECT,json);
 
         return response;
 
@@ -31,7 +31,7 @@ public class ProjectService {
 
     public Vector<Project> getProjects() throws IOException {
 
-        String projectsJson = this.httpService.get(Consts.URI_GET_PROJECTS);
+        String projectsJson = this.baseService.get(Consts.URI_GET_PROJECTS);
         Type listType = new TypeToken<Vector<Project>>(){}.getType();
         Vector<Project> projects = gson.fromJson(projectsJson,listType);
 
@@ -44,7 +44,7 @@ public class ProjectService {
         String ID = project.getID();
         String uri = Consts.URI_GET_PROJECT + "/" + ID;
 
-        String response = this.httpService.get(uri);
+        String response = this.baseService.get(uri);
         Project projectResponse = gson.fromJson(response,Project.class);
 
         return projectResponse;

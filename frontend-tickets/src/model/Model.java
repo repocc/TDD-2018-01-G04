@@ -138,14 +138,27 @@ public class Model extends Observable
 		//TODO: Update ticket state in API
 	}
 
-	public boolean canUserChangeToState(TicketState state)
+	public boolean canUserChangeToState(Project project, TicketState state)
 	{
-		return state.canChangeState(currentUser.getRole());
+		String role = project.getUserRole(currentUser.getName());
+		return state.canChangeState(role);
 	}
 
 	public User getCurrentUser()
 	{
 		return this.currentUser;
+	}
+
+	public Project getProjet(String name) {
+
+		for (Project project: this.projects) {
+			if(project.toString().equals(name))
+			{
+				return project;
+			}
+		}
+
+		return null;
 	}
 
 }

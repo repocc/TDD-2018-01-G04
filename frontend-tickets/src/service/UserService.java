@@ -11,17 +11,17 @@ import java.util.Vector;
 
 public class UserService {
 
-    private HttpService httpService;
+    private BaseService baseService;
     private Gson gson;
 
     public UserService() {
-        this.httpService = new HttpService();
+        this.baseService = new BaseService();
         this.gson = new Gson();
     }
 
     public Vector<User> getUsers() throws IOException {
 
-        String usersJson = this.httpService.get(Consts.URI_GET_USERS);
+        String usersJson = this.baseService.get(Consts.URI_GET_USERS);
         Type listType = new TypeToken<Vector<User>>(){}.getType();
         Vector<User> users = gson.fromJson(usersJson,listType);
 
@@ -31,7 +31,7 @@ public class UserService {
 
     public Vector<Role> getRoles() throws IOException {
 
-        String roleJson = this.httpService.get(Consts.URI_GET_ROLES);
+        String roleJson = this.baseService.get(Consts.URI_GET_ROLES);
         Type listType = new TypeToken<Vector<Role>>(){}.getType();
         Vector<Role> roles = gson.fromJson(roleJson,listType);
 
@@ -44,7 +44,7 @@ public class UserService {
         String ID = user.getID();
         String uri = Consts.URI_GET_PROJECTS_BY_USER + "/" + ID + "/state";
 
-        return this.httpService.get(uri);
+        return this.baseService.get(uri);
 
     }
 
