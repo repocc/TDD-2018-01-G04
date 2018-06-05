@@ -5,12 +5,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import model.*;
+import service.ProjectService;
+import service.TicketService;
 import view.MainView;
 
 public class MainController extends Controller {
@@ -186,7 +189,7 @@ public class MainController extends Controller {
 		return new ticketLabelListener();
 	}
 
-	public ActionListener getChangeStateListener(TicketState ticketState)
+	public ActionListener getChangeStateListener(Project project, TicketState ticketState)
 	{
 		MainController controller = this;
 
@@ -194,10 +197,20 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if((selectedTicket != null) && (selectedTicket.isCurrentState(ticketState.getName())))
-				{
-					getModel().changeTicketState(selectedTicket, selectedProject);
+
+				if((selectedTicket != null) && (selectedTicket.isCurrentState(ticketState.getName()))) {
+
+					System.out.println(selectedTicket.getCurrentState());
+					TicketState nextState = project.getNextTicketState(selectedTicket.getCurrentState());
+					TicketService ticketService = new TicketService();
+					try {
+						ticketService.putChangeState(selectedTicket.getID(),nextState);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
 					view.showTicketsFromProject(selectedProject.getName(), controller);
+
 				}
 			}
 		}	

@@ -148,10 +148,11 @@ public class MainView extends View {
 		projectsList.setModel(model);
 	}
 	
-	public void showTicketsFromProject(String name, MainController controller)
-	{
+	public void showTicketsFromProject(String name, MainController controller) {
+
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
 		Vector<TicketState> states = (getModel().getStatesFromProject(name));
+		Project project = getModel().getProjet(name);
 		
 		Iterator iStates = states.iterator();
 		
@@ -187,9 +188,10 @@ public class MainView extends View {
             if(iStates.hasNext())
             {
 				JButton changeStateButton = new JButton(">");
-				changeStateButton.addActionListener(controller.getChangeStateListener(state));
-				if(!getModel().canUserChangeToState(state))
+				changeStateButton.addActionListener(controller.getChangeStateListener(project,state));
+				if(!getModel().canUserChangeToState(project,state))
 				{
+
 					changeStateButton.setEnabled(false);
 				}
 				container.add(changeStateButton);

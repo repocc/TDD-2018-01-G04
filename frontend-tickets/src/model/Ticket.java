@@ -125,4 +125,5 @@ public class Ticket {
 	public void setType(String type) {
 		this.type = type;
 	}
+
 }

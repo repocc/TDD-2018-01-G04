@@ -90,6 +90,20 @@ public class Project {
 		return ticketStates;
 	}
 
+	public TicketState getNextTicketState(String name) {
+
+		Iterator<TicketState> iterator = this.ticketStates.iterator();
+
+		while (iterator.hasNext()) {
+			TicketState ticketState = iterator.next();
+			if (ticketState.getName().equals(name)) {
+				return iterator.next();
+			}
+		}
+
+		return null;
+	}
+
 	public void changeTicketState(User user, Ticket ticket)
 	{
 		String currentState = ticket.getCurrentState();
@@ -133,4 +147,16 @@ public class Project {
 	public void setUsers(Vector<User> users) {
 		this.users = users;
 	}
+
+    public String getUserRole(String name) {
+
+		String role = "";
+		for (User user:this.users) {
+			if (user.getName().equals(name)) {
+				role = user.getRole();
+			}
+		}
+
+		return  role;
+    }
 }

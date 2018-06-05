@@ -3,6 +3,7 @@ package service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Ticket;
+import model.TicketState;
 import model.TicketTypes;
 
 import java.io.IOException;
@@ -11,11 +12,11 @@ import java.util.Vector;
 
 public class TicketService {
 
-    private HttpService httpService;
+    private BaseService baseService;
     private Gson gson;
 
     public TicketService() {
-        this.httpService = new HttpService();
+        this.baseService = new BaseService();
         this.gson = new Gson();
     }
 
@@ -23,19 +24,18 @@ public class TicketService {
 
         String json = this.gson.toJson(ticket);
 
-        String response = this.httpService.post(Consts.URI_POST_TICKETS,json);
+        String response = this.baseService.post(Consts.URI_POST_TICKETS,json);
 
         return response;
 
     }
 
-    public String postChangeState(Ticket ticket) throws IOException {
+    public String putChangeState(String id,TicketState ticketState) throws IOException {
 
-        String json = this.gson.toJson(ticket);
-        String ID = ticket.getID();
-        String uri = Consts.URI_POST_TICKETS + "/" + ID + "/state";
+        String json = this.gson.toJson(ticketState);
+        String uri = Consts.URI_PUT_TICKETS + "/" + id;
 
-        String response = this.httpService.post(uri, json);
+        String response = this.baseService.put(uri, json);
 
         return response;
 
@@ -43,7 +43,7 @@ public class TicketService {
 
     public Vector<TicketTypes> getTypes() throws IOException {
 
-        String ticketTypesJson = this.httpService.get(Consts.URI_GET_TYPES_TICKETS);
+        String ticketTypesJson = this.baseService.get(Consts.URI_GET_TYPES_TICKETS);
         Type listType = new TypeToken<Vector<TicketTypes>>(){}.getType();
         Vector<TicketTypes> ticketTypes = gson.fromJson(ticketTypesJson,listType);
 
