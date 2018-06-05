@@ -257,9 +257,9 @@ public class MainView extends View {
 			Ticket ticket = new Ticket();//(tittle,description,this.typeAsigned,state);
 			ticket.setTitle(tittle);
 			ticket.setDescription(description);
-			ticket.setUserAsigned(this.userAssigned);
+			ticket.setAssignedUser(this.userAssigned);
 			ticket.setType(this.typeAssigned);
-			ticket.setProjectAsigned(selectedProject.getID());
+			ticket.setProject(selectedProject.getID());
 
 			TicketService service = new TicketService();
 
