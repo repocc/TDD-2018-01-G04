@@ -3,13 +3,14 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Vector;
 
 import container.TicketsSystemContainer;
 import model.Comment;
 import model.Model;
 import model.Ticket;
+import model.Project;
 import service.TicketService;
+import view.CreateTicketView;
 import view.TicketDetailView;
 
 import javax.swing.*;
@@ -17,9 +18,13 @@ import javax.swing.*;
 public class TicketController extends Controller {
 
     private TicketDetailView ticketDetailView;
+    private CreateTicketView createTicketView;
     private TicketService ticketService;
 
     private Ticket selectedTicket;
+    private Project selectedProject;
+
+    private ActionListener showTicketsFromProject;
 
     public TicketController(Model model, TicketsSystemContainer container)
     {
@@ -34,6 +39,16 @@ public class TicketController extends Controller {
 
     public void setSelectedTicket(Ticket selectedTicket){
         this.selectedTicket = selectedTicket;
+    }
+
+    public void setSelectedProject(Project selectedProject){
+        this.selectedProject = selectedProject;
+    }
+
+    public void showTicketForm(){
+        createTicketView = new CreateTicketView(getModel());
+        createTicketView.initializeViewActionListeners(this);
+        createTicketView.showView();
     }
 
     public void showTicketDetail()
@@ -76,5 +91,41 @@ public class TicketController extends Controller {
         }
         return new postCommentListener();
     }
+
+    public ActionListener getCreateTicketListener() {
+        TicketController controller = this;
+
+        class createTicketListener implements ActionListener
+        {
+            public void actionPerformed(ActionEvent arg0) {
+                String tittle = createTicketView.getTitle();
+                String description = createTicketView.getDescription();
+
+                Ticket ticket = new Ticket();
+                ticket.setTitle(tittle);
+                ticket.setDescription(description);
+
+                ticket.setAssignedUser(createTicketView.getAssignedUser());
+                ticket.setType(createTicketView.getTicketType());
+                ticket.setProject(controller.selectedProject.getID());
+
+                try {
+                    ticketService.postTicket(ticket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                controller.showTicketsFromProject.actionPerformed(null);
+
+            }
+        }
+        return new createTicketListener();
+    }
+
+    public void initializeViewActionListeners(MainController controller)
+    {
+        this.showTicketsFromProject = controller.getShowTicketsFromProjectListener();
+    }
+
 
 }
