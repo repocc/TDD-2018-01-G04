@@ -71,30 +71,6 @@ public class Project {
 		return null;
 	}
 
-	public void changeTicketState(User user, Ticket ticket)
-	{
-		String currentState = ticket.getCurrentState();
-		Iterator i = this.ticketStates.iterator();
-		
-		while(i.hasNext())
-		{
-			TicketState state = (TicketState)i.next();
-			if(state.getName().equals(currentState))
-			{
-				if(state.canChangeState(user.getRole()))
-				{
-					try {
-						ticket.changeState(((TicketState) i.next()).getName());
-					}
-					catch (NoSuchElementException e) {
-						return;
-					}
-				}
-			}
-		}
-
-	}
-
 	public String getID() {
 		return this.id;
 	}
