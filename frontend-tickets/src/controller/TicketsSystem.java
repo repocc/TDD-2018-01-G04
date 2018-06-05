@@ -16,7 +16,7 @@ public class TicketsSystem
     {
     	context = new ControllerContext();
     	Model model = new Model(context);
-    	Controller controller = new IdentificationController(model);
+    	Controller controller = new UserController(model);
 		
 		context.setController(controller); 
 		context.start();

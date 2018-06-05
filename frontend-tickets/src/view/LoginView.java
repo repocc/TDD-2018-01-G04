@@ -5,10 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import controller.IdentificationController;
+import controller.UserController;
 import model.Model;
 
-public class IdentificationView extends View {
+public class LoginView extends View {
 	
 	private JFrame window;
 	private JPanel panelUser;
@@ -19,7 +19,7 @@ public class IdentificationView extends View {
 	private JButton cancelButton = new JButton("Cancel");
 	private JTextField user;
 
-	public IdentificationView(Model model)
+	public LoginView(Model model)
 	{
 		super(model);
 	}
@@ -47,6 +47,7 @@ public class IdentificationView extends View {
 
 		panelError = new JPanel();
 		labelLoginError.setForeground(Color.RED);
+		labelLoginError.setText(" ");
 		panelError.add(labelLoginError);
 
 		JPanel buttonPanel = new JPanel();
@@ -69,7 +70,7 @@ public class IdentificationView extends View {
 		window.dispose();
 	}
 	
-	public void initializeViewActionListeners(IdentificationController controller) {
+	public void initializeViewActionListeners(UserController controller) {
 		initLoginButton(controller.getLoginListener());
 		initCancelButton(controller.getCancelListener());
 	}

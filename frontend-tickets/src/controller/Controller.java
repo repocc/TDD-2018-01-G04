@@ -16,28 +16,7 @@ public abstract class Controller{
     }
 
     public abstract void showView();
-    
-    public boolean authenticateUser(String username)
-	{
 
-        UserService service = new UserService();
-        User user = new User(username);
-        try {
-            user = service.postLogin(user);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        model.authenticateUser(user);
-
-    	return user != null;
-	}
-	
-    public void notifyContextLogin()
-    {
-    	model.notifyContextLogin();
-    }
-    
     public Model getModel()
     {
     	return model;
