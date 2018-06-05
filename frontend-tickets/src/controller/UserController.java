@@ -14,9 +14,9 @@ public class UserController extends Controller {
 	private LoginView view;
 	private UserService userService;
 
-	public UserController(Model model)
+	public UserController(Model model, TicketsSystem container)
 	{
-		super(model);
+		super(model, container);
 		userService = new UserService();
 		view = new LoginView(model);
 		view.initializeViewActionListeners(this);
@@ -36,14 +36,14 @@ public class UserController extends Controller {
             e.printStackTrace();
         }
 
-        getModel().authenticateUser(user);
+        this.getModel().authenticateUser(user);
 
         return user != null;
     }
 
     public void notifyContextLogin()
     {
-        getModel().notifyContextLogin();
+        this.getContainer().initializeProjectController();
     }
 	
 	public ActionListener getLoginListener()

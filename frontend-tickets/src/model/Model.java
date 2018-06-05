@@ -1,30 +1,20 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Vector;
 
-import controller.ControllerContext;
-import controller.MainController;
 import service.ProjectService;
 
 public class Model extends Observable 
 {
-	private ControllerContext context;
 	private User currentUser;
 	private Vector<Project> projects = new Vector<>();
 
-	public Model(ControllerContext context)
+	public Model()
 	{
-		this.context = context;
-	}
-	
-	public void notifyContextLogin()
-	{
-		context.setController(new MainController(this));
-		context.start();
+		super();
 	}
 	
 	public void authenticateUser(User user) {

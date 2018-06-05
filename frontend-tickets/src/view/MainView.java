@@ -161,61 +161,67 @@ public class MainView extends View {
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
 		Vector<TicketState> states = (getModel().getStatesFromProject(name));
 		Project project = getModel().getProjet(name);
-		
-		Iterator iStates = states.iterator();
-		
+
 		ticketsListMainPanel.removeAll();
-		
-		while(iStates.hasNext())
-		{
-			DefaultListModel model = new DefaultListModel();
-			TicketState state = (TicketState)iStates.next();
-			Iterator iTickets = tickets.iterator();
-			
-			while(iTickets.hasNext())
+
+		if (states != null){
+			Iterator iStates = states.iterator();
+
+			while(iStates.hasNext())
 			{
-				Ticket ticket = (Ticket)iTickets.next();
-				if(ticket.isCurrentState(state.getName()))
-				{
-					model.addElement(ticket);
+				DefaultListModel model = new DefaultListModel();
+				TicketState state = (TicketState)iStates.next();
+
+				if (tickets != null){
+					Iterator iTickets = tickets.iterator();
+
+					while(iTickets.hasNext())
+					{
+						Ticket ticket = (Ticket)iTickets.next();
+						if(ticket.isCurrentState(state.getName()))
+						{
+							model.addElement(ticket);
+						}
+					}
 				}
-			}
-			JList<Ticket> ticketsList = new JList<>(model);
-			ticketsList.setVisible(true);
-			ticketsList.addMouseListener(controller.getTicketLabelListener());
-			
-			JScrollPane scrollPanel = new JScrollPane(ticketsList);
-			scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-			//Container for jscrollpane and change state button
-            JPanel container = new JPanel();
-            container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
-            container.add(scrollPanel);
+				JList<Ticket> ticketsList = new JList<>(model);
+				ticketsList.setVisible(true);
+				ticketsList.addMouseListener(controller.getTicketLabelListener());
 
-            //Change state button
-            if(iStates.hasNext())
-            {
-				JButton changeStateButton = new JButton(">");
-				changeStateButton.addActionListener(controller.getChangeStateListener(project,state));
-				if(!getModel().canUserChangeToState(project,state))
+				JScrollPane scrollPanel = new JScrollPane(ticketsList);
+				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+				//Container for jscrollpane and change state button
+				JPanel container = new JPanel();
+				container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
+				container.add(scrollPanel);
+
+				//Change state button
+				if(iStates.hasNext())
 				{
+					JButton changeStateButton = new JButton(">");
+					changeStateButton.addActionListener(controller.getChangeStateListener(project,state));
+					if(!getModel().canUserChangeToState(project,state))
+					{
 
-					changeStateButton.setEnabled(false);
+						changeStateButton.setEnabled(false);
+					}
+					container.add(changeStateButton);
 				}
-				container.add(changeStateButton);
+
+				//Border around the container showing the state
+				container.setBorder(BorderFactory.createTitledBorder(state.getName()));
+
+				ticketsListMainPanel.add(container);
 			}
-
-			//Border around the container showing the state
-			container.setBorder(BorderFactory.createTitledBorder(state.getName()));
-
-			ticketsListMainPanel.add(container);
 		}
 
 		newTicketButton.setVisible(true);
 
 		ticketsListMainPanel.revalidate();
 		ticketsListMainPanel.repaint();
-	}	
+	}
 	
 	private JPanel createLabelWith(String label, JComponent component)
 	{

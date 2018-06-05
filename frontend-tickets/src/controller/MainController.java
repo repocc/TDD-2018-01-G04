@@ -22,19 +22,16 @@ public class MainController extends Controller {
 	private Project selectedProject;
 	private Ticket selectedTicket;
 
-	public MainController(Model model)
+	public MainController(Model model, TicketsSystem container)
 	{
-		super(model);
+		super(model, container);
 		view = new MainView(model);
 		view.initializeViewActionListeners(this);
 	}
 	
 	public void showView()
     {
-
     	view.showView();
-
-
     }
     
     public MouseListener getProjectsListSelectionListener()

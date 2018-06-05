@@ -151,12 +151,13 @@ public class Project {
     public String getUserRole(String name) {
 
 		String role = "";
-		for (User user:this.users) {
-			if (user.getName().equals(name)) {
-				role = user.getRole();
+		if (this.users != null){
+			for (User user:this.users) {
+				if (user.getName().equals(name)) {
+					role = user.getRole();
+				}
 			}
 		}
-
 		return  role;
     }
 }

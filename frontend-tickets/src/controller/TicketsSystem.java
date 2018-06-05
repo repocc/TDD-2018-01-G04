@@ -5,22 +5,27 @@ import model.Model;
 
 public class TicketsSystem 
 {	
-    private ControllerContext context;
+    private Controller currentController;
+    private Model currentModel;
 
     public TicketsSystem() 
     {
-    	
+        this.currentModel = new Model();
     }
     
     public void initialize()
     {
-    	context = new ControllerContext();
-    	Model model = new Model(context);
-    	Controller controller = new UserController(model);
-		
-		context.setController(controller); 
-		context.start();
+    	this.initializeUserController();
+    }
 
+    private void initializeUserController(){
+        this.currentController = new UserController(this.currentModel, this);
+        this.currentController.showView();
+    }
+
+    public void initializeProjectController(){
+        this.currentController = new MainController(this.currentModel, this);
+        this.currentController.showView();
     }
 
 }
