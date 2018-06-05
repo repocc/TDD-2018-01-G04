@@ -15,11 +15,9 @@ public class Model extends Observable
 	private ControllerContext context;
 	private User currentUser;
 	private Vector<Project> projects = new Vector<>();
-	private TicketsSystemAdapter adapter;
-	
+
 	public Model(ControllerContext context)
 	{
-		this.adapter = new TicketsSystemAdapter();
 		this.context = context;
 	}
 	
@@ -32,7 +30,6 @@ public class Model extends Observable
 	public void authenticateUser(User user) {
 
 		currentUser = user;
-
 	}
 	
 	public Vector<Project> getProjects()
