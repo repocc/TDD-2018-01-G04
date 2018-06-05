@@ -102,39 +102,14 @@ public class MainView extends View {
 	
 	public void initializeViewActionListeners(MainController controller)
 	{
-		initProjectsListListener(controller.getProjectsListSelectionListener());
-		initNewProjectButton(controller.getNewProjectListener());
-		initNewTicketButton(controller.getNewTicketListener());
-		initLogOutButton(controller.getLogOutListener());
-		
-		initNewProjectMenuListeners(controller);
-	}
-	
-	public void initNewProjectButton(ActionListener listener)
-	{
-		newProjectButton.addActionListener(listener);
+        projectsList.addMouseListener(controller.getProjectsListSelectionListener());
+
+        newProjectButton.addActionListener(controller.getNewProjectListener());
+        newTicketButton.addActionListener(controller.getNewTicketListener());
+
+        logOutButton.addActionListener(controller.getLogOutListener());
 	}
 
-	public void initNewTicketButton(ActionListener listener)
-	{
-		newTicketButton.addActionListener(listener);
-	}
-
-	public void initProjectsListListener(MouseListener listener)
-	{
-		projectsList.addMouseListener(listener);
-	}
-
-	public void initLogOutButton(ActionListener listener)
-	{
-		this.logOutButton.addActionListener(listener);
-	}
-
-	public void initNewProjectMenuListeners(MainController controller)
-	{
-		//Ej: button1.addActionListener(controller.getButton1Listener()); ...
-	}
-	
 	public void showProjectsList()
 	{
 		projectsList.setVisible(true);
