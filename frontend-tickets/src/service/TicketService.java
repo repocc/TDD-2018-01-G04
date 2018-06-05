@@ -2,6 +2,8 @@ package service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import model.Comment;
+import model.Project;
 import model.Ticket;
 import model.TicketTypes;
 
@@ -51,4 +53,25 @@ public class TicketService {
 
     }
 
+    public String postComment(Comment comment) throws IOException {
+
+        String json = this.gson.toJson(comment);
+        System.out.println(json);
+
+        String response = this.httpService.post(Consts.URI_POST_COMMENT,json);
+
+        return response;
+
+    }
+
+    public Ticket getTicket(Ticket ticket) throws IOException {
+
+        String ID = ticket.getID();
+        String uri = Consts.URI_GET_TICKET + "/" + ID;
+
+        String response = this.httpService.get(uri);
+        Ticket ticketResponse = gson.fromJson(response,Ticket.class);
+
+        return ticketResponse;
+    }
 }

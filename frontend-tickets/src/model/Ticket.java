@@ -16,6 +16,7 @@ public class Ticket {
 	private String userAsigned;
 	@SerializedName("project")
 	private String projectAsigned;
+	@SerializedName("comments")
 	private Vector<Comment> comments = new Vector<>();
 	@SerializedName("state")
 	private String currentState;

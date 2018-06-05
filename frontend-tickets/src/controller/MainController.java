@@ -5,12 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import model.*;
+import service.TicketService;
 import view.MainView;
 
 public class MainController extends Controller {
@@ -204,7 +206,7 @@ public class MainController extends Controller {
 		return new changeStateListener();
 	}
 
-	public ActionListener getPostCommentListener(JTextArea comment,JList commentsList)
+	public ActionListener getPostCommentListener(JTextArea commentArea,JList commentsList)
 	{
 		MainController controller = this;
 
@@ -212,13 +214,20 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg)
 			{
-				if(comment.getText() != null)
+				if(commentArea.getText() != null)
 				{
-					Comment c = new Comment(getModel().getCurrentUser(), comment.getText());
-					comment.setText(null);
-					selectedTicket.addComment(c);
-					view.putCommentsInList(commentsList, selectedTicket.getComments());
-					//TODO: Post comment c
+					Comment comment = new Comment(getModel().getCurrentUser(), commentArea.getText(), selectedTicket);
+					commentArea.setText(null);
+					selectedTicket.addComment(comment);
+
+					TicketService service = new TicketService();
+					try {
+						service.postComment(comment);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					view.putCommentsInList(commentsList, view.getTicketComments(selectedTicket));
 				}
 			}
 		}

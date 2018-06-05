@@ -622,7 +622,7 @@ public class MainView extends View {
 
 		usersCommentsPanel.add(new JLabel("Comments: "), c);
 
-		Vector<Comment> comments = ticket.getComments();
+		Vector<Comment> comments = this.getTicketComments(ticket);
 
 		JList commentsList = new JList();
 		commentsList.setVisibleRowCount(3);
@@ -665,6 +665,20 @@ public class MainView extends View {
 		mainPanel.add(postButton, c);
 
 		return mainPanel;
+	}
+
+	public Vector<Comment> getTicketComments(Ticket selectedTicket)
+	{
+		TicketService ticketService = new TicketService();
+		Ticket ticket = null;
+		try {
+			ticket = ticketService.getTicket(selectedTicket);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Vector<Comment> comments = ticket.getComments();
+		return comments;
 	}
 
 	public JList putCommentsInList(JList list, Vector<Comment> comments)
