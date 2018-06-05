@@ -14,8 +14,11 @@ import service.TicketService;
 import view.MainView;
 
 public class MainController extends Controller {
-	
-	private MainView view;
+
+    private int SINGLE_CLICK = 1;
+    private int DOUBLE_CLICK = 2;
+
+    private MainView view;
 	private Project selectedProject;
 	private Ticket selectedTicket;
 
@@ -140,24 +143,24 @@ public class MainController extends Controller {
 		return new newTicketListener();
 	}
 
-	public MouseListener getTicketLabelListener()
+	public MouseListener getTicketClickedListener()
 	{
 		MainController controller = this;
 
-		class ticketLabelListener implements MouseListener
+		class ticketClickedListener implements MouseListener
 		{
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent)
 			{
 				JList list = (JList)mouseEvent.getSource();
-				if (mouseEvent.getClickCount() == 1)
+				if (mouseEvent.getClickCount() == SINGLE_CLICK)
 				{
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
 						selectedTicket = (Ticket)list.getModel().getElementAt(index);
 					}
 				}
-				else if (mouseEvent.getClickCount() == 2)
+				else if (mouseEvent.getClickCount() == DOUBLE_CLICK)
 				{
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
@@ -188,14 +191,14 @@ public class MainController extends Controller {
 
 			}
 		}
-		return new ticketLabelListener();
+		return new ticketClickedListener();
 	}
 
-	public ActionListener getChangeStateListener(Project project, TicketState ticketState)
+	public ActionListener getChangeTicketStateListener(Project project, TicketState ticketState)
 	{
 		MainController controller = this;
 
-		class changeStateListener implements ActionListener
+		class changeTicketStateListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -216,7 +219,7 @@ public class MainController extends Controller {
 				}
 			}
 		}	
-		return new changeStateListener();
+		return new changeTicketStateListener();
 	}
 
 	public ActionListener getRoleSelectedListener(JCheckBox check,JComboBox comboBox){

@@ -12,6 +12,7 @@ import controller.TicketController;
 import model.*;
 import service.TicketService;
 import service.UserService;
+import utils.GroupButtonUtils;
 
 public class CreateTicketView extends View {
 
@@ -19,6 +20,8 @@ public class CreateTicketView extends View {
     private JTextField descriptionText;
     private ButtonGroup ticketTypeButtonGroup;
     private ButtonGroup userButtonGroup;
+
+    private GroupButtonUtils groupButtonUtils = new GroupButtonUtils();
 
     private ActionListener createTicketListener;
 
@@ -36,11 +39,11 @@ public class CreateTicketView extends View {
     }
 
     public String getTicketType(){
-        return ticketTypeButtonGroup.getElements().nextElement().getText();
+        return groupButtonUtils.getSelectedButtonText(ticketTypeButtonGroup);
     }
 
     public String getAssignedUser(){
-        return userButtonGroup.getElements().nextElement().getText();
+        return groupButtonUtils.getSelectedButtonText(userButtonGroup);
     }
 
     private void addTicketTypeMenu(JPanel mainPanel) {

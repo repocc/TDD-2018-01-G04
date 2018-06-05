@@ -185,7 +185,7 @@ public class MainView extends View {
 
 				JList<Ticket> ticketsList = new JList<>(model);
 				ticketsList.setVisible(true);
-				ticketsList.addMouseListener(controller.getTicketLabelListener());
+				ticketsList.addMouseListener(controller.getTicketClickedListener());
 
 				JScrollPane scrollPanel = new JScrollPane(ticketsList);
 				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -199,7 +199,7 @@ public class MainView extends View {
 				if(iStates.hasNext())
 				{
 					JButton changeStateButton = new JButton(">");
-					changeStateButton.addActionListener(controller.getChangeStateListener(project,state));
+					changeStateButton.addActionListener(controller.getChangeTicketStateListener(project,state));
 					if(!getModel().canUserChangeToState(project,state))
 					{
 

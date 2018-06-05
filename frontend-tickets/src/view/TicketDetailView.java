@@ -87,6 +87,12 @@ public class TicketDetailView extends View {
             informationPanel.add(new JLabel(ticket.getType()));
         }
 
+        if (!ticket.getType().isEmpty()){
+            informationPanel.add(new JLabel("Assigned user: " ));
+            informationPanel.add(new JLabel(ticket.getAssignedUser()));
+        }
+
+
         informationPanel.add(new JLabel("State: " ));
         informationPanel.add(new JLabel(ticket.getCurrentState()));
 

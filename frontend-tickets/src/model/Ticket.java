@@ -81,6 +81,10 @@ public class Ticket {
 		return this.type;
 	}
 
+	public String getAssignedUser(){
+		return this.assignedUser;
+	}
+
 	public void addComment(Comment comment)
 	{
 		comments.add(comment);
