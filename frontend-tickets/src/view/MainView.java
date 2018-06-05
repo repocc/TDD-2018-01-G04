@@ -19,6 +19,7 @@ public class MainView extends View {
 	private JFrame window;
 	private JButton newProjectButton = new JButton("New Project");
 	private JButton newTicketButton = new JButton("New Ticket");
+	private JButton logOutButton = new JButton("Log Out");
 	private JList projectsList = new JList();
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
@@ -75,12 +76,13 @@ public class MainView extends View {
 
 		JPanel ticketButtonPanel = new JPanel();
 		ticketButtonPanel.setLayout(new BorderLayout());
-		ticketButtonPanel.add(newTicketButton, BorderLayout.EAST);
+		ticketButtonPanel.add(newTicketButton, BorderLayout.WEST);
 		newTicketButton.setVisible(false);
+
+		ticketButtonPanel.add(logOutButton, BorderLayout.EAST);
 
 		ticketsGeneralPanel.add(ticketButtonPanel,BorderLayout.NORTH);
 		ticketsGeneralPanel.add(ticketsListMainPanel,BorderLayout.CENTER);
-
 
 		c.gridx = 2;
 		c.gridwidth = 3;
@@ -105,6 +107,7 @@ public class MainView extends View {
 		initProjectsListListener(controller.getProjectsListSelectionListener());
 		initNewProjectButton(controller.getNewProjectListener());
 		initNewTicketButton(controller.getNewTicketListener());
+		initLogOutButton(controller.getLogOutListener());
 		
 		initNewProjectMenuListeners(controller);
 	}
@@ -122,6 +125,11 @@ public class MainView extends View {
 	public void initProjectsListListener(MouseListener listener)
 	{
 		projectsList.addMouseListener(listener);
+	}
+
+	public void initLogOutButton(ActionListener listener)
+	{
+		this.logOutButton.addActionListener(listener);
 	}
 
 	public void initNewProjectMenuListeners(MainController controller)

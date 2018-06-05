@@ -31,7 +31,10 @@ public class MainController extends Controller {
 	
 	public void showView()
     {
+
     	view.showView();
+
+
     }
     
     public MouseListener getProjectsListSelectionListener()
@@ -93,6 +96,20 @@ public class MainController extends Controller {
 				view.showNewProjectMenu(controller);
 			}
 		}	
+		return new newProjectListener();
+	}
+
+	public ActionListener getLogOutListener() {
+
+		class newProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+				view.closeWindow();
+				//TODO: check better way
+				TicketsSystem ticketsSystem = new TicketsSystem();
+				ticketsSystem.initialize();
+			}
+		}
 		return new newProjectListener();
 	}
 

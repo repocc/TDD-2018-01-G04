@@ -1,6 +1,10 @@
 package controller;
 
 import model.Model;
+import model.User;
+import service.UserService;
+
+import java.io.IOException;
 
 public abstract class Controller{
 
@@ -15,7 +19,18 @@ public abstract class Controller{
     
     public boolean authenticateUser(String username)
 	{
-    	return model.authenticateUser(username);
+
+        UserService service = new UserService();
+        User user = new User(username);
+        try {
+            user = service.postLogin(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        model.authenticateUser(user);
+
+    	return user != null;
 	}
 	
     public void notifyContextLogin()

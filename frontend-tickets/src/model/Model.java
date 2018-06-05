@@ -74,12 +74,10 @@ public class Model extends Observable
 		context.start();
 	}
 	
-	public boolean authenticateUser(String username)
-	{
-		//TODO: Use adapter to connect to API
-		currentUser = new User(username, "admin");
-		//return adapter.authenticateUser(user);
-		return true;
+	public void authenticateUser(User user) {
+
+		currentUser = user;
+
 	}
 	
 	public Vector<Project> getProjects()

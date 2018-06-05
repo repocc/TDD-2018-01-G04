@@ -39,12 +39,21 @@ public class UserService {
 
     }
 
-    public String getProjects(User user) throws IOException {
+    public User postLogin(User user) throws IOException {
 
-        String ID = user.getID();
-        String uri = Consts.URI_GET_PROJECTS_BY_USER + "/" + ID + "/state";
+        String json = this.gson.toJson(user);
 
-        return this.baseService.get(uri);
+        String response = this.baseService.post(Consts.URI_POST_LOGIN,json);
+
+
+        User userlogin = null;
+
+        if (!response.equals("")) {
+            userlogin = this.gson.fromJson(response,User.class);
+
+        }
+
+        return userlogin;
 
     }
 

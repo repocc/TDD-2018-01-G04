@@ -2,9 +2,14 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import model.Model;
+import model.User;
+import service.UserService;
 import view.IdentificationView;
+
+import javax.jws.soap.SOAPBinding;
 
 public class IdentificationController extends Controller {
 	
@@ -32,16 +37,21 @@ public class IdentificationController extends Controller {
 				if(view.isFieldEmpty())
 				{
 					view.closeWindow();
+					view.setError("Insert username");
 					view.showView();
 				}	
 				else if (authenticateUser(view.getUsername()))
 				{
+
 					view.closeWindow();
+					view.setError("");
 					notifyContextLogin();
 				}
 				else
 				{
+
 					view.closeWindow();
+					view.setError("Insert correct username");
 					view.showView();
 				}
 			}
