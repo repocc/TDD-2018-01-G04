@@ -56,7 +56,6 @@ public class TicketService {
     public String postComment(Comment comment) throws IOException {
 
         String json = this.gson.toJson(comment);
-        System.out.println(json);
 
         String response = this.httpService.post(Consts.URI_POST_COMMENT,json);
 
