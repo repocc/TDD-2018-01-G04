@@ -19,10 +19,7 @@ public abstract class Controller{
 
     public abstract void showView();
 
-    public Model getModel()
-    {
-    	return model;
-    }
+    public Model getModel() { return model; }
 
     public TicketsSystem getContainer()
     {

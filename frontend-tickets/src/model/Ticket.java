@@ -27,14 +27,6 @@ public class Ticket {
 
 	}
 
-	public Ticket(String title, String description, String type, String initialState)
-	{
-		this.title = title;
-		this.description = description;
-		this.type = type;
-		this.currentState = initialState;
-	}
-
 	public boolean isCurrentState(String state)
 	{
 		return this.currentState.equals(state);
@@ -97,10 +89,6 @@ public class Ticket {
 	public Vector<Comment> getComments()
 	{
 		return this.comments;
-	}
-
-	public void setID(String id) {
-		this.id = id;
 	}
 
 	public String getID() {

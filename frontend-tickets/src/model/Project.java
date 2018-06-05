@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
-import javax.swing.ComboBoxModel;
-
 public class Project {
 
 	@SerializedName("name")
@@ -17,7 +15,7 @@ public class Project {
 	@SerializedName("owner")
 	private String nameOwner;
 	@SerializedName("ticket-types")
-	private Vector<TicketTypes> ticketTypes = new Vector<>();
+	private Vector<TicketType> ticketTypes = new Vector<>();
 	@SerializedName("states")
 	private Vector<TicketState> ticketStates = new Vector<>();
 	@SerializedName("users")
@@ -32,14 +30,6 @@ public class Project {
 
 	}
 
-	public Project(String name, User owner, Vector<User> users, Vector<TicketState> ticketStates)
-	{
-		this.name = name;
-		this.owner = owner;
-		this.users = users;
-		this.ticketStates = ticketStates;
-	}
-	
 	public String getName()
 	{
 		return name;
@@ -63,29 +53,6 @@ public class Project {
 		return tickets;
 	}
 	
-	public void addTicket(Ticket ticket)
-	{
-		tickets.add(ticket);
-	}
-
-	public Vector<User> getUsers()
-	{
-		return users;
-	}
-
-	public Vector<String> getUsersNames()
-	{
-		Vector<String> names = new Vector<String>();
-		Iterator i = this.users.iterator();
-	
-		while(i.hasNext())
-		{
-			User user = (User)i.next();
-			names.add(user.getName());
-		}
-		return names;
-	}
-
 	public Vector<TicketState> getStates() {
 		return ticketStates;
 	}
@@ -128,15 +95,11 @@ public class Project {
 
 	}
 
-	public void setID(String id) {
-		this.id = id;
-	}
-
 	public String getID() {
 		return this.id;
 	}
 
-	public void setTicketTypes(Vector<TicketTypes> ticketTypes) {
+	public void setTicketTypes(Vector<TicketType> ticketTypes) {
 		this.ticketTypes = ticketTypes;
 	}
 

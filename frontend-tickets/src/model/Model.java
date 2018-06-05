@@ -72,12 +72,6 @@ public class Model extends Observable
 		return null;
 	}
 
-	public void changeTicketState(Ticket selectedTicket, Project selectedProject)
-	{
-		selectedProject.changeTicketState(currentUser, selectedTicket);
-		//TODO: Update ticket state in API
-	}
-
 	public boolean canUserChangeToState(Project project, TicketState state)
 	{
 		String role = project.getUserRole(currentUser.getName());

@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class FlowStates {
+public class FlowState {
     private Map<String,HashSet<String>> states = new HashMap<>();
     private ArrayList<String> statesOrder = new ArrayList<>();
 

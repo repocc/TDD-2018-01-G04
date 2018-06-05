@@ -28,7 +28,7 @@ public class MainView extends View {
 	//create project
 	private Map<String,String> selectUsers =new HashMap<>();
 	private Map<String,HashSet<String>> fieldsRequired = new HashMap<>();
-	private FlowStates flowStates = new FlowStates();
+	private FlowState flowStates = new FlowState();
 	private String userAssigned = "";
 	private String typeAssigned = "";
 
@@ -276,7 +276,7 @@ public class MainView extends View {
 	private void addTypeTicketSelectMenu(MainController controller, JPanel mainPanel) {
 
 		TicketService ticketService = new TicketService();
-		Vector<TicketTypes> ticketsTypes = null;
+		Vector<TicketType> ticketsTypes = null;
 		try {
 			ticketsTypes = ticketService.getTypes();
 		} catch (IOException e) {
@@ -289,7 +289,7 @@ public class MainView extends View {
 
 		ButtonGroup buttonTicketTypes = new ButtonGroup();
 
-		for (TicketTypes type: ticketsTypes) {
+		for (TicketType type: ticketsTypes) {
 			JRadioButton radioButton = new JRadioButton(type.getType(),false);
 			radioButton.addActionListener(controller.getAssignTypeTicket());
 			buttonTicketTypes.add(radioButton);
@@ -359,7 +359,7 @@ public class MainView extends View {
 			String owner = getModel().getCurrentUser().getName();
 			project.setOwner(owner);
 
-			Vector<TicketTypes> ticketTypesList = this.getTicketTypeList();
+			Vector<TicketType> ticketTypesList = this.getTicketTypeList();
 
 			project.setTicketTypes(ticketTypesList);
 
@@ -403,13 +403,13 @@ public class MainView extends View {
 		return selectedUsers;
 	}
 
-	private Vector<TicketTypes> getTicketTypeList(){
+	private Vector<TicketType> getTicketTypeList(){
 
-		Vector<TicketTypes> ticketTypesList = new Vector<>();
+		Vector<TicketType> ticketTypesList = new Vector<>();
 
 		for(Map.Entry m:this.fieldsRequired.entrySet()){
 
-			TicketTypes ticketTypes = new TicketTypes();
+			TicketType ticketTypes = new TicketType();
 			ticketTypes.setType((String) m.getKey());
 			ticketTypes.setFields((HashSet<String>) m.getValue());
 			ticketTypesList.add(ticketTypes);
@@ -472,7 +472,7 @@ public class MainView extends View {
 	private void addTicketsTypesNewProjectMenu(MainController controller) {
 
 		TicketService ticketService = new TicketService();
-		Vector<TicketTypes> ticketsTypes = null;
+		Vector<TicketType> ticketsTypes = null;
 		try {
 			ticketsTypes = ticketService.getTypes();
 		} catch (IOException e) {
@@ -480,7 +480,7 @@ public class MainView extends View {
 		}
 
 		Vector<String> ticketsTypesList = new Vector<>();
-		for (TicketTypes ticket:ticketsTypes) {
+		for (TicketType ticket:ticketsTypes) {
 			ticketsTypesList.add(ticket.getType());
 		}
 

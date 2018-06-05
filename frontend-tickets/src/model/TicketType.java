@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashSet;
 import java.util.Vector;
 
-public class TicketTypes {
+public class TicketType {
 
     @SerializedName("name")
     private String type;
@@ -22,10 +22,6 @@ public class TicketTypes {
 
     public String getType() {
         return type;
-    }
-
-    public HashSet<String> getFields() {
-        return fields;
     }
 
 }
