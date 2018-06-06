@@ -62,15 +62,19 @@ public class TicketController extends Controller {
         createTicketView.show();
     }
 
-    public void showTicketDetail()
-    {
+    private Ticket loadTicketDetail(){
         Ticket ticket = null;
         try {
             ticket = ticketService.getTicketById(selectedTicket);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return ticket;
+    }
 
+    public void showTicketDetail()
+    {
+        Ticket ticket = loadTicketDetail();
         ticketDetailView = new TicketDetailView();
         ticketDetailView.setTicket(ticket);
         ticketDetailView.initializeViewActionListeners(this);
@@ -97,7 +101,9 @@ public class TicketController extends Controller {
                         e.printStackTrace();
                     }
 
-                    ticketDetailView.putCommentsInList(commentsList, selectedTicket.getComments());
+                    Ticket ticket = loadTicketDetail();
+                    ticketDetailView.setTicket(ticket);
+                    ticketDetailView.putCommentsInList(commentsList, ticket.getComments());
                 }
             }
         }
