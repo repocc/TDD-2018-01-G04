@@ -30,17 +30,85 @@ public class ProjectController extends Controller {
 
 	private TicketController ticketController;
 
+	private Vector<Project> projects;
+
 	private TicketService ticketService = new TicketService();
 	private UserService userService = new UserService();
+	private ProjectService projectService = new ProjectService();
 
 	public ProjectController(Model model, TicketsSystemContainer container) {
 		super(model, container);
+
 		projectListView = new ProjectListView(model);
 		projectListView.initializeViewActionListeners(this);
 
+		showProjectsListView();
+
 		ticketController = new TicketController(getModel(), container);
 	}
-	
+
+	public Vector<Project> loadProjects(){
+		Vector<Project> projects = null;
+		try {
+			projects = projectService.getProjects();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return projects;
+	}
+
+	public Project loadProjectById(Project selectedProject){
+		Project project = null;
+		try {
+			project = projectService.getProjectById(selectedProject);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return project;
+	}
+
+	public Vector<TicketType> loadTicketTypes(){
+		Vector<TicketType> ticketsTypes = null;
+		try {
+			ticketsTypes = ticketService.getTypes();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ticketsTypes;
+	}
+
+	public Vector<User> loadUsers(){
+		Vector<User> users = null;
+		try {
+			users = userService.getUsers();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return users;
+	}
+
+	public Vector<Role> loadRoles(){
+		Vector<Role> roles = null;
+		try {
+			roles = userService.getRoles();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return roles;
+	}
+
+	public void showProjectDetailView(){
+		Project project = loadProjectById(selectedProject);
+		projectListView.setSelectedProject(project);
+		projectListView.showProjectDetail();
+	}
+
+	public void showProjectsListView(){
+		projects = loadProjects();
+		projectListView.setProjects(projects);
+		projectListView.showProjectsList();
+	}
+
 	public void showView()
     {
     	projectListView.showView();
@@ -58,10 +126,10 @@ public class ProjectController extends Controller {
 				{
 					int index = list.locationToIndex(mouseEvent.getPoint());
 					if (index >= 0) {
-						Project project = (Project)list.getModel().getElementAt(index);
-						String name = project.toString();
+						Project project = projects.elementAt(index);
+
 						selectedProject = project;
-						projectListView.showProjectDetail(name, controller);
+						showProjectDetailView();
 						selectedTicket = null;
 					}
 				}
@@ -101,26 +169,9 @@ public class ProjectController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Vector<TicketType> ticketsTypes = null;
-				try {
-					ticketsTypes = ticketService.getTypes();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				Vector<User> users = null;
-				try {
-					users = userService.getUsers();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				Vector<Role> roles = null;
-				try {
-					roles = userService.getRoles();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Vector<TicketType> ticketsTypes = loadTicketTypes();
+				Vector<User> users = loadUsers();
+				Vector<Role> roles = loadRoles();
 
 				createProjectView = new CreateProjectView(getModel(), roles, users, ticketsTypes);
 				createProjectView.initializeViewActionListeners(controller);
@@ -150,7 +201,7 @@ public class ProjectController extends Controller {
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                projectListView.showProjectDetail(selectedProject.toString(),controller);
+            	showProjectDetailView();
             }
         }
         return new showProjectDetailListener();
@@ -232,7 +283,6 @@ public class ProjectController extends Controller {
 
 				if((selectedTicket != null) && (selectedTicket.isCurrentState(ticketState.getName()))) {
 
-					System.out.println(selectedTicket.getCurrentState());
 					TicketState nextState = project.getNextTicketState(selectedTicket.getCurrentState());
 					TicketService ticketService = new TicketService();
 					try {
@@ -241,8 +291,7 @@ public class ProjectController extends Controller {
 						e.printStackTrace();
 					}
 
-					projectListView.showProjectDetail(selectedProject.getName(), controller);
-
+					showProjectDetailView();
 				}
 			}
 		}	
@@ -283,7 +332,7 @@ public class ProjectController extends Controller {
 					e.printStackTrace();
 				}
 
-				projectListView.showProjectsList();
+				showProjectsListView();
 			}
 		}
 		return new createProjectListener();

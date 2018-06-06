@@ -1,11 +1,7 @@
 package model;
 
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Vector;
-
-import service.ProjectService;
 
 public class Model extends Observable 
 {
@@ -21,78 +17,16 @@ public class Model extends Observable
 
 		currentUser = user;
 	}
-	
-	public Vector<Project> getProjects()
-	{
-		ProjectService projectService = new ProjectService();
-
-		try {
-			projects = projectService.getProjects();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return projects;
-	}
-	
-	public Vector<Ticket> getTicketsFromProject(String projectName)
-	{
-		Iterator i = this.projects.iterator();
-	
-		while(i.hasNext())
-		{
-			Project project = (Project)i.next();
-			if(project.toString().equals(projectName))
-			{
-				ProjectService projectService = new ProjectService();
-				try {
-					project = projectService.getProjectById(project);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return project.getTickets();
-			}
-		}
-		return null;
-	}
-	
-	public Vector<TicketState> getStatesFromProject(String projectName)
-	{
-		Iterator i = this.projects.iterator();
-	
-		while(i.hasNext())
-		{
-			Project project = (Project)i.next();
-			if(project.toString().equals(projectName))
-			{
-				return project.getStates();
-			}
-		}
-		return null;
-	}
-
-	public boolean canUserChangeToState(Project project, TicketState state)
-	{
-		String role = project.getUserRole(currentUser.getName());
-		return state.canChangeState(role);
-	}
 
 	public User getCurrentUser()
 	{
 		return this.currentUser;
 	}
 
-	public Project getProjet(String name) {
-
-		for (Project project: this.projects) {
-			if(project.toString().equals(name))
-			{
-				return project;
-			}
-		}
-
-		return null;
+	public boolean canUserChangeToState(Project project, TicketState state)
+	{
+		String role = project.getUserRole(currentUser.getName());
+		return state.canChangeState(role);
 	}
 
 }

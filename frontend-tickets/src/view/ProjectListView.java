@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.*;
 
 import javax.swing.*;
@@ -18,8 +20,25 @@ public class ProjectListView extends View {
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
+	private MouseListener ticketClickedListener;
+	private ActionListener changeTicketStateListener;
+
+	private ProjectController projectController;
+
+	private Vector<Project> projects = new Vector<>();
+	private Project selectedProject;
+
 	public ProjectListView(Model model) {
 		super(model);
+		this.projects = projects;
+	}
+
+	public void setProjects(Vector<Project> projects){
+		this.projects = projects;
+	}
+
+	public void setSelectedProject(Project project){
+		this.selectedProject = project;
 	}
 	
 	public void showView() {
@@ -92,13 +111,14 @@ public class ProjectListView extends View {
         newProjectButton.addActionListener(controller.getNewProjectListener());
         newTicketButton.addActionListener(controller.getNewTicketListener());
         logOutButton.addActionListener(controller.getLogOutListener());
+
+        this.ticketClickedListener = controller.getTicketClickedListener();
+		this.projectController = controller;
 	}
 
 	public void showProjectsList() {
 		projectsList.setVisible(true);
 
-		Vector<Project> projects = (getModel().getProjects());
-		
 		DefaultListModel model = new DefaultListModel();
 		
 		Iterator i = projects.iterator();
@@ -111,11 +131,11 @@ public class ProjectListView extends View {
 		projectsList.setModel(model);
 	}
 	
-	public void showProjectDetail(String name, ProjectController controller) {
+	public void showProjectDetail() {
 
-		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
-		Vector<TicketState> states = (getModel().getStatesFromProject(name));
-		Project project = getModel().getProjet(name);
+		Vector<Ticket> tickets = this.selectedProject.getTickets();
+		Vector<TicketState> states = this.selectedProject.getStates();
+		Project project = this.selectedProject;
 
 		ticketsListMainPanel.removeAll();
 
@@ -142,7 +162,7 @@ public class ProjectListView extends View {
 
 				JList<Ticket> ticketsList = new JList<>(model);
 				ticketsList.setVisible(true);
-				ticketsList.addMouseListener(controller.getTicketClickedListener());
+				ticketsList.addMouseListener(ticketClickedListener);
 
 				JScrollPane scrollPanel = new JScrollPane(ticketsList);
 				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -156,7 +176,7 @@ public class ProjectListView extends View {
 				if(iStates.hasNext())
 				{
 					JButton changeStateButton = new JButton(">");
-					changeStateButton.addActionListener(controller.getChangeTicketStateListener(project,state));
+					changeStateButton.addActionListener(projectController.getChangeTicketStateListener(project,state));
 					if(!getModel().canUserChangeToState(project,state))
 					{
 						changeStateButton.setEnabled(false);
@@ -176,4 +196,5 @@ public class ProjectListView extends View {
 		ticketsListMainPanel.revalidate();
 		ticketsListMainPanel.repaint();
 	}
+
 }
