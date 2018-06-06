@@ -5,31 +5,28 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import container.TicketsSystemContainer;
-import model.Model;
 import model.User;
 import service.UserService;
 import view.LoginView;
 
 public class UserController extends Controller {
 	
-	private LoginView view;
+	private LoginView loginView;
 	private UserService userService;
 
-	public UserController(Model model, TicketsSystemContainer container)
-	{
-		super(model, container);
+	public UserController(TicketsSystemContainer container) {
+		super(container);
 		userService = new UserService();
-		view = new LoginView(model);
-		view.initializeViewActionListeners(this);
+		loginView = new LoginView();
+		loginView.initializeViewActionListeners(this);
 	}
 	
-    public void showView()
-    {
-    	view.showView();
+    public void showLoginView() {
+
+    	loginView.show();
     }
 
-    public boolean authenticateUser(String username)
-    {
+    public boolean authenticateUser(String username) {
         User user = new User(username);
         try {
             user = userService.postLogin(user);
@@ -37,49 +34,47 @@ public class UserController extends Controller {
             e.printStackTrace();
         }
 
-        this.getModel().authenticateUser(user);
+        this.getContainer().setCurrentUser(user);
 
         return user != null;
     }
 
-    public void notifyContextLogin()
-    {
-        this.getContainer().initializeProjectController();
+    public void notifyContextLogin() {
+
+    	this.getContainer().initializeProjectController();
     }
 	
-	public ActionListener getLoginListener()
-	{
+	public ActionListener getLoginListener() {
 		class loginListener implements ActionListener
 		{
 
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(view.isFieldEmpty())
+				if(loginView.isFieldEmpty())
 				{
-					view.setError("Insert username");
+					loginView.setError("Insert username");
 				}
-				else if (authenticateUser(view.getUsername()))
+				else if (authenticateUser(loginView.getUsername()))
 				{
-                    view.closeWindow();
+                    loginView.closeWindow();
 					notifyContextLogin();
 				}
 				else
 				{
-					view.setError("Insert correct username");
+					loginView.setError("Insert correct username");
 				}
 			}
 		}	
 		return new loginListener();
 	}
 	
-	public ActionListener getCancelListener()
-	{
+	public ActionListener getCancelListener() {
 		class cancelListener implements ActionListener
 		{
 
 			public void actionPerformed(ActionEvent arg0)
 			{
-				view.closeWindow();
+				loginView.closeWindow();
 			}
 		}	
 		return new cancelListener();

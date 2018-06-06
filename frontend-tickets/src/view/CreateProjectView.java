@@ -35,14 +35,8 @@ public class CreateProjectView extends View {
 
     private ActionListener createProjectListener;
 
-    public CreateProjectView(Model model)
+    public CreateProjectView(Vector<Role> roles, Vector<User> users, Vector<TicketType> ticketsTypes)
     {
-        super(model);
-    }
-
-    public CreateProjectView(Model model, Vector<Role> roles, Vector<User> users, Vector<TicketType> ticketsTypes)
-    {
-        super(model);
         this.roles = roles;
         this.users = users;
         this.ticketsTypes = ticketsTypes;
@@ -52,7 +46,7 @@ public class CreateProjectView extends View {
         return nameText.getText();
     }
 
-    public void showView() { return; }
+    public void show() { return; }
 
     public Vector<TicketState> getTicketStates() {
         Vector<TicketState> ticketStates = new Vector<>();

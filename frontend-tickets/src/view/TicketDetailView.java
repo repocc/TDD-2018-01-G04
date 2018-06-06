@@ -17,9 +17,8 @@ public class TicketDetailView extends View {
     private JTextArea commentArea = new JTextArea(4, 30);
     private JList commentsList = new JList();
 
-    public TicketDetailView(Model model)
+    public TicketDetailView()
     {
-        super(model);
     }
 
     private GridBagConstraints createGbc(int x, int y) {
@@ -39,7 +38,7 @@ public class TicketDetailView extends View {
         return gbc;
     }
 
-    public void showView()
+    public void show()
     {
         return;
     }

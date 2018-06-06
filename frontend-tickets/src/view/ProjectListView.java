@@ -28,9 +28,7 @@ public class ProjectListView extends View {
 	private Vector<Project> projects = new Vector<>();
 	private Project selectedProject;
 
-	public ProjectListView(Model model) {
-		super(model);
-		this.projects = projects;
+	public ProjectListView() {
 	}
 
 	public void setProjects(Vector<Project> projects){
@@ -41,7 +39,7 @@ public class ProjectListView extends View {
 		this.selectedProject = project;
 	}
 	
-	public void showView() {
+	public void show() {
 		window = new JFrame("Tickets System");
 		window.setPreferredSize(new Dimension(800, 600));
 		
@@ -177,7 +175,7 @@ public class ProjectListView extends View {
 				{
 					JButton changeStateButton = new JButton(">");
 					changeStateButton.addActionListener(projectController.getChangeTicketStateListener(project,state));
-					if(!getModel().canUserChangeToState(project,state))
+					if(!projectController.canUserChangeToState(project,state))
 					{
 						changeStateButton.setEnabled(false);
 					}

@@ -1,25 +1,11 @@
 package view;
 
-import model.Model;
-
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class View {
 
-	private Model model;
-	
-	public View(Model model)
-	{
-		this.model = model;
-	}
-
-	public abstract void showView();
-	
-	public Model getModel()
-	{
-		return model;
-	}
+	public abstract void show();
 
 	protected JPanel createLabelWith(String label, JComponent component)
 	{

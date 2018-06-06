@@ -19,12 +19,11 @@ public class LoginView extends View {
 	private JButton cancelButton = new JButton("Cancel");
 	private JTextField user;
 
-	public LoginView(Model model)
+	public LoginView()
 	{
-		super(model);
 	}
 
-	public void showView()
+	public void show()
 	{
 		window = new JFrame("Tickets System");
 		window.setLayout(new GridLayout(1, 1));
@@ -71,18 +70,10 @@ public class LoginView extends View {
 	}
 	
 	public void initializeViewActionListeners(UserController controller) {
-		initLoginButton(controller.getLoginListener());
-		initCancelButton(controller.getCancelListener());
+		loginButton.addActionListener(controller.getLoginListener());
+		cancelButton.addActionListener(controller.getCancelListener());
 	}
-	
-	public void initLoginButton(ActionListener listener) {
-		loginButton.addActionListener(listener);
-	}
-	
-	public void initCancelButton(ActionListener listener) {
-		cancelButton.addActionListener(listener);
-	}
-	
+
 	public boolean isFieldEmpty() {
 		return (user.getText().isEmpty());
 	}

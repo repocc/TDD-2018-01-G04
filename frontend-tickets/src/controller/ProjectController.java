@@ -36,15 +36,15 @@ public class ProjectController extends Controller {
 	private UserService userService = new UserService();
 	private ProjectService projectService = new ProjectService();
 
-	public ProjectController(Model model, TicketsSystemContainer container) {
-		super(model, container);
+	public ProjectController(TicketsSystemContainer container) {
+		super(container);
 
-		projectListView = new ProjectListView(model);
+		projectListView = new ProjectListView();
 		projectListView.initializeViewActionListeners(this);
 
-		showProjectsListView();
+		refreshProjectsList();
 
-		ticketController = new TicketController(getModel(), container);
+		ticketController = new TicketController(container);
 	}
 
 	public Vector<Project> loadProjects(){
@@ -103,16 +103,23 @@ public class ProjectController extends Controller {
 		projectListView.showProjectDetail();
 	}
 
-	public void showProjectsListView(){
+	public void refreshProjectsList(){
 		projects = loadProjects();
 		projectListView.setProjects(projects);
 		projectListView.showProjectsList();
 	}
 
-	public void showView()
+	public void showProjectsListView()
     {
-    	projectListView.showView();
+    	projectListView.show();
     }
+
+
+	public boolean canUserChangeToState(Project project, TicketState state)
+	{
+		String role = project.getUserRole(getContainer().getCurrentUser().getName());
+		return state.canChangeState(role);
+	}
     
     public MouseListener getProjectsListSelectionListener() {
 		ProjectController controller = this;
@@ -173,7 +180,7 @@ public class ProjectController extends Controller {
 				Vector<User> users = loadUsers();
 				Vector<Role> roles = loadRoles();
 
-				createProjectView = new CreateProjectView(getModel(), roles, users, ticketsTypes);
+				createProjectView = new CreateProjectView(roles, users, ticketsTypes);
 				createProjectView.initializeViewActionListeners(controller);
 				createProjectView.showNewProjectForm();
 			}
@@ -312,7 +319,7 @@ public class ProjectController extends Controller {
 
 				project.setName(nameProject);
 
-				String owner = getModel().getCurrentUser().getName();
+				String owner = getContainer().getCurrentUser().getName();
 				project.setOwner(owner);
 
 				Vector<TicketType> ticketTypesList = createProjectView.getTicketTypesRequiredFields();
@@ -332,7 +339,7 @@ public class ProjectController extends Controller {
 					e.printStackTrace();
 				}
 
-				showProjectsListView();
+				refreshProjectsList();
 			}
 		}
 		return new createProjectListener();

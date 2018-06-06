@@ -23,14 +23,8 @@ public class CreateTicketView extends View {
 
     private ActionListener createTicketListener;
 
-    public CreateTicketView(Model model)
+    public CreateTicketView(Vector<TicketType> ticketsTypes, Vector<User> users)
     {
-        super(model);
-    }
-
-    public CreateTicketView(Model model, Vector<TicketType> ticketsTypes, Vector<User> users)
-    {
-        super(model);
         this.ticketsTypes = ticketsTypes;
         this.users = users;
     }
@@ -85,7 +79,7 @@ public class CreateTicketView extends View {
         mainPanel.add(containerSelectUser);
     }
 
-    public void showView()
+    public void show()
     {
         titleText = new JTextField(30);
         descriptionText = new JTextField(30);
@@ -96,8 +90,8 @@ public class CreateTicketView extends View {
         mainPanel.add(createLabelWith("Title:", titleText));
         mainPanel.add(createLabelWith("Description:", descriptionText));
 
-        this.addTicketTypeMenu(/*controller,*/mainPanel);
-        this.addSelectedAssignedUser(/*controller,*/mainPanel);
+        this.addTicketTypeMenu(mainPanel);
+        this.addSelectedAssignedUser(mainPanel);
 
         int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Ticket", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION)

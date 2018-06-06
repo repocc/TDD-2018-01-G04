@@ -26,16 +26,11 @@ public class TicketController extends Controller {
 
     private ActionListener showTicketsFromProject;
 
-    public TicketController(Model model, TicketsSystemContainer container)
+    public TicketController(TicketsSystemContainer container)
     {
-        super(model, container);
+        super(container);
         ticketService = new TicketService();
         userService = new UserService();
-    }
-
-    public void showView()
-    {
-        return;
     }
 
     public void setSelectedTicket(Ticket selectedTicket){
@@ -62,9 +57,9 @@ public class TicketController extends Controller {
             e.printStackTrace();
         }
 
-        createTicketView = new CreateTicketView(getModel(), ticketsTypes, users);
+        createTicketView = new CreateTicketView(ticketsTypes, users);
         createTicketView.initializeViewActionListeners(this);
-        createTicketView.showView();
+        createTicketView.show();
     }
 
     public void showTicketDetail()
@@ -76,7 +71,7 @@ public class TicketController extends Controller {
             e.printStackTrace();
         }
 
-        ticketDetailView = new TicketDetailView(getModel());
+        ticketDetailView = new TicketDetailView();
         ticketDetailView.initializeViewActionListeners(this);
         ticketDetailView.show(ticket);
     }
@@ -90,7 +85,7 @@ public class TicketController extends Controller {
             {
                 if(commentArea.getText() != null)
                 {
-                    Comment comment = new Comment(getModel().getCurrentUser(), commentArea.getText(), selectedTicket);
+                    Comment comment = new Comment(getContainer().getCurrentUser(), commentArea.getText(), selectedTicket);
                     commentArea.setText(null);
                     selectedTicket.addComment(comment);
 
