@@ -17,8 +17,14 @@ public class TicketDetailView extends View {
     private JTextArea commentArea = new JTextArea(4, 30);
     private JList commentsList = new JList();
 
+    private Ticket ticket;
+
     public TicketDetailView()
     {
+    }
+
+    public void setTicket(Ticket ticket){
+        this.ticket = ticket;
     }
 
     private GridBagConstraints createGbc(int x, int y) {
@@ -40,10 +46,6 @@ public class TicketDetailView extends View {
 
     public void show()
     {
-        return;
-    }
-
-    public void show(Ticket ticket){
         JPanel mainPanel = createTicketDetails(ticket);
         JOptionPane.showMessageDialog(null, mainPanel, "Ticket", JOptionPane.INFORMATION_MESSAGE);
     }

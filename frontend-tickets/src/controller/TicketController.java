@@ -72,8 +72,9 @@ public class TicketController extends Controller {
         }
 
         ticketDetailView = new TicketDetailView();
+        ticketDetailView.setTicket(ticket);
         ticketDetailView.initializeViewActionListeners(this);
-        ticketDetailView.show(ticket);
+        ticketDetailView.show();
     }
 
 

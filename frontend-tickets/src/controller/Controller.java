@@ -1,7 +1,6 @@
 package controller;
 
 import container.TicketsSystemContainer;
-import model.Model;
 
 public abstract class Controller{
 
