@@ -1,20 +1,15 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.*;
 
-import controller.MainController;
 import controller.TicketController;
-import controller.UserController;
 import model.Comment;
 import model.Model;
 import model.Ticket;
-import service.TicketService;
 
 public class TicketDetailView extends View {
 

@@ -1,20 +1,14 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.*;
 
 import javax.swing.*;
 
-import controller.MainController;
+import controller.ProjectController;
 import model.*;
-import service.ProjectService;
-import service.TicketService;
-import service.UserService;
 
-public class MainView extends View {
+public class ProjectListView extends View {
 
 	private JFrame window;
 	private JButton newProjectButton = new JButton("New Project");
@@ -24,7 +18,7 @@ public class MainView extends View {
 	private JScrollPane projectsListScroller;
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
-	public MainView(Model model) {
+	public ProjectListView(Model model) {
 		super(model);
 	}
 	
@@ -93,7 +87,7 @@ public class MainView extends View {
 		window.dispose();
 	}
 	
-	public void initializeViewActionListeners(MainController controller) {
+	public void initializeViewActionListeners(ProjectController controller) {
         projectsList.addMouseListener(controller.getProjectsListSelectionListener());
         newProjectButton.addActionListener(controller.getNewProjectListener());
         newTicketButton.addActionListener(controller.getNewTicketListener());
@@ -117,7 +111,7 @@ public class MainView extends View {
 		projectsList.setModel(model);
 	}
 	
-	public void showTicketsFromProject(String name, MainController controller) {
+	public void showProjectDetail(String name, ProjectController controller) {
 
 		Vector<Ticket> tickets = (getModel().getTicketsFromProject(name));
 		Vector<TicketState> states = (getModel().getStatesFromProject(name));

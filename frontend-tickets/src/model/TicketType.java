@@ -12,6 +12,15 @@ public class TicketType {
     @SerializedName("fields")
     private HashSet<String> fields = new HashSet<>();
 
+    public TicketType(){
+
+    }
+
+    public TicketType(String type, HashSet<String> fields){
+        this.setType(type);
+        this.setFields(fields);
+    }
+
     public void setType(String type) {
         this.type = type;
     }

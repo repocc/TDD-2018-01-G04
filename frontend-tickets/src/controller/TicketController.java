@@ -122,9 +122,9 @@ public class TicketController extends Controller {
         return new createTicketListener();
     }
 
-    public void initializeViewActionListeners(MainController controller)
+    public void initializeViewActionListeners(ProjectController controller)
     {
-        this.showTicketsFromProject = controller.getShowTicketsFromProjectListener();
+        this.showTicketsFromProject = controller.getShowProjectDetailListener();
     }
 
 

@@ -2,12 +2,10 @@ package view;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.*;
 
-import controller.MainController;
 import controller.TicketController;
 import model.*;
 import service.TicketService;
@@ -65,7 +63,6 @@ public class CreateTicketView extends View {
 
         for (TicketType type: ticketsTypes) {
             JRadioButton radioButton = new JRadioButton(type.getType(),false);
-            //radioButton.addActionListener(controller.getAssignTypeTicket());
             ticketTypeButtonGroup.add(radioButton);
             containertype.add(radioButton);
         }
@@ -94,7 +91,6 @@ public class CreateTicketView extends View {
         for (User user: users) {
 
             JRadioButton radioButton = new JRadioButton(user.getName(),false);
-            //radioButton.addActionListener(controller.getAssignUserTicket());
             userButtonGroup.add(radioButton);
             containerSelectUser.add(radioButton);
         }

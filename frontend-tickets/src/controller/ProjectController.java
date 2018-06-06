@@ -13,15 +13,16 @@ import container.TicketsSystemContainer;
 import model.*;
 import service.ProjectService;
 import service.TicketService;
+import service.UserService;
 import view.CreateProjectView;
-import view.MainView;
+import view.ProjectListView;
 
-public class MainController extends Controller {
+public class ProjectController extends Controller {
 
     private int SINGLE_CLICK = 1;
     private int DOUBLE_CLICK = 2;
 
-    private MainView view;
+    private ProjectListView projectListView;
     private CreateProjectView createProjectView;
 
 	private Project selectedProject;
@@ -29,26 +30,24 @@ public class MainController extends Controller {
 
 	private TicketController ticketController;
 
-	public MainController(Model model, TicketsSystemContainer container)
-	{
-		super(model, container);
-		view = new MainView(model);
-		view.initializeViewActionListeners(this);
+	private TicketService ticketService = new TicketService();
+	private UserService userService = new UserService();
 
-		createProjectView = new CreateProjectView(model);
-		createProjectView.initializeViewActionListeners(this);
+	public ProjectController(Model model, TicketsSystemContainer container) {
+		super(model, container);
+		projectListView = new ProjectListView(model);
+		projectListView.initializeViewActionListeners(this);
 
 		ticketController = new TicketController(getModel(), container);
 	}
 	
 	public void showView()
     {
-    	view.showView();
+    	projectListView.showView();
     }
     
-    public MouseListener getProjectsListSelectionListener()
-	{
-		MainController controller = this;
+    public MouseListener getProjectsListSelectionListener() {
+		ProjectController controller = this;
 
 		class projectsListListener implements MouseListener
 		{
@@ -62,7 +61,7 @@ public class MainController extends Controller {
 						Project project = (Project)list.getModel().getElementAt(index);
 						String name = project.toString();
 						selectedProject = project;
-						view.showTicketsFromProject(name, controller);
+						projectListView.showProjectDetail(name, controller);
 						selectedTicket = null;
 					}
 				}
@@ -96,13 +95,36 @@ public class MainController extends Controller {
 
 	public ActionListener getNewProjectListener() {
 
-		MainController controller = this;
+		ProjectController controller = this;
 
 		class newProjectListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				createProjectView.showNewProjectMenu(controller);
+				Vector<TicketType> ticketsTypes = null;
+				try {
+					ticketsTypes = ticketService.getTypes();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				Vector<User> users = null;
+				try {
+					users = userService.getUsers();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				Vector<Role> roles = null;
+				try {
+					roles = userService.getRoles();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				createProjectView = new CreateProjectView(getModel(), roles, users, ticketsTypes);
+				createProjectView.initializeViewActionListeners(controller);
+				createProjectView.showNewProjectForm();
 			}
 		}	
 		return new newProjectListener();
@@ -113,31 +135,30 @@ public class MainController extends Controller {
 		class newProjectListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0) {
-				view.closeWindow();
+				projectListView.closeWindow();
 				getContainer().initialize();
 			}
 		}
 		return new newProjectListener();
 	}
 
-    public ActionListener getShowTicketsFromProjectListener() {
+    public ActionListener getShowProjectDetailListener() {
 
-        MainController controller = this;
+        ProjectController controller = this;
 
-        class showTicketsFromProjectListener implements ActionListener
+        class showProjectDetailListener implements ActionListener
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                view.showTicketsFromProject(selectedProject.toString(),controller);
+                projectListView.showProjectDetail(selectedProject.toString(),controller);
             }
         }
-        return new showTicketsFromProjectListener();
+        return new showProjectDetailListener();
     }
-
 
 	public ActionListener getNewTicketListener() {
 
-		MainController controller = this;
+		ProjectController controller = this;
 
 		class newTicketListener implements ActionListener
 		{
@@ -151,9 +172,8 @@ public class MainController extends Controller {
 		return new newTicketListener();
 	}
 
-	public MouseListener getTicketClickedListener()
-	{
-		MainController controller = this;
+	public MouseListener getTicketClickedListener() {
+		ProjectController controller = this;
 
 		class ticketClickedListener implements MouseListener
 		{
@@ -202,9 +222,8 @@ public class MainController extends Controller {
 		return new ticketClickedListener();
 	}
 
-	public ActionListener getChangeTicketStateListener(Project project, TicketState ticketState)
-	{
-		MainController controller = this;
+	public ActionListener getChangeTicketStateListener(Project project, TicketState ticketState) {
+		ProjectController controller = this;
 
 		class changeTicketStateListener implements ActionListener
 		{
@@ -222,7 +241,7 @@ public class MainController extends Controller {
 						e.printStackTrace();
 					}
 
-					view.showTicketsFromProject(selectedProject.getName(), controller);
+					projectListView.showProjectDetail(selectedProject.getName(), controller);
 
 				}
 			}
@@ -230,78 +249,8 @@ public class MainController extends Controller {
 		return new changeTicketStateListener();
 	}
 
-	public ActionListener getRoleSelectedListener(JCheckBox check,JComboBox comboBox){
-
-		class postRoleSelectedListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg){
-
-				String userName = check.getText();
-				if (check.isSelected()) {
-					String role = (String) comboBox.getSelectedItem();
-					createProjectView.putUserSelect(userName,role);
-				} else {
-					createProjectView.removeUserSelect(userName);
-				}
-			}
-		}
-		return new postRoleSelectedListener();
-	}
-
-	public ActionListener getFieldRequiredListener(String type) {
-
-		class postFieldRequiredListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg){
-				JCheckBox checkBox = (JCheckBox) arg.getSource();
-				String field = checkBox.getText();
-				if (checkBox.isSelected()) {
-					createProjectView.putFieldRequired(type,field);
-				} else {
-					createProjectView.removeFieldRequired(type,field);
-				}
-			}
-		}
-		return new postFieldRequiredListener();
-	}
-
-	public ActionListener getRolesChangeStateListener(String state) {
-
-		class postRolesChangeStateListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg){
-				JCheckBox check = (JCheckBox) arg.getSource();
-				String role = check.getText();
-				if (check.isSelected()) {
-					createProjectView.putRolesChangeState(state,role);
-				} else {
-					createProjectView.removeRolesChangeState(state,role);
-				}
-			}
-		}
-		return new postRolesChangeStateListener();
-	}
-
-	public ActionListener getAddStateListener(JTextField nameText, FlowState flowStates, JPanel panel){
-
-		MainController controller = this;
-
-		class postNewStateListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent arg){
-				if (!nameText.getText().equals("")){
-					flowStates.setState(nameText.getText());
-					createProjectView.addPanelNewState(controller,panel,nameText.getText());
-					nameText.setText("");
-				}
-			}
-		}
-		return new postNewStateListener();
-
-	}
-
 	public ActionListener getCreateProjectListener() {
-		MainController controller = this;
+		ProjectController controller = this;
 
 		class createProjectListener implements ActionListener
 		{
@@ -317,15 +266,14 @@ public class MainController extends Controller {
 				String owner = getModel().getCurrentUser().getName();
 				project.setOwner(owner);
 
-				Vector<TicketType> ticketTypesList = createProjectView.getTicketTypeList();
+				Vector<TicketType> ticketTypesList = createProjectView.getTicketTypesRequiredFields();
 
 				project.setTicketTypes(ticketTypesList);
 
-				Vector<TicketState> ticketStates = createProjectView.getFlowStates().getTicketStates();
+				//Vector<TicketState> ticketStates = createProjectView.getFlowStates().getTicketStates();
+				//project.setTicketStates(ticketStates);
 
-				project.setTicketStates(ticketStates);
-
-				Vector<User> selectedUsers = createProjectView.getSelectedUser();
+				Vector<User> selectedUsers = createProjectView.getSelectedUsers();
 
 				project.setUsers(selectedUsers);
 
@@ -335,7 +283,7 @@ public class MainController extends Controller {
 					e.printStackTrace();
 				}
 
-				view.showProjectsList();
+				projectListView.showProjectsList();
 			}
 		}
 		return new createProjectListener();

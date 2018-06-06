@@ -1,7 +1,7 @@
 package container;
 
 import controller.Controller;
-import controller.MainController;
+import controller.ProjectController;
 import controller.UserController;
 import model.Model;
 
@@ -27,7 +27,7 @@ public class TicketsSystemContainer
     }
 
     public void initializeProjectController(){
-        this.currentController = new MainController(this.currentModel, this);
+        this.currentController = new ProjectController(this.currentModel, this);
         this.currentController.showView();
     }
 
