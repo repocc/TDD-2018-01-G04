@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.xml.bind.ValidationException;
 
 import controller.TicketController;
 import model.*;
@@ -19,6 +20,9 @@ public class CreateTicketView extends View {
     private ButtonGroup ticketTypeButtonGroup;
     private ButtonGroup userButtonGroup;
 
+    private Vector<TicketType> ticketsTypes = new Vector<>();
+    private Vector<User> users = new Vector<>();
+
     private GroupButtonUtils groupButtonUtils = new GroupButtonUtils();
 
     private ActionListener createTicketListener;
@@ -26,6 +30,13 @@ public class CreateTicketView extends View {
     public CreateTicketView(Model model)
     {
         super(model);
+    }
+
+    public CreateTicketView(Model model, Vector<TicketType> ticketsTypes, Vector<User> users)
+    {
+        super(model);
+        this.ticketsTypes = ticketsTypes;
+        this.users = users;
     }
 
     public String getTitle(){
@@ -45,16 +56,6 @@ public class CreateTicketView extends View {
     }
 
     private void addTicketTypeMenu(JPanel mainPanel) {
-
-        /*TODO: Extract request to controller*/
-        TicketService ticketService = new TicketService();
-        Vector<TicketType> ticketsTypes = null;
-        try {
-            ticketsTypes = ticketService.getTypes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         JPanel containertype = new JPanel();
         containertype.setBorder(BorderFactory.createTitledBorder("Select Type "));
         containertype.setLayout(new BoxLayout(containertype , BoxLayout.Y_AXIS));
@@ -72,16 +73,6 @@ public class CreateTicketView extends View {
     }
 
     private void addSelectedAssignedUser(JPanel mainPanel) {
-        UserService userService = new UserService();
-
-        /*TODO: Extract request to controller*/
-        Vector<User> users = null;
-        try {
-            users = userService.getUsers();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         JPanel containerSelectUser = new JPanel();
         containerSelectUser.setBorder(BorderFactory.createTitledBorder("Select Assigned user "));
         containerSelectUser.setLayout(new BoxLayout(containerSelectUser , BoxLayout.Y_AXIS));

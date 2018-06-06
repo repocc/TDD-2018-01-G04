@@ -46,7 +46,7 @@ public class Model extends Observable
 			{
 				ProjectService projectService = new ProjectService();
 				try {
-					project = projectService.getProjet(project);
+					project = projectService.getProjectById(project);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -3,13 +3,12 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Vector;
 
 import container.TicketsSystemContainer;
-import model.Comment;
-import model.Model;
-import model.Ticket;
-import model.Project;
+import model.*;
 import service.TicketService;
+import service.UserService;
 import view.CreateTicketView;
 import view.TicketDetailView;
 
@@ -20,6 +19,7 @@ public class TicketController extends Controller {
     private TicketDetailView ticketDetailView;
     private CreateTicketView createTicketView;
     private TicketService ticketService;
+    private UserService userService;
 
     private Ticket selectedTicket;
     private Project selectedProject;
@@ -30,6 +30,7 @@ public class TicketController extends Controller {
     {
         super(model, container);
         ticketService = new TicketService();
+        userService = new UserService();
     }
 
     public void showView()
@@ -46,7 +47,22 @@ public class TicketController extends Controller {
     }
 
     public void showTicketForm(){
-        createTicketView = new CreateTicketView(getModel());
+
+        Vector<TicketType> ticketsTypes = null;
+        try {
+            ticketsTypes = ticketService.getTypes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Vector<User> users = null;
+        try {
+            users = userService.getUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        createTicketView = new CreateTicketView(getModel(), ticketsTypes, users);
         createTicketView.initializeViewActionListeners(this);
         createTicketView.showView();
     }
@@ -55,7 +71,7 @@ public class TicketController extends Controller {
     {
         Ticket ticket = null;
         try {
-            ticket = ticketService.getTicket(selectedTicket);
+            ticket = ticketService.getTicketById(selectedTicket);
         } catch (IOException e) {
             e.printStackTrace();
         }

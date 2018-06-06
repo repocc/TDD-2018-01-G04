@@ -62,7 +62,7 @@ public class TicketService {
 
     }
 
-    public Ticket getTicket(Ticket ticket) throws IOException {
+    public Ticket getTicketById(Ticket ticket) throws IOException {
 
         String ID = ticket.getID();
         String uri = Consts.URI_GET_TICKET + "/" + ID;
