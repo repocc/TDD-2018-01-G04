@@ -29,10 +29,12 @@ public class CreateProjectView extends View {
     //First key is ticket type, second key is required field.
     private HashMap<String,HashMap<String,JCheckBox>> ticketTypesCheckboxes = new HashMap<>();
 
+    //First key is username
     private HashMap<String,JCheckBox> usersCheckboxes = new HashMap<>();
     private HashMap<String,JComboBox> usersComboboxes = new HashMap<>();
 
     private Vector<String> states = new Vector<>();
+    //First key is state, second key is role
     private HashMap<String, HashMap<String, JCheckBox>> statesRoles = new HashMap<>();
 
     private ActionListener createProjectListener;
