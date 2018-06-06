@@ -1,16 +1,12 @@
 package view;
 
 import controller.ProjectController;
-import javafx.util.Pair;
 import model.*;
-import service.TicketService;
-import service.UserService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.*;
 
 public class CreateProjectView extends View {

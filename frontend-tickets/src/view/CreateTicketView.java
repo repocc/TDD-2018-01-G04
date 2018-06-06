@@ -1,16 +1,12 @@
 package view;
 
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.*;
-import javax.xml.bind.ValidationException;
 
 import controller.TicketController;
 import model.*;
-import service.TicketService;
-import service.UserService;
 import utils.GroupButtonUtils;
 
 public class CreateTicketView extends View {

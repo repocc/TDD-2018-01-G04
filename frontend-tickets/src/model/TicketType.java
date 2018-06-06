@@ -3,7 +3,6 @@ package model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashSet;
-import java.util.Vector;
 
 public class TicketType {
 
