@@ -22,7 +22,8 @@
     [ring/ring-jetty-adapter "1.5.0"]
     [ring/ring-json "0.4.0"]
     [rage-db "1.0"]
-    [jarohen/chime "0.2.2"]]
+    [ring/ring-mock "0.3.2"]
+    ]
   :plugins [[lein-ring "0.9.7"]]
   :main ^:skip-aot api-tickets
   :aot :all
