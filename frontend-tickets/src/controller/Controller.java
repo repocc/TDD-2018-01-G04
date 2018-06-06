@@ -1,46 +1,26 @@
 package controller;
 
+import container.TicketsSystemContainer;
 import model.Model;
-import model.User;
-import service.UserService;
-
-import java.io.IOException;
 
 public abstract class Controller{
 
     private Model model;
+    private TicketsSystemContainer container;
 
-    public Controller(Model model)
+    public Controller(Model model, TicketsSystemContainer container)
     {
         this.model = model;
+        this.container = container;
     }
 
     public abstract void showView();
-    
-    public boolean authenticateUser(String username)
-	{
 
-        UserService service = new UserService();
-        User user = new User(username);
-        try {
-            user = service.postLogin(user);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Model getModel() { return model; }
 
-        model.authenticateUser(user);
-
-    	return user != null;
-	}
-	
-    public void notifyContextLogin()
+    public TicketsSystemContainer getContainer()
     {
-    	model.notifyContextLogin();
-    }
-    
-    public Model getModel()
-    {
-    	return model;
+        return container;
     }
        
 }

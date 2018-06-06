@@ -4,27 +4,47 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import container.TicketsSystemContainer;
 import model.Model;
 import model.User;
 import service.UserService;
-import view.IdentificationView;
+import view.LoginView;
 
-import javax.jws.soap.SOAPBinding;
-
-public class IdentificationController extends Controller {
+public class UserController extends Controller {
 	
-	private IdentificationView view;
+	private LoginView view;
+	private UserService userService;
 
-	public IdentificationController(Model model)
+	public UserController(Model model, TicketsSystemContainer container)
 	{
-		super(model);
-		view = new IdentificationView(model);
+		super(model, container);
+		userService = new UserService();
+		view = new LoginView(model);
 		view.initializeViewActionListeners(this);
 	}
 	
     public void showView()
     {
     	view.showView();
+    }
+
+    public boolean authenticateUser(String username)
+    {
+        User user = new User(username);
+        try {
+            user = userService.postLogin(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.getModel().authenticateUser(user);
+
+        return user != null;
+    }
+
+    public void notifyContextLogin()
+    {
+        this.getContainer().initializeProjectController();
     }
 	
 	public ActionListener getLoginListener()
@@ -36,23 +56,16 @@ public class IdentificationController extends Controller {
 			{
 				if(view.isFieldEmpty())
 				{
-					view.closeWindow();
 					view.setError("Insert username");
-					view.showView();
-				}	
+				}
 				else if (authenticateUser(view.getUsername()))
 				{
-
-					view.closeWindow();
-					view.setError("");
+                    view.closeWindow();
 					notifyContextLogin();
 				}
 				else
 				{
-
-					view.closeWindow();
 					view.setError("Insert correct username");
-					view.showView();
 				}
 			}
 		}	

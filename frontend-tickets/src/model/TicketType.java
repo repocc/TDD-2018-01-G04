@@ -3,14 +3,22 @@ package model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashSet;
-import java.util.Vector;
 
-public class TicketTypes {
+public class TicketType {
 
     @SerializedName("name")
     private String type;
     @SerializedName("fields")
     private HashSet<String> fields = new HashSet<>();
+
+    public TicketType(){
+
+    }
+
+    public TicketType(String type, HashSet<String> fields){
+        this.setType(type);
+        this.setFields(fields);
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -22,10 +30,6 @@ public class TicketTypes {
 
     public String getType() {
         return type;
-    }
-
-    public HashSet<String> getFields() {
-        return fields;
     }
 
 }

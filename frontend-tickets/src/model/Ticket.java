@@ -13,9 +13,9 @@ public class Ticket {
 	@SerializedName("type")
 	private String type;
 	@SerializedName("assigned")
-	private String userAsigned;
+	private String assignedUser;
 	@SerializedName("project")
-	private String projectAsigned;
+	private String project;
 	@SerializedName("comments")
 	private Vector<Comment> comments = new Vector<>();
 	@SerializedName("state")
@@ -27,14 +27,6 @@ public class Ticket {
 
 	}
 
-	public Ticket(String title, String description, String type, String initialState)
-	{
-		this.title = title;
-		this.description = description;
-		this.type = type;
-		this.currentState = initialState;
-	}
-
 	public boolean isCurrentState(String state)
 	{
 		return this.currentState.equals(state);
@@ -44,20 +36,20 @@ public class Ticket {
 		String label = "<html>";
 		if (!title.isEmpty()) {
 			label = label + "Title: " + title;
+			label = label + "<br/>";
 		}
 
 		if (!description.isEmpty()) {
-			if(!title.isEmpty()){
-				label = label + "<br/>";
-			}
 			label = label + "Description: " + description;
+			label = label + "<br/>";
 		}
 
 		if (!type.isEmpty()) {
-			if(!(description.isEmpty() && title.isEmpty())){
-				label = label + "<br/>";
-			}
 			label = label + "Type: " + type;
+			label = label + "<br/>";
+		}
+		if (!assignedUser.isEmpty()) {
+			label = label + "Assigned user: " + assignedUser;
 		}
 		label = label + "</html>";
 
@@ -89,6 +81,10 @@ public class Ticket {
 		return this.type;
 	}
 
+	public String getAssignedUser(){
+		return this.assignedUser;
+	}
+
 	public void addComment(Comment comment)
 	{
 		comments.add(comment);
@@ -99,20 +95,16 @@ public class Ticket {
 		return this.comments;
 	}
 
-	public void setID(String id) {
-		this.id = id;
-	}
-
 	public String getID() {
 		return this.id;
 	}
 
-	public void setProjectAsigned(String projectAsigned) {
-		this.projectAsigned = projectAsigned;
+	public void setProject(String project) {
+		this.project = project;
 	}
 
-	public void setUserAsigned(String userAsigned) {
-		this.userAsigned = userAsigned;
+	public void setAssignedUser(String assignedUser) {
+		this.assignedUser = assignedUser;
 	}
 
 	public void setTitle(String tittle) {

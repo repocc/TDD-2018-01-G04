@@ -39,7 +39,7 @@ public class ProjectService {
 
     }
 
-    public Project getProjet(Project project) throws IOException {
+    public Project getProjectById(Project project) throws IOException {
 
         String ID = project.getID();
         String uri = Consts.URI_GET_PROJECT + "/" + ID;

@@ -3,10 +3,9 @@ package service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Comment;
-import model.Project;
 import model.Ticket;
 import model.TicketState;
-import model.TicketTypes;
+import model.TicketType;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -43,11 +42,11 @@ public class TicketService {
 
     }
 
-    public Vector<TicketTypes> getTypes() throws IOException {
+    public Vector<TicketType> getTypes() throws IOException {
 
         String ticketTypesJson = this.baseService.get(Consts.URI_GET_TYPES_TICKETS);
-        Type listType = new TypeToken<Vector<TicketTypes>>(){}.getType();
-        Vector<TicketTypes> ticketTypes = gson.fromJson(ticketTypesJson,listType);
+        Type listType = new TypeToken<Vector<TicketType>>(){}.getType();
+        Vector<TicketType> ticketTypes = gson.fromJson(ticketTypesJson,listType);
 
         return ticketTypes;
 
@@ -63,7 +62,7 @@ public class TicketService {
 
     }
 
-    public Ticket getTicket(Ticket ticket) throws IOException {
+    public Ticket getTicketById(Ticket ticket) throws IOException {
 
         String ID = ticket.getID();
         String uri = Consts.URI_GET_TICKET + "/" + ID;
