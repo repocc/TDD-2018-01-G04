@@ -270,8 +270,8 @@ public class ProjectController extends Controller {
 
 				project.setTicketTypes(ticketTypesList);
 
-				//Vector<TicketState> ticketStates = createProjectView.getFlowStates().getTicketStates();
-				//project.setTicketStates(ticketStates);
+				Vector<TicketState> ticketStates = createProjectView.getTicketStates();
+				project.setTicketStates(ticketStates);
 
 				Vector<User> selectedUsers = createProjectView.getSelectedUsers();
 

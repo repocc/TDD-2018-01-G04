@@ -159,7 +159,6 @@ public class ProjectListView extends View {
 					changeStateButton.addActionListener(controller.getChangeTicketStateListener(project,state));
 					if(!getModel().canUserChangeToState(project,state))
 					{
-
 						changeStateButton.setEnabled(false);
 					}
 					container.add(changeStateButton);

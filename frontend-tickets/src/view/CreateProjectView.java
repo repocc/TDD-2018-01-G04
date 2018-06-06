@@ -29,7 +29,12 @@ public class CreateProjectView extends View {
     //First key is ticket type, second key is required field.
     private HashMap<String,HashMap<String,JCheckBox>> ticketTypesCheckboxes = new HashMap<>();
 
-    
+    private HashMap<String,JCheckBox> usersCheckboxes = new HashMap<>();
+    private HashMap<String,JComboBox> usersComboboxes = new HashMap<>();
+
+    private Vector<String> states = new Vector<>();
+    private HashMap<String, HashMap<String, JCheckBox>> statesRoles = new HashMap<>();
+
     private ActionListener createProjectListener;
 
     public CreateProjectView(Model model)
@@ -51,8 +56,36 @@ public class CreateProjectView extends View {
 
     public void showView() { return; }
 
+    public Vector<TicketState> getTicketStates() {
+        Vector<TicketState> ticketStates = new Vector<>();
+
+        for (String state:states) {
+            HashSet<String> stateRoles = new HashSet<>();
+
+            for (Role role:roles) {
+                JCheckBox checkBox = statesRoles.get(state).get(role.getId());
+                if (checkBox != null && checkBox.isSelected()) stateRoles.add(role.getId());
+            }
+
+            ticketStates.add(new TicketState(state, stateRoles));
+        }
+
+        return ticketStates;
+    }
+
     public Vector<User> getSelectedUsers() {
-       return new Vector<>();
+        Vector<User> selectedUsers = new Vector<>();
+
+        for (User user: this.users) {
+
+            JCheckBox checkBox = usersCheckboxes.get(user.getName());
+            if (checkBox != null && checkBox.isSelected()) {
+                JComboBox comboBox = usersComboboxes.get(user.getName());
+                String selectedRole = (String) comboBox.getSelectedItem();
+                selectedUsers.add(new User(user.getName(), new Role(selectedRole)));
+            }
+        }
+        return selectedUsers;
     }
 
     public Vector<TicketType> getTicketTypesRequiredFields(){
@@ -110,9 +143,11 @@ public class CreateProjectView extends View {
             containerUser.setLayout(new BorderLayout());
 
             JCheckBox check = new JCheckBox(user.getName());
+            usersCheckboxes.put(user.getName(), check);
 
             containerUser.add(BorderLayout.WEST,check);
             JComboBox comboBox = new JComboBox(rolesList);
+            usersComboboxes.put(user.getName(), comboBox);
 
             containerUser.add(BorderLayout.EAST,comboBox);
 
@@ -204,10 +239,16 @@ public class CreateProjectView extends View {
                 JPanel rolesPanel = new JPanel();
                 rolesPanel.setLayout(new BoxLayout(rolesPanel, BoxLayout.Y_AXIS));
 
+                states.add(stateNameText.getText());
+
+                HashMap<String,JCheckBox> checkboxes = new HashMap<>();
+
                 for (Role role:roles) {
                     JCheckBox checkBox = new JCheckBox(role.getId());
+                    checkboxes.put(role.getId(), checkBox);
                     rolesPanel.add(checkBox);
                 }
+                statesRoles.put(stateNameText.getText(), checkboxes);
 
                 statePanel.add(BorderLayout.EAST,rolesPanel);
                 panel.add(statePanel);
