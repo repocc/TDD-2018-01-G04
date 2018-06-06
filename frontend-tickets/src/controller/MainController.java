@@ -5,12 +5,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.swing.*;
 
 import container.TicketsSystemContainer;
 import model.*;
+import service.ProjectService;
 import service.TicketService;
+import view.CreateProjectView;
 import view.MainView;
 
 public class MainController extends Controller {
@@ -19,6 +22,8 @@ public class MainController extends Controller {
     private int DOUBLE_CLICK = 2;
 
     private MainView view;
+    private CreateProjectView createProjectView;
+
 	private Project selectedProject;
 	private Ticket selectedTicket;
 
@@ -29,6 +34,9 @@ public class MainController extends Controller {
 		super(model, container);
 		view = new MainView(model);
 		view.initializeViewActionListeners(this);
+
+		createProjectView = new CreateProjectView(model);
+		createProjectView.initializeViewActionListeners(this);
 
 		ticketController = new TicketController(getModel(), container);
 	}
@@ -94,7 +102,7 @@ public class MainController extends Controller {
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				view.showNewProjectMenu(controller);
+				createProjectView.showNewProjectMenu(controller);
 			}
 		}	
 		return new newProjectListener();
@@ -231,9 +239,9 @@ public class MainController extends Controller {
 				String userName = check.getText();
 				if (check.isSelected()) {
 					String role = (String) comboBox.getSelectedItem();
-					view.putUserSelect(userName,role);
+					createProjectView.putUserSelect(userName,role);
 				} else {
-					view.removeUserSelect(userName);
+					createProjectView.removeUserSelect(userName);
 				}
 			}
 		}
@@ -248,9 +256,9 @@ public class MainController extends Controller {
 				JCheckBox checkBox = (JCheckBox) arg.getSource();
 				String field = checkBox.getText();
 				if (checkBox.isSelected()) {
-					view.putFieldRequired(type,field);
+					createProjectView.putFieldRequired(type,field);
 				} else {
-					view.removeFieldRequired(type,field);
+					createProjectView.removeFieldRequired(type,field);
 				}
 			}
 		}
@@ -265,15 +273,14 @@ public class MainController extends Controller {
 				JCheckBox check = (JCheckBox) arg.getSource();
 				String role = check.getText();
 				if (check.isSelected()) {
-					view.putRolesChangeState(state,role);
+					createProjectView.putRolesChangeState(state,role);
 				} else {
-					view.removeRolesChangeState(state,role);
+					createProjectView.removeRolesChangeState(state,role);
 				}
 			}
 		}
 		return new postRolesChangeStateListener();
 	}
-
 
 	public ActionListener getAddStateListener(JTextField nameText, FlowState flowStates, JPanel panel){
 
@@ -284,13 +291,54 @@ public class MainController extends Controller {
 			public void actionPerformed(ActionEvent arg){
 				if (!nameText.getText().equals("")){
 					flowStates.setState(nameText.getText());
-					view.addPanelNewState(controller,panel,nameText.getText());
+					createProjectView.addPanelNewState(controller,panel,nameText.getText());
 					nameText.setText("");
 				}
 			}
 		}
 		return new postNewStateListener();
 
+	}
+
+	public ActionListener getCreateProjectListener() {
+		MainController controller = this;
+
+		class createProjectListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent arg0) {
+				ProjectService projectService = new ProjectService();
+
+				Project project = new Project();
+
+				String nameProject = createProjectView.getName();
+
+				project.setName(nameProject);
+
+				String owner = getModel().getCurrentUser().getName();
+				project.setOwner(owner);
+
+				Vector<TicketType> ticketTypesList = createProjectView.getTicketTypeList();
+
+				project.setTicketTypes(ticketTypesList);
+
+				Vector<TicketState> ticketStates = createProjectView.getFlowStates().getTicketStates();
+
+				project.setTicketStates(ticketStates);
+
+				Vector<User> selectedUsers = createProjectView.getSelectedUser();
+
+				project.setUsers(selectedUsers);
+
+				try {
+					projectService.postProject(project);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				view.showProjectsList();
+			}
+		}
+		return new createProjectListener();
 	}
 
 }
