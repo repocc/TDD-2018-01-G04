@@ -61,11 +61,6 @@ public class Ticket {
 		return this.currentState;
 	}
 
-	public void changeState(String state)
-	{
-		this.currentState = state;
-	}
-
 	public String getName()
 	{
 		return this.title;
@@ -107,8 +102,8 @@ public class Ticket {
 		this.assignedUser = assignedUser;
 	}
 
-	public void setTitle(String tittle) {
-		this.title = tittle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void setDescription(String description) {

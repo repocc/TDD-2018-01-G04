@@ -21,7 +21,6 @@ public class ProjectListView extends View {
 	private JPanel ticketsListMainPanel = new JPanel(new BorderLayout());
 
 	private MouseListener ticketClickedListener;
-	private ActionListener changeTicketStateListener;
 
 	private ProjectController projectController;
 

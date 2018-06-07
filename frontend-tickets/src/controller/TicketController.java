@@ -3,7 +3,6 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Vector;
 
 import container.TicketsSystemContainer;
@@ -25,7 +24,7 @@ public class TicketController extends Controller {
     private Ticket selectedTicket;
     private Project selectedProject;
 
-    private ActionListener showTicketsFromProject;
+    private ActionListener showProjectDetailListener;
 
     public TicketController(TicketsSystemContainer container)
     {
@@ -118,36 +117,34 @@ public class TicketController extends Controller {
                     this.createTicket();
 
                 } else {
-
                     createTicketView.confirmDialog();
-
                 }
 
             }
 
             private boolean validateRequiredField(){
 
-                String tittle = createTicketView.getTitle();
+                String title = createTicketView.getTitle();
                 String description = createTicketView.getDescription();
                 String type = createTicketView.getTicketType();
 
                 Boolean validDescription = selectedProject.validateTicketType("Description",description,type);
-                Boolean validTittle = selectedProject.validateTicketType("Title",tittle,type);
+                Boolean validTitle = selectedProject.validateTicketType("Title",title,type);
 
                 this.validateDescription(validDescription);
-                this.validateTittle(validTittle);
+                this.validateTitle(validTitle);
 
-                return validDescription && validTittle;
+                return validDescription && validTitle;
 
             }
 
             private void createTicket() {
 
-                String tittle = createTicketView.getTitle();
+                String title = createTicketView.getTitle();
                 String description = createTicketView.getDescription();
 
                 Ticket ticket = new Ticket();
-                ticket.setTitle(tittle);
+                ticket.setTitle(title);
                 ticket.setDescription(description);
 
                 ticket.setAssignedUser(createTicketView.getAssignedUser());
@@ -160,7 +157,7 @@ public class TicketController extends Controller {
                     e.printStackTrace();
                 }
 
-                controller.showTicketsFromProject.actionPerformed(null);
+                controller.showProjectDetailListener.actionPerformed(null);
 
             }
 
@@ -172,11 +169,11 @@ public class TicketController extends Controller {
                 }
             }
 
-            private void validateTittle(boolean validTittle) {
-                if (!validTittle) {
-                    createTicketView.setErrorTittle(" Tittle is required");
+            private void validateTitle(boolean validTitle) {
+                if (!validTitle) {
+                    createTicketView.setErrorTitle(" Title is required");
                 } else {
-                    createTicketView.setErrorTittle(" ");
+                    createTicketView.setErrorTitle(" ");
                 }
             }
 
@@ -186,7 +183,7 @@ public class TicketController extends Controller {
 
     public void initializeViewActionListeners(ProjectController controller)
     {
-        this.showTicketsFromProject = controller.getShowProjectDetailListener();
+        this.showProjectDetailListener = controller.getShowProjectDetailListener();
     }
 
 

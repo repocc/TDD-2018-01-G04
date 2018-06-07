@@ -18,7 +18,7 @@ public class CreateTicketView extends View {
     private ButtonGroup userButtonGroup;
     private JPanel mainPanel;
     private JLabel labelDescriptionRequired;
-    private JLabel labelTittleRequired;
+    private JLabel labelTitleRequired;
 
     private Vector<TicketType> ticketsTypes = new Vector<>();
     private Vector<User> users = new Vector<>();
@@ -103,12 +103,12 @@ public class CreateTicketView extends View {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        labelTittleRequired = new JLabel(" ");
-        labelTittleRequired.setForeground(Color.RED);
+        labelTitleRequired = new JLabel(" ");
+        labelTitleRequired.setForeground(Color.RED);
         labelDescriptionRequired = new JLabel(" ");
         labelDescriptionRequired.setForeground(Color.RED);
 
-        mainPanel.add(createLabelWith("Title:", labelTittleRequired, titleText));
+        mainPanel.add(createLabelWith("Title:", labelTitleRequired, titleText));
         mainPanel.add(createLabelWith("Description:", labelDescriptionRequired, descriptionText));
 
         this.addTicketTypeMenu(mainPanel);
@@ -137,8 +137,8 @@ public class CreateTicketView extends View {
         labelDescriptionRequired.setText(message);
     }
 
-    public void setErrorTittle(String message) {
-        labelTittleRequired.setText(message);
+    public void setErrorTitle(String message) {
+        labelTitleRequired.setText(message);
     }
 
 }
