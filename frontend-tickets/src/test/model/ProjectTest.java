@@ -1,5 +1,8 @@
-package model;
+package test.model;
 
+import model.Project;
+import model.TicketState;
+import model.TicketType;
 import org.junit.Before;
 
 import java.util.HashSet;

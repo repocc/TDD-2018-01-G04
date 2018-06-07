@@ -1,5 +1,6 @@
-package model;
+package test.model;
 
+import model.TicketType;
 import org.junit.Before;
 import org.junit.Test;
 
