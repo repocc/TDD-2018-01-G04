@@ -10,10 +10,8 @@ public class Project {
 
 	@SerializedName("name")
 	private String name;
-	@SerializedName("UserOwner")
-	private User owner;
 	@SerializedName("owner")
-	private String nameOwner;
+	private String owner;
 	@SerializedName("ticket-types")
 	private Vector<TicketType> ticketTypes = new Vector<>();
 	@SerializedName("states")
@@ -22,7 +20,6 @@ public class Project {
 	private Vector<User> users = new Vector<>();
 	@SerializedName("tickets")
 	private Vector<Ticket> tickets = new Vector<>();
-	private Vector<String> roles = new Vector<>();
 	@SerializedName("id")
 	private String id;
 
@@ -40,7 +37,7 @@ public class Project {
 	}
 
 	public void setOwner(String owner) {
-		this.nameOwner = owner;
+		this.owner = owner;
 	}
 
 	public String toString()
@@ -63,7 +60,7 @@ public class Project {
 
 		while (iterator.hasNext()) {
 			TicketState ticketState = iterator.next();
-			if (ticketState.getName().equals(name)) {
+			if (ticketState.getName().equals(name) && iterator.hasNext()) {
 				return iterator.next();
 			}
 		}
