@@ -329,7 +329,7 @@ public class ProjectController extends Controller {
 				String nameProject = createProjectView.getName();
 
 				if (nameProject.equals("")) {
-					createProjectView.setErrorName(" Insert name");
+					createProjectView.setErrorName(" Name is required");
 				}
 
 				return !nameProject.equals("");

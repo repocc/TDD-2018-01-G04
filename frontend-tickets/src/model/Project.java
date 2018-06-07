@@ -27,11 +27,6 @@ public class Project {
 
 	}
 
-	public String getName()
-	{
-		return name;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -74,10 +69,6 @@ public class Project {
 
 	public void setTicketTypes(Vector<TicketType> ticketTypes) {
 		this.ticketTypes = ticketTypes;
-	}
-
-	public Vector<TicketType> getTicketTypes() {
-		return ticketTypes;
 	}
 
 	public void setTicketStates(Vector<TicketState> ticketStates) {

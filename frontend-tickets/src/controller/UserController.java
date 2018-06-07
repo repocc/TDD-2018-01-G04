@@ -52,7 +52,7 @@ public class UserController extends Controller {
 			{
 				if(loginView.isFieldEmpty())
 				{
-					loginView.setError("Insert username");
+					loginView.setError("Username is required");
 				}
 				else if (authenticateUser(loginView.getUsername()))
 				{
