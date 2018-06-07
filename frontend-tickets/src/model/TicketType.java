@@ -32,4 +32,12 @@ public class TicketType {
         return type;
     }
 
+    public Boolean validField(String field, String text) {
+
+        Boolean fieldRequired = fields.contains(field);
+
+        return !fieldRequired || (!text.equals(""));
+
+    }
+
 }

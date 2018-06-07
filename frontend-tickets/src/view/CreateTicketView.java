@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
@@ -15,6 +16,9 @@ public class CreateTicketView extends View {
     private JTextField descriptionText;
     private ButtonGroup ticketTypeButtonGroup;
     private ButtonGroup userButtonGroup;
+    private JPanel mainPanel;
+    private JLabel labelDescriptionRequired;
+    private JLabel labelTittleRequired;
 
     private Vector<TicketType> ticketsTypes = new Vector<>();
     private Vector<User> users = new Vector<>();
@@ -46,6 +50,9 @@ public class CreateTicketView extends View {
     }
 
     private void addTicketTypeMenu(JPanel mainPanel) {
+
+        JPanel panelGeneral = new JPanel();
+        panelGeneral.setLayout(new BorderLayout());
         JPanel containertype = new JPanel();
         containertype.setBorder(BorderFactory.createTitledBorder("Select Type "));
         containertype.setLayout(new BoxLayout(containertype , BoxLayout.Y_AXIS));
@@ -60,11 +67,15 @@ public class CreateTicketView extends View {
 
         ticketTypeButtonGroup.getElements().nextElement().setSelected(true);
 
-        mainPanel.add(containertype);
+        panelGeneral.add(containertype);
+        mainPanel.add(panelGeneral);
 
     }
 
     private void addSelectedAssignedUser(JPanel mainPanel) {
+
+        JPanel panelGeneral = new JPanel();
+        panelGeneral.setLayout(new BorderLayout());
         JPanel containerSelectUser = new JPanel();
         containerSelectUser.setBorder(BorderFactory.createTitledBorder("Select Assigned user "));
         containerSelectUser.setLayout(new BoxLayout(containerSelectUser , BoxLayout.Y_AXIS));
@@ -80,7 +91,8 @@ public class CreateTicketView extends View {
 
         userButtonGroup.getElements().nextElement().setSelected(true);
 
-        mainPanel.add(containerSelectUser);
+        panelGeneral.add(containerSelectUser);
+        mainPanel.add(panelGeneral);
     }
 
     public void show()
@@ -88,14 +100,25 @@ public class CreateTicketView extends View {
         titleText = new JTextField(30);
         descriptionText = new JTextField(30);
 
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.add(createLabelWith("Title:", titleText));
-        mainPanel.add(createLabelWith("Description:", descriptionText));
+        labelTittleRequired = new JLabel(" ");
+        labelTittleRequired.setForeground(Color.RED);
+        labelDescriptionRequired = new JLabel(" ");
+        labelDescriptionRequired.setForeground(Color.RED);
+
+        mainPanel.add(createLabelWith("Title:", labelTittleRequired, titleText));
+        mainPanel.add(createLabelWith("Description:", labelDescriptionRequired, descriptionText));
 
         this.addTicketTypeMenu(mainPanel);
         this.addSelectedAssignedUser(mainPanel);
+
+        this.confirmDialog();
+
+    }
+
+    public void confirmDialog(){
 
         int result = JOptionPane.showConfirmDialog(null, mainPanel, "New Ticket", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION)
@@ -110,5 +133,12 @@ public class CreateTicketView extends View {
         this.createTicketListener = controller.getCreateTicketListener();
     }
 
+    public void setErrorDescription(String message) {
+        labelDescriptionRequired.setText(message);
+    }
+
+    public void setErrorTittle(String message) {
+        labelTittleRequired.setText(message);
+    }
 
 }

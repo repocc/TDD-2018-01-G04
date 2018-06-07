@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Vector;
 
 import container.TicketsSystemContainer;
@@ -116,6 +117,37 @@ public class TicketController extends Controller {
         class createTicketListener implements ActionListener
         {
             public void actionPerformed(ActionEvent arg0) {
+
+                if (this.validateRequiredField()) {
+
+                    this.createTicket();
+
+                } else {
+
+                    createTicketView.confirmDialog();
+
+                }
+
+            }
+
+            private boolean validateRequiredField(){
+
+                String tittle = createTicketView.getTitle();
+                String description = createTicketView.getDescription();
+                String type = createTicketView.getTicketType();
+
+                Boolean validDescription = selectedProject.validateTicketType("Description",description,type);
+                Boolean validTittle = selectedProject.validateTicketType("Title",tittle,type);
+
+                this.validateDescription(validDescription);
+                this.validateTittle(validTittle);
+
+                return validDescription && validTittle;
+
+            }
+
+            private void createTicket() {
+
                 String tittle = createTicketView.getTitle();
                 String description = createTicketView.getDescription();
 
@@ -136,6 +168,23 @@ public class TicketController extends Controller {
                 controller.showTicketsFromProject.actionPerformed(null);
 
             }
+
+            private void validateDescription(boolean validDescription) {
+                if (!validDescription) {
+                    createTicketView.setErrorDescription(" Description is required");
+                } else {
+                    createTicketView.setErrorDescription(" ");
+                }
+            }
+
+            private void validateTittle(boolean validTittle) {
+                if (!validTittle) {
+                    createTicketView.setErrorTittle(" Tittle is required");
+                } else {
+                    createTicketView.setErrorTittle(" ");
+                }
+            }
+
         }
         return new createTicketListener();
     }

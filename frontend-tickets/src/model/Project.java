@@ -2,6 +2,7 @@ package model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -78,6 +79,10 @@ public class Project {
 		this.ticketTypes = ticketTypes;
 	}
 
+	public Vector<TicketType> getTicketTypes() {
+		return ticketTypes;
+	}
+
 	public void setTicketStates(Vector<TicketState> ticketStates) {
 		this.ticketStates = ticketStates;
 	}
@@ -98,4 +103,19 @@ public class Project {
 		}
 		return  role;
     }
+
+    public boolean validateTicketType(String field, String text, String type) {
+
+		for (TicketType ticketType: ticketTypes) {
+
+			if(ticketType.getType().equals(type)) {
+
+				return ticketType.validField(field,text);
+
+			}
+
+		}
+
+		return false;
+	}
 }

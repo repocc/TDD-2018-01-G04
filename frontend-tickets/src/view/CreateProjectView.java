@@ -14,6 +14,7 @@ public class CreateProjectView extends View {
     private JPanel projectMenuPanel = new JPanel();
     private JTextField nameText;
     private JTextField stateNameText;
+    private JLabel labelNameProjectRequired;
 
     private Vector<Role> roles;
     private Vector<User> users;
@@ -105,7 +106,9 @@ public class CreateProjectView extends View {
         projectMenuPanel.removeAll();
         nameText = new JTextField(30);
         projectMenuPanel.setLayout(new BoxLayout(projectMenuPanel, BoxLayout.Y_AXIS));
-        projectMenuPanel.add(createLabelWith("Project name:", nameText));
+
+        labelNameProjectRequired = new JLabel(" ");
+        projectMenuPanel.add(createLabelWith("Project name:",labelNameProjectRequired, nameText));
 
         this.addProjectUsersMenu();
         this.addProjectTicketTypesRequiredFieldsMenu();
@@ -190,7 +193,7 @@ public class CreateProjectView extends View {
         containerNewState.setLayout(new BoxLayout(containerNewState, BoxLayout.Y_AXIS));
 
         stateNameText = new JTextField(5);
-        containerNewState.add(createLabelWith("Name", stateNameText));
+        containerNewState.add(createLabelWith("Name",null, stateNameText));
 
         JButton button = new JButton("Add");
         containerNewState.add(button);
