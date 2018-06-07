@@ -108,18 +108,27 @@ public class CreateProjectView extends View {
         projectMenuPanel.setLayout(new BoxLayout(projectMenuPanel, BoxLayout.Y_AXIS));
 
         labelNameProjectRequired = new JLabel(" ");
+        labelNameProjectRequired.setForeground(Color.RED);
         projectMenuPanel.add(createLabelWith("Project name:",labelNameProjectRequired, nameText));
 
         this.addProjectUsersMenu();
         this.addProjectTicketTypesRequiredFieldsMenu();
         this.addProjectStatesMenu();
 
+        this.confirmDialog();
+
+    }
+
+    public void confirmDialog(){
+
         int result = JOptionPane.showConfirmDialog(null, projectMenuPanel, "New Project", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             createProjectListener.actionPerformed(null);
         }
+
     }
+
 
     private void addProjectUsersMenu() {
 
@@ -261,5 +270,9 @@ public class CreateProjectView extends View {
         this.createProjectListener = controller.getCreateProjectListener();
     }
 
+
+    public void setErrorName(String message) {
+        labelNameProjectRequired.setText(message);
+    }
 
 }

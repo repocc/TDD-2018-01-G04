@@ -311,6 +311,34 @@ public class ProjectController extends Controller {
 		class createProjectListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent arg0) {
+
+				if (this.validateNameProject()) {
+
+					this.createProject();
+
+				} else {
+
+					createProjectView.confirmDialog();
+
+				}
+
+
+			}
+
+			private boolean validateNameProject(){
+
+				String nameProject = createProjectView.getName();
+
+				if (nameProject.equals("")) {
+					createProjectView.setErrorName(" Insert name");
+				}
+
+				return !nameProject.equals("");
+
+			}
+
+			private void createProject() {
+
 				ProjectService projectService = new ProjectService();
 
 				Project project = new Project();
@@ -340,7 +368,9 @@ public class ProjectController extends Controller {
 				}
 
 				refreshProjectsList();
+
 			}
+
 		}
 		return new createProjectListener();
 	}
