@@ -322,7 +322,6 @@ public class ProjectController extends Controller {
 
 				}
 
-
 			}
 
 			private boolean validateNameProject(){

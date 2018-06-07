@@ -91,7 +91,11 @@ public class Project {
 		this.users = users;
 	}
 
-    public String getUserRole(String name) {
+	public Vector<User> getUsers() {
+		return users;
+	}
+
+	public String getUserRole(String name) {
 
 		String role = "";
 		if (this.users != null){

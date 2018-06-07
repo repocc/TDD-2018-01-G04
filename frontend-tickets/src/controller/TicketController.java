@@ -51,12 +51,7 @@ public class TicketController extends Controller {
             e.printStackTrace();
         }
 
-        Vector<User> users = null;
-        try {
-            users = userService.getUsers();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Vector<User> users = selectedProject.getUsers();
 
         createTicketView = new CreateTicketView(ticketsTypes, users);
         createTicketView.initializeViewActionListeners(this);

@@ -257,6 +257,8 @@ public class CreateProjectView extends View {
                 statePanel.add(BorderLayout.EAST,rolesPanel);
                 panel.add(statePanel);
 
+                stateNameText.setText("");
+
                 projectMenuPanel.revalidate();
                 projectMenuPanel.repaint();
 
