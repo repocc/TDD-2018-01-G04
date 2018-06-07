@@ -6,10 +6,14 @@
             [controllers.tickettype-controller :refer :all]
             [controllers.project-controller :refer :all]
             [controllers.ticket-controller :refer :all]
+            [controllers.comment-controller :refer :all]
             ))
 
 (use-fixtures :once wrap-setup)
 
+(def ticket {:title "test" :description "description" :type "type" :assigned "user-test@gmail.com" :project "1" :state "open"} )
+(def ticket-state {:id "2", :state "in-progress"})
+(def comment-test {:ticket "2", :author "user-test@gmail.com", :text "Comment in ticket"})
 
 (deftest login-test
   (testing "login test with correct user"
@@ -71,13 +75,35 @@
           "project-test"
         )))))
 
-;(deftest create-ticket-in-project-test
-;  (testing "Create ticket in existing project and store in project"
-;  ( let [
-;        ok (store-ticket {:params ticket})
-;        response (find-project-by-id "1")
-;    ]
-;    (is ( =
-;          (:title (first(get-in response [:body :tickets])))
-;          "test"
-;      )))))
+(deftest create-ticket-in-project-test
+  (testing "Create ticket in existing project and store in project"
+  ( let [
+        ok (store-ticket {:params ticket})
+        response (find-project-by-id "1")
+    ]
+    (is ( =
+          (:title (first(get-in response [:body :tickets])))
+          "test"
+      )))))
+
+(deftest change-state-ticket-test
+  (testing "Change state for ticket"
+    (let [
+      sendTicket (update-ticket-by-id {:params ticket-state})
+      response (find-ticket-by-id "2")
+    ]
+    (is ( =
+          (get-in response [:body :state])
+          "in-progress"
+    )))))
+
+(deftest insert-comment-in-ticket-test
+  (testing "insert comment in ticket"
+    (let [
+      ok (store-comment {:params comment-test})
+      response (find-ticket-by-id "2")
+    ]
+    (is ( =
+          (first (get-in response [:body :comments ]))
+          comment-test
+    )))))

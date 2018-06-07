@@ -9,11 +9,17 @@
 		url (str api-events-processor-base-url "/event")
 		body {:event {:source source :type "create-project"}}
 	]
-	(client/post url {:form-params body :content-type :json})))
+	(try
+     (client/post url {:form-params body :content-type :json})
+     (catch Exception e (str "caught exception: " (.getMessage e))))
+	))
 
 (defn log-ticket [ticket] (
 	let [
 		url (str api-events-processor-base-url "/event")
 		body {:event {:source source :type "ticket" :state (:state ticket)}}
 	]
-	(client/post url {:form-params body :content-type :json})))
+	(try
+     (client/post url {:form-params body :content-type :json})
+     (catch Exception e (str "caught exception: " (.getMessage e))))
+	))
