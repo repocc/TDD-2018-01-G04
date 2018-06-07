@@ -24,22 +24,22 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Example
 
-Project created by rule
+## Created projects by source
 
 (define-counter "projects-by-source" [] ( = (current "source") "api-tickets"))
 
-Project created
+## Created projects
 
 (define-counter "projects-create" [] ( = (current "type") "create-project"))
 
-Tickets created
+## Created tickets
 
 (define-counter "tickets-created" [] ( = (current "type") "ticket"))
 
-Tickets in "state"
+## Tickets by "state"
 
 (define-counter "tickets-in-state" [] (and ( = (current "state") "estado") ( = (current "type") "ticket")))
 
-Fraction tickets in one state
+## Tickets fraction by state
 
 (define-signal {"ticket-fraction" (/ (counter-value "tickets-in-state" []) (counter-value "tickets-created" []))} true)')
