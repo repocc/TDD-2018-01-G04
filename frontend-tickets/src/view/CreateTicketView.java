@@ -58,6 +58,8 @@ public class CreateTicketView extends View {
             containertype.add(radioButton);
         }
 
+        ticketTypeButtonGroup.getElements().nextElement().setSelected(true);
+
         mainPanel.add(containertype);
 
     }
@@ -75,6 +77,8 @@ public class CreateTicketView extends View {
             userButtonGroup.add(radioButton);
             containerSelectUser.add(radioButton);
         }
+
+        userButtonGroup.getElements().nextElement().setSelected(true);
 
         mainPanel.add(containerSelectUser);
     }
