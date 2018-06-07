@@ -4,7 +4,7 @@ This is a simple clojure REST example that denmonstrates how a REST api can be b
 
 # Port
 
-* 3000
+* 3001
 
 # Routes
 
